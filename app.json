@@ -17,10 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.koreanhole.pluto"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "android": {
+      "package": "com.koreanhole.pluto"
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
   }
 }
