@@ -19,15 +19,12 @@
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "jsx": "react-native",
-    "lib": ["es2017"],
-    "module": "es2015",
+    "lib": ["dom", "esnext"],
     "moduleResolution": "node",
     "noEmitHelpers": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "sourceMap": false,
-    "strict": true,
-    "target": "es2017"
-  },
-  "exclude": ["node_modules"]
+    "strict": true
+  }
 }
