@@ -1,15 +1,21 @@
 import * as React from "react";
-import { Layout, Text } from "@ui-kitten/components";
 import AppLayout from "modules/AppLayout";
+import NoticeCard from "./NoticeCard";
+import { ScrollView, View } from "react-native";
+import styled from "styled-components/native";
+
+const HomeContainer = styled(View)`
+  flex: 1;
+`;
 
 export default function Home() {
   return (
     <AppLayout title="홈" mode="MENU">
-      <Layout
-        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-      >
-        <Text category="h1">DETAILS</Text>
-      </Layout>
+      <HomeContainer>
+        <ScrollView>
+          <NoticeCard />
+        </ScrollView>
+      </HomeContainer>
     </AppLayout>
   );
 }
