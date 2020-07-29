@@ -1,29 +1,15 @@
-import React from "react";
-import { SafeAreaView } from "react-native";
-import { Button, Divider, Layout, TopNavigation } from "@ui-kitten/components";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "./navigation";
+import * as React from "react";
+import { Layout, Text } from "@ui-kitten/components";
+import AppLayout from "../modules/AppLayout";
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
-
-type Props = {
-  navigation: HomeScreenNavigationProp;
-};
-
-export const HomeScreen = ({ navigation }: Props) => {
-  const navigateDetails = () => {
-    navigation.navigate("Details");
-  };
-
+export default function Home() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TopNavigation title="My?App" alignment="center" />
-      <Divider />
+    <AppLayout title="홈" mode="MENU">
       <Layout
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
       >
-        <Button onPress={navigateDetails}>OPEN DETAILS</Button>
+        <Text category="h1">DETAILS</Text>
       </Layout>
-    </SafeAreaView>
+    </AppLayout>
   );
-};
+}
