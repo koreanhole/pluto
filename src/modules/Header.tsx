@@ -9,19 +9,13 @@ type HeaderProps = {
   mode: HeaderMode;
 };
 
-const StyledHeader = styled(RNElementHeader)`
-  background-color: #e5e5e5;
-`;
-
 const StyledHeaderTitle = styled(Text)`
-  flex: 2;
   color: #2b2926;
   font-size: 20px;
   font-weight: bold;
 `;
 
 const StyledHeaderIcon = styled(Icon)`
-  flex: 2;
   color: #2b2926;
 `;
 
@@ -42,14 +36,13 @@ function HeaderTitle({ title }: { title: string }) {
 
 export default function Header({ title, mode }: HeaderProps) {
   return (
-    <StyledHeader
+    <RNElementHeader
       placement="left"
       barStyle="dark-content"
       leftComponent={<HeaderLeftIcon mode={mode} />}
       centerComponent={<HeaderTitle title={title} />}
       containerStyle={{
-        backgroundColor: "#e5e5e5",
-        justifyContent: "space-around",
+        backgroundColor: "#fff",
       }}
     />
   );

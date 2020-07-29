@@ -57,8 +57,10 @@ function NoticeCardItemTitle() {
 function NoticeCardItemSubtitle() {
   return (
     <NoticeCardItemSubtitleContainer>
-      <NoticeCardItemSubtitleText>2020-07-27</NoticeCardItemSubtitleText>
-      <NoticeCardItemSubtitleText>차민아 / 일반공지</NoticeCardItemSubtitleText>
+      <NoticeCardItemSubtitleText>날짜입니다.</NoticeCardItemSubtitleText>
+      <NoticeCardItemSubtitleText>
+        작성자입니다. / 분류입니다.
+      </NoticeCardItemSubtitleText>
     </NoticeCardItemSubtitleContainer>
   );
 }
