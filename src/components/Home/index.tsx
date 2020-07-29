@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Layout, Text } from "@ui-kitten/components";
-import AppLayout from "../modules/AppLayout";
+import AppLayout from "modules/AppLayout";
 
 export default function Home() {
   return (
