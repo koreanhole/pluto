@@ -5,6 +5,7 @@ import Ripple from "react-native-material-ripple";
 import { Divider } from "react-native-elements";
 // @ts-ignore
 import TextAvatar from "react-native-text-avatar";
+import { useNavigation } from "@react-navigation/native";
 
 const NoticeCardContainer = styled(View)`
   padding: 16px;
@@ -66,10 +67,16 @@ const NoticeCardItemSubtitle = () => {
 };
 
 export default function NoticeCard() {
+  const navigation = useNavigation();
+
+  const handleNoticeCardItemClick = React.useCallback(() => {
+    navigation.navigate("Article");
+  }, []);
+
   return (
     <NoticeCardContainer>
       <NoticeCardHeaderText>7월 31일</NoticeCardHeaderText>
-      <Ripple>
+      <Ripple onPress={handleNoticeCardItemClick}>
         <NoticeCardItemTitle />
         <NoticeCardItemSubtitle />
         <Divider />
