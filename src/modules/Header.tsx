@@ -8,6 +8,7 @@ export type HeaderMode = "MENU" | "BACK";
 type HeaderProps = {
   title: string;
   mode: HeaderMode;
+  rightComponent?: React.ReactElement;
 };
 
 type HeaderLeftButtonProps = {
@@ -51,13 +52,14 @@ function HeaderTitle({ title }: { title: string }) {
   return <StyledHeaderTitle>{title}</StyledHeaderTitle>;
 }
 
-export default function Header({ title, mode }: HeaderProps) {
+export default function Header({ title, mode, rightComponent }: HeaderProps) {
   return (
     <RNElementHeader
       placement="left"
       barStyle="dark-content"
       leftComponent={<HeaderLeftButton mode={mode} />}
       centerComponent={<HeaderTitle title={title} />}
+      rightComponent={rightComponent}
       containerStyle={{
         backgroundColor: "#fff",
       }}

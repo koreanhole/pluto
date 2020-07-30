@@ -6,6 +6,7 @@ import styled from "styled-components/native";
 type AppLayoutProps = {
   title: string;
   mode: HeaderMode;
+  rightComponent: React.ReactElement;
   children?: React.ReactNode;
 };
 
@@ -14,12 +15,12 @@ const MainSection = styled(View)`
 `;
 
 export default function AppLayout(props: AppLayoutProps) {
-  const { title, mode, children } = props;
+  const { title, mode, rightComponent, children } = props;
 
   return (
     <React.Fragment>
       <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-        <Header title={title} mode={mode} />
+        <Header title={title} mode={mode} rightComponent={rightComponent} />
         <MainSection>{children}</MainSection>
       </View>
     </React.Fragment>
