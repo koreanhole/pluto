@@ -1,5 +1,4 @@
 import React from "react";
-import { View } from "react-native";
 import styled from "styled-components/native";
 import Ripple from "react-native-material-ripple";
 import { Divider } from "react-native-elements";
@@ -7,8 +6,19 @@ import { Divider } from "react-native-elements";
 import TextAvatar from "react-native-text-avatar";
 import { useNavigation } from "@react-navigation/native";
 
-const NoticeCardContainer = styled(View)`
-  padding: 16px;
+export type NoticeCardProps = {
+  type: string;
+  title: string;
+  date: string;
+  author: string;
+};
+
+const NoticeCardContainer = styled.View`
+  padding: 0 16px;
+`;
+
+export const NoticeCardHeaderContainer = styled.View`
+  margin: 16px 16px 0 16px;
 `;
 
 const NoticeCardHeaderText = styled.Text`
@@ -39,7 +49,21 @@ const NoticeCardItemSubtitleText = styled.Text`
   color: #828282;
 `;
 
-const NoticeCardItemTitle = () => {
+export const NoticeCardHeader = ({ created_day }: { created_day: string }) => {
+  return (
+    <NoticeCardHeaderContainer>
+      <NoticeCardHeaderText>{created_day}</NoticeCardHeaderText>
+    </NoticeCardHeaderContainer>
+  );
+};
+
+const NoticeCardItemTitle = ({
+  type,
+  title,
+}: {
+  type: string;
+  title: string;
+}) => {
   return (
     <NoticeCardItemTitleContainer>
       <TextAvatar
@@ -48,25 +72,38 @@ const NoticeCardItemTitle = () => {
         size={34}
         type={"circle"}
       >
-        일반
+        {`${type}`}
       </TextAvatar>
-      <NoticeCardItemTitleText>제목입니다.</NoticeCardItemTitleText>
+      <NoticeCardItemTitleText>{title}</NoticeCardItemTitleText>
     </NoticeCardItemTitleContainer>
   );
 };
 
-const NoticeCardItemSubtitle = () => {
+const NoticeCardItemSubtitle = ({
+  date,
+  author,
+  type,
+}: {
+  date: string;
+  author: string;
+  type: string;
+}) => {
   return (
     <NoticeCardItemSubtitleContainer>
-      <NoticeCardItemSubtitleText>날짜입니다.</NoticeCardItemSubtitleText>
+      <NoticeCardItemSubtitleText>{date}</NoticeCardItemSubtitleText>
       <NoticeCardItemSubtitleText>
-        작성자입니다. / 분류입니다.
+        {`${author} / ${type}`}
       </NoticeCardItemSubtitleText>
     </NoticeCardItemSubtitleContainer>
   );
 };
 
-export default function NoticeCard() {
+export default function NoticeCard({
+  type,
+  title,
+  date,
+  author,
+}: NoticeCardProps) {
   const navigation = useNavigation();
 
   const handleNoticeCardItemClick = React.useCallback(() => {
@@ -74,13 +111,12 @@ export default function NoticeCard() {
   }, []);
 
   return (
-    <NoticeCardContainer>
-      <NoticeCardHeaderText>7월 31일</NoticeCardHeaderText>
-      <Ripple onPress={handleNoticeCardItemClick}>
-        <NoticeCardItemTitle />
-        <NoticeCardItemSubtitle />
+    <Ripple onPress={handleNoticeCardItemClick}>
+      <NoticeCardContainer>
+        <NoticeCardItemTitle type={type} title={title} />
+        <NoticeCardItemSubtitle date={date} author={author} type={type} />
         <Divider />
-      </Ripple>
-    </NoticeCardContainer>
+      </NoticeCardContainer>
+    </Ripple>
   );
 }

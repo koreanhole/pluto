@@ -1,8 +1,130 @@
 import * as React from "react";
 import AppLayout from "modules/AppLayout";
-import NoticeCard from "./NoticeCard";
-import { ScrollView, View } from "react-native";
+import NoticeCard, { NoticeCardHeader } from "./NoticeCard";
+import { View, SectionList } from "react-native";
 import styled from "styled-components/native";
+
+// dummy data
+const DATA = [
+  {
+    created_day: "7월 31일",
+    data: [
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+    ],
+  },
+  {
+    created_day: "7월 31일",
+    data: [
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+      {
+        type: "일반공지",
+        title: "교내 체육시설 개방안내",
+        date: "2020-07-31",
+        author: "체육관",
+      },
+    ],
+  },
+];
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -12,9 +134,22 @@ export default function Home() {
   return (
     <AppLayout title="홈" mode="MENU">
       <HomeContainer>
-        <ScrollView>
-          <NoticeCard />
-        </ScrollView>
+        <SectionList
+          sections={DATA}
+          keyExtractor={(item, index) => item.title + index}
+          stickySectionHeadersEnabled={false}
+          renderSectionHeader={({ section: { created_day } }) => (
+            <NoticeCardHeader created_day={created_day} />
+          )}
+          renderItem={(data) => (
+            <NoticeCard
+              type={data.item.type}
+              title={data.item.title}
+              date={data.item.date}
+              author={data.item.author}
+            />
+          )}
+        />
       </HomeContainer>
     </AppLayout>
   );
