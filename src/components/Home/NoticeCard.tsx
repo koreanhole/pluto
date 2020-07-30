@@ -38,7 +38,7 @@ const NoticeCardItemSubtitleText = styled.Text`
   color: #828282;
 `;
 
-function NoticeCardItemTitle() {
+const NoticeCardItemTitle = () => {
   return (
     <NoticeCardItemTitleContainer>
       <TextAvatar
@@ -52,9 +52,9 @@ function NoticeCardItemTitle() {
       <NoticeCardItemTitleText>제목입니다.</NoticeCardItemTitleText>
     </NoticeCardItemTitleContainer>
   );
-}
+};
 
-function NoticeCardItemSubtitle() {
+const NoticeCardItemSubtitle = () => {
   return (
     <NoticeCardItemSubtitleContainer>
       <NoticeCardItemSubtitleText>날짜입니다.</NoticeCardItemSubtitleText>
@@ -63,7 +63,7 @@ function NoticeCardItemSubtitle() {
       </NoticeCardItemSubtitleText>
     </NoticeCardItemSubtitleContainer>
   );
-}
+};
 
 export default function NoticeCard() {
   return (
