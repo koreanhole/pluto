@@ -1,9 +1,11 @@
 import * as React from "react";
+import { useDispatch } from "react-redux";
 import { View } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 import styled from "styled-components/native";
 import { Divider } from "react-native-elements";
 import Ripple from "react-native-material-ripple";
+import { setFavoriteDepartment } from "./redux/actions";
 
 type AccordionSection = {
   departmentType: string;
@@ -72,8 +74,12 @@ const AccrodionContentItem = ({
 }: {
   departmentName: string;
 }) => {
+  const dispatch = useDispatch();
+  const handleClickDepartmentName = React.useCallback(() => {
+    dispatch(setFavoriteDepartment(departmentName));
+  }, []);
   return (
-    <Ripple>
+    <Ripple onPress={handleClickDepartmentName}>
       <AccordionContentItemContainer>
         <AccordionText>{departmentName}</AccordionText>
       </AccordionContentItemContainer>
