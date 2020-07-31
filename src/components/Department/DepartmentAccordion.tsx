@@ -1,11 +1,12 @@
 import * as React from "react";
-import { useDispatch } from "react-redux";
-import { View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { View, Text } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 import styled from "styled-components/native";
 import { Divider } from "react-native-elements";
 import Ripple from "react-native-material-ripple";
-import { setFavoriteDepartment } from "./redux/actions";
+import { addToFavoriteDepartmentList } from "./redux/actions";
+import { getFavoriteDepartmentList } from "./redux/selectors";
 
 type AccordionSection = {
   departmentType: string;
@@ -76,7 +77,7 @@ const AccrodionContentItem = ({
 }) => {
   const dispatch = useDispatch();
   const handleClickDepartmentName = React.useCallback(() => {
-    dispatch(setFavoriteDepartment(departmentName));
+    dispatch(addToFavoriteDepartmentList(departmentName));
   }, []);
   return (
     <Ripple onPress={handleClickDepartmentName}>
@@ -88,20 +89,24 @@ const AccrodionContentItem = ({
 };
 
 export default function DepartmentAccordion() {
+  const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
   const [activeDepartmentSection, setActiveDepartmentSection] = React.useState([
     0,
   ]);
 
   return (
-    <Accordion
-      sections={ACCORDIONSECTIONS}
-      activeSections={activeDepartmentSection}
-      renderHeader={AccordionHeader}
-      renderContent={AccordionContent}
-      onChange={setActiveDepartmentSection}
-      touchableComponent={Ripple}
-      expandMultiple={true}
-      underlayColor="#fff"
-    />
+    <>
+      <Text>{favoriteDepartmentList}</Text>
+      <Accordion
+        sections={ACCORDIONSECTIONS}
+        activeSections={activeDepartmentSection}
+        renderHeader={AccordionHeader}
+        renderContent={AccordionContent}
+        onChange={setActiveDepartmentSection}
+        touchableComponent={Ripple}
+        expandMultiple={true}
+        underlayColor="#fff"
+      />
+    </>
   );
 }
