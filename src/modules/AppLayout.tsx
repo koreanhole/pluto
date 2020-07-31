@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 type AppLayoutProps = {
   title: string;
   mode: HeaderMode;
-  rightComponent: React.ReactElement;
+  rightComponent?: React.ReactElement;
   children?: React.ReactNode;
 };
 

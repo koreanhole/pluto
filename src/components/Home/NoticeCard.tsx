@@ -22,7 +22,7 @@ export const NoticeCardHeaderContainer = styled.View`
 `;
 
 const NoticeCardHeaderText = styled.Text`
-  font-size: 23px;
+  font-size: 18px;
   font-weight: bold;
 `;
 
@@ -90,10 +90,10 @@ const NoticeCardItemSubtitle = ({
 }) => {
   return (
     <NoticeCardItemSubtitleContainer>
-      <NoticeCardItemSubtitleText>{date}</NoticeCardItemSubtitleText>
       <NoticeCardItemSubtitleText>
         {`${author} / ${type}`}
       </NoticeCardItemSubtitleText>
+      <NoticeCardItemSubtitleText>{date}</NoticeCardItemSubtitleText>
     </NoticeCardItemSubtitleContainer>
   );
 };

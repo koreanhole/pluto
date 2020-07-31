@@ -2,8 +2,9 @@ import * as React from "react";
 import { Header as RNElementHeader, Icon, Text } from "react-native-elements";
 import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
+import { Divider } from "react-native-elements";
 
-export type HeaderMode = "MENU" | "BACK";
+export type HeaderMode = "MENU" | "BACK" | "NONE";
 
 type HeaderProps = {
   title: string;
@@ -45,6 +46,9 @@ function HeaderLeftButton({ mode }: HeaderLeftButtonProps) {
         />
       );
     }
+    case "NONE": {
+      return null;
+    }
   }
 }
 
@@ -54,15 +58,18 @@ function HeaderTitle({ title }: { title: string }) {
 
 export default function Header({ title, mode, rightComponent }: HeaderProps) {
   return (
-    <RNElementHeader
-      placement="left"
-      barStyle="dark-content"
-      leftComponent={<HeaderLeftButton mode={mode} />}
-      centerComponent={<HeaderTitle title={title} />}
-      rightComponent={rightComponent}
-      containerStyle={{
-        backgroundColor: "#fff",
-      }}
-    />
+    <>
+      <RNElementHeader
+        placement="left"
+        barStyle="dark-content"
+        leftComponent={<HeaderLeftButton mode={mode} />}
+        centerComponent={<HeaderTitle title={title} />}
+        rightComponent={rightComponent}
+        containerStyle={{
+          backgroundColor: "#f2f2f2",
+        }}
+      />
+      <Divider />
+    </>
   );
 }

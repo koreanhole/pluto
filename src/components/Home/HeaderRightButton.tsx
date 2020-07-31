@@ -1,16 +1,16 @@
 import * as React from "react";
-import { Linking } from "react-native";
 import { Icon } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HeaderRightButton() {
+  const navigation = useNavigation();
+
   const handleClickHeaderRightButton = React.useCallback(() => {
-    Linking.openURL("https://naver.com").catch((err) =>
-      console.error("Couldn't load page", err)
-    );
+    navigation.navigate("Department");
   }, []);
   return (
     <Icon
-      name="public"
+      name="filter-list"
       type="material"
       onPress={handleClickHeaderRightButton}
     />
