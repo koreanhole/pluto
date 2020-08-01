@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import theme from "theme";
 
 export default function HeaderRightButton() {
   const navigation = useNavigation();
@@ -10,9 +11,10 @@ export default function HeaderRightButton() {
   }, []);
   return (
     <Icon
-      name="filter-list"
+      name="format-list-bulleted"
       type="material"
       onPress={handleClickHeaderRightButton}
+      color={theme.colors.black}
     />
   );
 }
