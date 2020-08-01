@@ -1,12 +1,11 @@
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { View, Text } from "react-native";
+import { useDispatch } from "react-redux";
+import { View } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 import styled from "styled-components/native";
 import { Divider } from "react-native-elements";
 import Ripple from "react-native-material-ripple";
 import { addToFavoriteDepartmentList } from "./redux/actions";
-import { getFavoriteDepartmentList } from "./redux/selectors";
 
 type AccordionSection = {
   departmentType: string;
@@ -89,14 +88,12 @@ const AccrodionContentItem = ({
 };
 
 export default function DepartmentAccordion() {
-  const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
   const [activeDepartmentSection, setActiveDepartmentSection] = React.useState([
     0,
   ]);
 
   return (
     <>
-      <Text>{favoriteDepartmentList}</Text>
       <Accordion
         sections={ACCORDIONSECTIONS}
         activeSections={activeDepartmentSection}
