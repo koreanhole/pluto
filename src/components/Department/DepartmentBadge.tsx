@@ -5,8 +5,11 @@ import { Text, Alert } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import { deleteFromFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
+import theme from "theme";
 
 const DepartmentBadgeContainer = styled.View`
+  margin-top: 8px;
+  margin-left: 8px;
   flex-direction: row;
   flex-wrap: wrap;
 `;
@@ -37,7 +40,14 @@ const DepartmentBadgeItem = ({
       raised={true}
       title={departmentName}
       onPress={handleClickDepartmentBadgeItem}
-      icon={<Icon name="clear" type="material" color="white" size={15} />}
+      icon={
+        <Icon
+          name="clear"
+          type="material"
+          color={theme.colors.white}
+          size={15}
+        />
+      }
       iconRight={true}
       containerStyle={{
         alignSelf: "flex-start",

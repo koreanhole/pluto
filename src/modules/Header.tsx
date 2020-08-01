@@ -3,6 +3,7 @@ import { Header as RNElementHeader, Icon, Text } from "react-native-elements";
 import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import { Divider } from "react-native-elements";
+import theme from "theme";
 
 export type HeaderMode = "MENU" | "BACK" | "NONE";
 
@@ -17,13 +18,13 @@ type HeaderLeftButtonProps = {
 };
 
 const StyledHeaderTitle = styled(Text)`
-  color: #2b2926;
+  color: ${theme.colors.black};
   font-size: 20px;
   font-weight: bold;
 `;
 
 const StyledHeaderIcon = styled(Icon)`
-  color: #2b2926;
+  color: ${theme.colors.black};
 `;
 
 function HeaderLeftButton({ mode }: HeaderLeftButtonProps) {
@@ -66,7 +67,7 @@ export default function Header({ title, mode, rightComponent }: HeaderProps) {
         centerComponent={<HeaderTitle title={title} />}
         rightComponent={rightComponent}
         containerStyle={{
-          backgroundColor: "#f2f2f2",
+          backgroundColor: theme.colors.ligthGrey,
         }}
       />
       <Divider />

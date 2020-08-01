@@ -1,15 +1,21 @@
 import * as React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { View } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 import styled from "styled-components/native";
-import { Divider } from "react-native-elements";
+import { Divider, Icon } from "react-native-elements";
 import Ripple from "react-native-material-ripple";
 import { addToFavoriteDepartmentList } from "./redux/actions";
+import { getFavoriteDepartmentList } from "./redux/selectors";
+import theme from "theme";
 
 type AccordionSection = {
   departmentType: string;
   departmentList: string[];
+};
+
+type AccordionTextProps = {
+  type: "HEADER" | "CONTENT";
 };
 
 const ACCORDIONSECTIONS: AccordionSection[] = [
@@ -32,24 +38,30 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
   },
 ];
 
-const AccordionHeaderContainer = styled.View``;
+const AccordionHeaderContainer = styled.View`
+  padding: 10px;
+`;
 
-const AccordionText = styled.Text`
+export const AccordionText = styled.Text<AccordionTextProps>`
   padding: 10px 0;
   font-size: 15px;
+  ${(props) => (props.type == "HEADER" ? "font-weight: bold" : "")};
 `;
 
 const AccordionContentItemContainer = styled.View`
-  margin-left: 24px;
+  flex-direction: row;
+  margin-horizontal: 24px;
+  margin-vertical: 8px;
+  justify-content: space-between;
 `;
 
 const AccordionHeader = (section: AccordionSection) => {
   return (
     <>
       <AccordionHeaderContainer>
-        <AccordionText>{section.departmentType}</AccordionText>
+        <AccordionText type="HEADER">{section.departmentType}</AccordionText>
       </AccordionHeaderContainer>
-      <Divider style={{ backgroundColor: "#f2f2f2" }} />
+      <Divider style={{ backgroundColor: theme.colors.grey }} />
     </>
   );
 };
@@ -75,13 +87,20 @@ const AccrodionContentItem = ({
   departmentName: string;
 }) => {
   const dispatch = useDispatch();
+
+  const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
+
   const handleClickDepartmentName = React.useCallback(() => {
     dispatch(addToFavoriteDepartmentList(departmentName));
   }, []);
   return (
     <Ripple onPress={handleClickDepartmentName}>
       <AccordionContentItemContainer>
-        <AccordionText>{departmentName}</AccordionText>
+        <AccordionText type="CONTENT">{departmentName}</AccordionText>
+        {favoriteDepartmentList !== null &&
+        favoriteDepartmentList.includes(departmentName) ? (
+          <Icon name="check" type="material" color={theme.colors.green} />
+        ) : null}
       </AccordionContentItemContainer>
     </Ripple>
   );
@@ -93,17 +112,15 @@ export default function DepartmentAccordion() {
   ]);
 
   return (
-    <>
-      <Accordion
-        sections={ACCORDIONSECTIONS}
-        activeSections={activeDepartmentSection}
-        renderHeader={AccordionHeader}
-        renderContent={AccordionContent}
-        onChange={setActiveDepartmentSection}
-        touchableComponent={Ripple}
-        expandMultiple={true}
-        underlayColor="#fff"
-      />
-    </>
+    <Accordion
+      sections={ACCORDIONSECTIONS}
+      activeSections={activeDepartmentSection}
+      renderHeader={AccordionHeader}
+      renderContent={AccordionContent}
+      onChange={setActiveDepartmentSection}
+      touchableComponent={Ripple}
+      expandMultiple={true}
+      underlayColor={theme.colors.white}
+    />
   );
 }

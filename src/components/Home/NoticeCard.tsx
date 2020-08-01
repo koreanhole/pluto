@@ -5,6 +5,7 @@ import { Divider } from "react-native-elements";
 // @ts-ignore
 import TextAvatar from "react-native-text-avatar";
 import { useNavigation } from "@react-navigation/native";
+import theme from "theme";
 
 export type NoticeCardProps = {
   type: string;
@@ -46,7 +47,7 @@ const NoticeCardItemTitleText = styled.Text`
 
 const NoticeCardItemSubtitleText = styled.Text`
   font-size: 12px;
-  color: #828282;
+  color: ${theme.colors.darkGrey};
 `;
 
 export const NoticeCardHeader = ({ created_day }: { created_day: string }) => {
@@ -67,8 +68,8 @@ const NoticeCardItemTitle = ({
   return (
     <NoticeCardItemTitleContainer>
       <TextAvatar
-        backgroundColor={"#0a4e9b"}
-        textColor={"#fff"}
+        backgroundColor={theme.colors.department.general}
+        textColor={theme.colors.white}
         size={34}
         type={"circle"}
       >
