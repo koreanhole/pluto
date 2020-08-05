@@ -10,7 +10,7 @@ import theme from "theme";
 import { setArticleId } from "components/Article/redux/actions";
 
 export type NoticeCardItem = {
-  type: string;
+  deptName: string;
   authorDept: string;
   title: string;
   date: string;
@@ -44,7 +44,7 @@ const NoticeCardItemSubtitleContainer = styled.View`
 `;
 
 const NoticeCardItemTitleText = styled.Text`
-  margin-left: 8px;
+  padding-left: 8px;
   font-size: 15px;
   align-self: center;
 `;
@@ -54,10 +54,14 @@ const NoticeCardItemSubtitleText = styled.Text`
   color: ${theme.colors.darkGrey};
 `;
 
-export const NoticeCardHeader = ({ created_day }: { created_day: string }) => {
+export const NoticeCardHeader = ({
+  displayedDay,
+}: {
+  displayedDay: string;
+}) => {
   return (
     <NoticeCardHeaderContainer>
-      <NoticeCardHeaderText>{created_day}</NoticeCardHeaderText>
+      <NoticeCardHeaderText>{displayedDay}</NoticeCardHeaderText>
     </NoticeCardHeaderContainer>
   );
 };
@@ -104,7 +108,7 @@ const NoticeCardItemSubtitle = ({
 };
 
 export default function NoticeCard({
-  type,
+  deptName,
   authorDept,
   title,
   date,
@@ -116,7 +120,7 @@ export default function NoticeCard({
 
   const handleNoticeCardItemClick = React.useCallback(() => {
     navigation.navigate("Article");
-    dispatch(setArticleId({ type: type, listId: listId }));
+    dispatch(setArticleId({ deptName: deptName, listId: listId }));
   }, []);
 
   return (

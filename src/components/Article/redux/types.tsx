@@ -7,10 +7,11 @@ export type NoticeArticle = {
   createdDate: string;
   listId: string;
   title: string;
-  type: string;
+  deptCode: string;
+  deptName: string;
 };
 
 export type ArticleId = {
-  type: string;
+  deptName: string;
   listId: string;
 };

@@ -7,6 +7,7 @@ import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
 import { noticeFirestore } from "firebase/firestore";
+import { getDescriptiveDateDifference } from "./util";
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -17,23 +18,25 @@ export default function Home() {
 
   const [noticeData, setNoticeData] = React.useState<NoticeCardItem[]>();
 
-  const retrieveData = async () => {
+  const retrieveData = async (favoriteDepartment: string) => {
     try {
       let noticeQuery = noticeFirestore
-        .collection("FA1")
+        .collection(favoriteDepartment)
         .where("createdDate", "==", "2020-07-20");
       let noticeSnapshot = await noticeQuery.get();
-      let fetchedNoticeData = noticeSnapshot.docs.map((document) => {
-        const fetchedData = document.data();
-        return {
-          type: fetchedData.type,
-          authorDept: fetchedData.authorDept,
-          title: fetchedData.title,
-          date: fetchedData.createdDate,
-          author: fetchedData.authorName,
-          listId: fetchedData.listId,
-        };
-      });
+      let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
+        (document) => {
+          const fetchedData = document.data();
+          return {
+            deptName: fetchedData.deptName,
+            authorDept: fetchedData.authorDept,
+            title: fetchedData.title,
+            date: fetchedData.createdDate,
+            author: fetchedData.authorName,
+            listId: fetchedData.listId,
+          };
+        }
+      );
       setNoticeData(fetchedNoticeData);
     } catch (error) {
       console.log(error);
@@ -41,8 +44,11 @@ export default function Home() {
   };
 
   React.useEffect(() => {
-    retrieveData();
-    console.log(noticeData);
+    if (favoriteDepartmentList !== null) {
+      favoriteDepartmentList.forEach((favoriteDepartment) =>
+        retrieveData(favoriteDepartment)
+      );
+    }
   }, [favoriteDepartmentList]);
   return (
     <AppLayout
@@ -53,15 +59,17 @@ export default function Home() {
       <HomeContainer>
         {noticeData && (
           <SectionList
-            sections={[{ created_day: "오늘", data: noticeData }]}
+            sections={[{ data: noticeData }]}
             keyExtractor={(item, index) => item.title + index}
             stickySectionHeadersEnabled={false}
-            renderSectionHeader={({ section: { created_day } }) => (
-              <NoticeCardHeader created_day={created_day} />
+            renderSectionHeader={({ section: { data } }) => (
+              <NoticeCardHeader
+                displayedDay={getDescriptiveDateDifference(data[0].date)}
+              />
             )}
             renderItem={(data) => (
               <NoticeCard
-                type={data.item.type}
+                deptName={data.item.deptName}
                 authorDept={data.item.authorDept}
                 title={data.item.title}
                 date={data.item.date}

@@ -28,23 +28,24 @@ export default function Article() {
   const fetchNoticeData = async () => {
     try {
       let noticeRef = noticeFirestore
-        .collection(articleId.type)
+        .collection(articleId.deptName)
         .doc(articleId.listId);
 
       noticeRef.get().then((document) => {
         if (document.exists) {
           const fetchedData = document.data();
           if (typeof fetchedData !== "undefined") {
-            const fetchedNoticeData = {
+            const fetchedNoticeData: NoticeArticle = {
               attachmentLink: fetchedData.attachmentLink,
               authorDept: fetchedData.authorDept,
               authorName: fetchedData.authorName,
               contentHtml: fetchedData.contentHtml,
               createdDate: fetchedData.createdDate,
               title: fetchedData.title,
-              type: fetchedData.type,
               contentString: fetchedData.contentString,
               listId: fetchedData.listId,
+              deptName: fetchedData.deptName,
+              deptCode: fetchedData.deptCode,
             };
             setNoticeData(fetchedNoticeData);
           }
@@ -60,7 +61,7 @@ export default function Article() {
   }, [articleId]);
   return (
     <AppLayout
-      title="2020-여름방학 캠퍼스 안심시대 순찰대 봉사단(4차-추가) 선발 결과 및 OT 안내"
+      title={noticeData?.title}
       mode="BACK"
       rightComponent={<HeaderRightButton />}
     >
@@ -68,13 +69,13 @@ export default function Article() {
         {typeof noticeData !== "undefined" ? (
           <ArticleContainer>
             <ArticleAdditionalInformation>
-              {noticeData?.createdDate}
+              {noticeData.createdDate}
             </ArticleAdditionalInformation>
             <ArticleAdditionalInformation>
-              {`${noticeData?.authorName} / ${noticeData?.authorDept} / ${noticeData?.type}`}
+              {`${noticeData.authorName} / ${noticeData.authorDept} / ${noticeData.deptName}`}
             </ArticleAdditionalInformation>
-            {typeof noticeData?.contentHtml !== "undefined" ? (
-              <HTML html={noticeData?.contentHtml} />
+            {typeof noticeData.contentHtml !== "undefined" ? (
+              <HTML html={noticeData.contentHtml} />
             ) : (
               <Text>데이터가 존재하지 않습니다.</Text>
             )}
