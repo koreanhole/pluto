@@ -7,7 +7,12 @@ import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
 import { noticeFirestore } from "firebase/firestore";
-import { getDescriptiveDateDifference } from "./util";
+import { getDescriptiveDateDifference, getFormattedDateString } from "./util";
+import { subDays } from "date-fns";
+
+type SectionDataList = {
+  data: NoticeCardItem[];
+};
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -16,13 +21,16 @@ const HomeContainer = styled(View)`
 export default function Home() {
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
-  const [noticeData, setNoticeData] = React.useState<NoticeCardItem[]>();
+  const [sectionData, setSectionData] = React.useState<SectionDataList[]>();
+  const [noticeCreatedDate, setNoticeCreatedDate] = React.useState<Date>(
+    new Date()
+  );
 
-  const fetchNoticeData = async (favoriteDepartment: string) => {
+  const fetchNoticeData = async (favoriteDepartment: string, date: string) => {
     try {
       let noticeQuery = noticeFirestore
         .collection(favoriteDepartment)
-        .where("createdDate", "==", "2020-07-21");
+        .where("createdDate", "==", date);
       let noticeSnapshot = await noticeQuery.get();
       let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
         (document) => {
@@ -37,19 +45,40 @@ export default function Home() {
           };
         }
       );
-      setNoticeData(fetchedNoticeData);
+      if (typeof sectionData !== "undefined") {
+        setSectionData([...sectionData, { data: fetchedNoticeData }]);
+      } else {
+        setSectionData([{ data: fetchedNoticeData }]);
+      }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
+  };
+
+  const fetchMoreNoticeData = () => {
+    if (favoriteDepartmentList !== null) {
+      favoriteDepartmentList.forEach((favoriteDepartment) =>
+        fetchNoticeData(
+          favoriteDepartment,
+          getFormattedDateString(noticeCreatedDate)
+        )
+      );
+    }
+    setNoticeCreatedDate(subDays(noticeCreatedDate, 1));
   };
 
   React.useEffect(() => {
     if (favoriteDepartmentList !== null) {
       favoriteDepartmentList.forEach((favoriteDepartment) =>
-        fetchNoticeData(favoriteDepartment)
+        fetchNoticeData(
+          favoriteDepartment,
+          getFormattedDateString(noticeCreatedDate)
+        )
       );
     }
-  }, [favoriteDepartmentList]);
+    setNoticeCreatedDate(subDays(noticeCreatedDate, 1));
+    console.log(sectionData);
+  }, []);
   return (
     <AppLayout
       title="UOS공지사항 뷰어"
@@ -57,16 +86,23 @@ export default function Home() {
       rightComponent={<HeaderRightButton />}
     >
       <HomeContainer>
-        {noticeData && (
+        {sectionData && (
           <SectionList
-            sections={[{ data: noticeData }]}
+            sections={sectionData}
             keyExtractor={(item, index) => item.title + index}
             stickySectionHeadersEnabled={false}
-            renderSectionHeader={({ section: { data } }) => (
-              <NoticeCardHeader
-                displayedDay={getDescriptiveDateDifference(data[0].date)}
-              />
-            )}
+            onEndReached={fetchMoreNoticeData}
+            renderSectionHeader={({ section: { data } }) => {
+              if (data.length !== 0) {
+                return (
+                  <NoticeCardHeader
+                    displayedDay={getDescriptiveDateDifference(data[0].date)}
+                  />
+                );
+              } else {
+                return null;
+              }
+            }}
             renderItem={(data) => (
               <NoticeCard
                 deptName={data.item.deptName}

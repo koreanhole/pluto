@@ -1,4 +1,4 @@
-import { parse, differenceInDays } from "date-fns";
+import { parse, differenceInDays, format } from "date-fns";
 
 export function getDescriptiveDateDifference(date: string) {
   const parsedDateTime = parse(date, "yyyy-MM-dd", new Date());
@@ -13,4 +13,8 @@ export function getDescriptiveDateDifference(date: string) {
   } else {
     return `${dateDifference}일전`;
   }
+}
+
+export function getFormattedDateString(date: Date) {
+  return format(date, "yyyy-MM-dd");
 }
