@@ -9,6 +9,7 @@ export type NoticeArticle = {
   title: string;
   deptCode: string;
   deptName: string;
+  url: string;
 };
 
 export type ArticleId = {

@@ -18,7 +18,7 @@ export default function Home() {
 
   const [noticeData, setNoticeData] = React.useState<NoticeCardItem[]>();
 
-  const retrieveData = async (favoriteDepartment: string) => {
+  const fetchNoticeData = async (favoriteDepartment: string) => {
     try {
       let noticeQuery = noticeFirestore
         .collection(favoriteDepartment)
@@ -46,7 +46,7 @@ export default function Home() {
   React.useEffect(() => {
     if (favoriteDepartmentList !== null) {
       favoriteDepartmentList.forEach((favoriteDepartment) =>
-        retrieveData(favoriteDepartment)
+        fetchNoticeData(favoriteDepartment)
       );
     }
   }, [favoriteDepartmentList]);

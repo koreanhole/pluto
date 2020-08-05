@@ -2,11 +2,13 @@ import * as React from "react";
 import { Linking } from "react-native";
 import { Icon } from "react-native-elements";
 
-export default function HeaderRightButton() {
+export default function HeaderRightButton({ url }: { url?: string }) {
   const handleClickHeaderRightButton = React.useCallback(() => {
-    Linking.openURL("https://naver.com").catch((err) =>
-      console.error("Couldn't load page", err)
-    );
+    if (typeof url !== "undefined") {
+      Linking.openURL(url).catch((err) =>
+        console.error("Couldn't load page", err)
+      );
+    }
   }, []);
   return (
     <Icon

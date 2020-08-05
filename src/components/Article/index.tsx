@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { getArticleId } from "./redux/selectors";
 import { noticeFirestore } from "firebase/firestore";
 import { NoticeArticle } from "./redux/types";
-import { Text } from "react-native-elements";
 
 const ArticleContainer = styled.View`
   margin: 16px;
@@ -46,6 +45,7 @@ export default function Article() {
               listId: fetchedData.listId,
               deptName: fetchedData.deptName,
               deptCode: fetchedData.deptCode,
+              url: fetchedData.url,
             };
             setNoticeData(fetchedNoticeData);
           }
@@ -59,14 +59,14 @@ export default function Article() {
   React.useEffect(() => {
     fetchNoticeData();
   }, [articleId]);
-  return (
-    <AppLayout
-      title={noticeData?.title}
-      mode="BACK"
-      rightComponent={<HeaderRightButton />}
-    >
-      <ScrollView>
-        {typeof noticeData !== "undefined" ? (
+  if (typeof noticeData !== "undefined") {
+    return (
+      <AppLayout
+        title={noticeData.title}
+        mode="BACK"
+        rightComponent={<HeaderRightButton url={noticeData.url} />}
+      >
+        <ScrollView>
           <ArticleContainer>
             <ArticleAdditionalInformation>
               {noticeData.createdDate}
@@ -74,16 +74,12 @@ export default function Article() {
             <ArticleAdditionalInformation>
               {`${noticeData.authorName} / ${noticeData.authorDept} / ${noticeData.deptName}`}
             </ArticleAdditionalInformation>
-            {typeof noticeData.contentHtml !== "undefined" ? (
-              <HTML html={noticeData.contentHtml} />
-            ) : (
-              <Text>데이터가 존재하지 않습니다.</Text>
-            )}
+            <HTML html={noticeData.contentHtml} />
           </ArticleContainer>
-        ) : (
-          <Text>데이터가 존재하지 않습니다.</Text>
-        )}
-      </ScrollView>
-    </AppLayout>
-  );
+        </ScrollView>
+      </AppLayout>
+    );
+  } else {
+    return <AppLayout title="데이터가 없습니다." mode="BACK" />;
+  }
 }
