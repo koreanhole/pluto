@@ -8,7 +8,7 @@ import theme from "theme";
 export type HeaderMode = "MENU" | "BACK" | "NONE";
 
 type HeaderProps = {
-  title: string;
+  title?: string;
   mode: HeaderMode;
   rightComponent?: React.ReactElement;
 };
@@ -53,7 +53,7 @@ function HeaderLeftButton({ mode }: HeaderLeftButtonProps) {
   }
 }
 
-function HeaderTitle({ title }: { title: string }) {
+function HeaderTitle({ title }: { title?: string }) {
   return <StyledHeaderTitle>{title}</StyledHeaderTitle>;
 }
 

@@ -4,7 +4,7 @@ import Header, { HeaderMode } from "./Header";
 import styled from "styled-components/native";
 
 type AppLayoutProps = {
-  title: string;
+  title?: string;
   mode: HeaderMode;
   rightComponent?: React.ReactElement;
   children?: React.ReactNode;
