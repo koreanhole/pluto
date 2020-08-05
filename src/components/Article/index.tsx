@@ -3,12 +3,35 @@ import AppLayout from "modules/AppLayout";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 import HTML from "react-native-render-html";
+import {
+  IGNORED_TAGS,
+  alterNode,
+  makeTableRenderer,
+} from "react-native-render-html-table-bridge";
+import WebView from "react-native-webview";
 import HeaderRightButton from "./HeaderRightButton";
 import theme from "theme";
 import { useSelector } from "react-redux";
 import { getArticleId } from "./redux/selectors";
 import { noticeFirestore } from "firebase/firestore";
 import { NoticeArticle } from "./redux/types";
+import { Linking } from "react-native";
+import { Dimensions } from "react-native";
+
+const config = {
+  WebViewComponent: WebView,
+  autoHeight: false,
+};
+
+const renderers = {
+  table: makeTableRenderer(config),
+};
+
+const htmlConfig = {
+  alterNode,
+  renderers,
+  ignoredTags: IGNORED_TAGS,
+};
 
 const ArticleContainer = styled.View`
   margin: 16px;
@@ -56,6 +79,14 @@ export default function Article() {
     }
   };
 
+  const handleClickHtmlLink = React.useCallback((href: string) => {
+    if (typeof href !== "undefined") {
+      Linking.openURL(href).catch((err) =>
+        console.error("Couldn't load page", err)
+      );
+    }
+  }, []);
+
   React.useEffect(() => {
     fetchNoticeData();
   }, [articleId]);
@@ -74,7 +105,15 @@ export default function Article() {
             <ArticleAdditionalInformation>
               {`${noticeData.authorName} / ${noticeData.authorDept} / ${noticeData.deptName}`}
             </ArticleAdditionalInformation>
-            <HTML html={noticeData.contentHtml} />
+            {/* @ts-ignore */}
+            <HTML
+              {...htmlConfig}
+              ignoredTags={[...IGNORED_TAGS]}
+              html={noticeData.contentHtml}
+              textSelectable={true}
+              imagesMaxWidth={Dimensions.get("window").width - 32}
+              onLinkPress={(_event, href) => handleClickHtmlLink(href)}
+            />
           </ArticleContainer>
         </ScrollView>
       </AppLayout>

@@ -22,7 +22,7 @@ export default function Home() {
     try {
       let noticeQuery = noticeFirestore
         .collection(favoriteDepartment)
-        .where("createdDate", "==", "2020-07-20");
+        .where("createdDate", "==", "2020-07-21");
       let noticeSnapshot = await noticeQuery.get();
       let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
         (document) => {

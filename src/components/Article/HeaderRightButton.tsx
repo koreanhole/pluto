@@ -9,7 +9,7 @@ export default function HeaderRightButton({ url }: { url?: string }) {
         console.error("Couldn't load page", err)
       );
     }
-  }, []);
+  }, [url]);
   return (
     <Icon
       name="public"
