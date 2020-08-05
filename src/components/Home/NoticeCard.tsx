@@ -1,17 +1,21 @@
 import React from "react";
 import styled from "styled-components/native";
+import { useDispatch } from "react-redux";
 import Ripple from "react-native-material-ripple";
 import { Divider } from "react-native-elements";
 // @ts-ignore
 import TextAvatar from "react-native-text-avatar";
 import { useNavigation } from "@react-navigation/native";
 import theme from "theme";
+import { setArticleId } from "components/Article/redux/actions";
 
-export type NoticeCardProps = {
+export type NoticeCardItem = {
   type: string;
+  authorDept: string;
   title: string;
   date: string;
   author: string;
+  listId: string;
 };
 
 const NoticeCardContainer = styled.View`
@@ -59,10 +63,10 @@ export const NoticeCardHeader = ({ created_day }: { created_day: string }) => {
 };
 
 const NoticeCardItemTitle = ({
-  type,
+  authorDept,
   title,
 }: {
-  type: string;
+  authorDept: string;
   title: string;
 }) => {
   return (
@@ -73,7 +77,7 @@ const NoticeCardItemTitle = ({
         size={34}
         type={"circle"}
       >
-        {`${type}`}
+        {`${authorDept}`}
       </TextAvatar>
       <NoticeCardItemTitleText>{title}</NoticeCardItemTitleText>
     </NoticeCardItemTitleContainer>
@@ -83,16 +87,16 @@ const NoticeCardItemTitle = ({
 const NoticeCardItemSubtitle = ({
   date,
   author,
-  type,
+  authorDept,
 }: {
   date: string;
   author: string;
-  type: string;
+  authorDept: string;
 }) => {
   return (
     <NoticeCardItemSubtitleContainer>
       <NoticeCardItemSubtitleText>
-        {`${author} / ${type}`}
+        {`${author} / ${authorDept}`}
       </NoticeCardItemSubtitleText>
       <NoticeCardItemSubtitleText>{date}</NoticeCardItemSubtitleText>
     </NoticeCardItemSubtitleContainer>
@@ -101,21 +105,29 @@ const NoticeCardItemSubtitle = ({
 
 export default function NoticeCard({
   type,
+  authorDept,
   title,
   date,
   author,
-}: NoticeCardProps) {
+  listId,
+}: NoticeCardItem) {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const handleNoticeCardItemClick = React.useCallback(() => {
     navigation.navigate("Article");
+    dispatch(setArticleId({ type: type, listId: listId }));
   }, []);
 
   return (
     <Ripple onPress={handleNoticeCardItemClick}>
       <NoticeCardContainer>
-        <NoticeCardItemTitle type={type} title={title} />
-        <NoticeCardItemSubtitle date={date} author={author} type={type} />
+        <NoticeCardItemTitle authorDept={authorDept} title={title} />
+        <NoticeCardItemSubtitle
+          date={date}
+          author={author}
+          authorDept={authorDept}
+        />
         <Divider />
       </NoticeCardContainer>
     </Ripple>
