@@ -1,18 +1,13 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
 import AppLayout from "modules/AppLayout";
-import NoticeCard, { NoticeCardHeader, NoticeCardItem } from "./NoticeCard";
-import { View, SectionList } from "react-native";
+import NoticeCard, { NoticeCardItem } from "./NoticeCard";
+import { View, FlatList } from "react-native";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
 import { noticeFirestore } from "firebase/firestore";
-import { getDescriptiveDateDifference, getFormattedDateString } from "./util";
 import { subDays } from "date-fns";
-
-type SectionDataList = {
-  data: NoticeCardItem[];
-};
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -21,16 +16,22 @@ const HomeContainer = styled(View)`
 export default function Home() {
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
-  const [sectionData, setSectionData] = React.useState<SectionDataList[]>();
+  const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
   const [noticeCreatedDate, setNoticeCreatedDate] = React.useState<Date>(
     new Date()
   );
 
-  const fetchNoticeData = async (favoriteDepartment: string, date: string) => {
+  const retrieveNoticeData = async (
+    favoriteDepartment: string,
+    createdDate: Date
+  ) => {
     try {
+      const fiveDaysBefore = subDays(createdDate, 5);
       let noticeQuery = noticeFirestore
         .collection(favoriteDepartment)
-        .where("createdDate", "==", date);
+        .where("createdDateTimestamp", "<", createdDate)
+        .where("createdDateTimestamp", ">", fiveDaysBefore)
+        .orderBy("createdDateTimestamp", "desc");
       let noticeSnapshot = await noticeQuery.get();
       let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
         (document) => {
@@ -45,39 +46,27 @@ export default function Home() {
           };
         }
       );
-      if (typeof sectionData !== "undefined") {
-        setSectionData([...sectionData, { data: fetchedNoticeData }]);
+      if (typeof flatListData !== "undefined") {
+        setFlatListData(flatListData.concat(fetchedNoticeData));
       } else {
-        setSectionData([{ data: fetchedNoticeData }]);
+        setFlatListData(fetchedNoticeData);
       }
+      setNoticeCreatedDate(fiveDaysBefore);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const fetchMoreNoticeData = () => {
+  const fetchNoticeData = () => {
     if (favoriteDepartmentList !== null) {
-      favoriteDepartmentList.forEach((favoriteDepartment) =>
-        fetchNoticeData(
-          favoriteDepartment,
-          getFormattedDateString(noticeCreatedDate)
-        )
-      );
+      favoriteDepartmentList.forEach((favoriteDepartment) => {
+        retrieveNoticeData(favoriteDepartment, noticeCreatedDate);
+      });
     }
-    setNoticeCreatedDate(subDays(noticeCreatedDate, 1));
   };
 
   React.useEffect(() => {
-    if (favoriteDepartmentList !== null) {
-      favoriteDepartmentList.forEach((favoriteDepartment) =>
-        fetchNoticeData(
-          favoriteDepartment,
-          getFormattedDateString(noticeCreatedDate)
-        )
-      );
-    }
-    setNoticeCreatedDate(subDays(noticeCreatedDate, 1));
-    console.log(sectionData);
+    fetchNoticeData();
   }, []);
   return (
     <AppLayout
@@ -86,23 +75,11 @@ export default function Home() {
       rightComponent={<HeaderRightButton />}
     >
       <HomeContainer>
-        {sectionData && (
-          <SectionList
-            sections={sectionData}
+        {flatListData && (
+          <FlatList
+            data={flatListData}
             keyExtractor={(item, index) => item.title + index}
-            stickySectionHeadersEnabled={false}
-            onEndReached={fetchMoreNoticeData}
-            renderSectionHeader={({ section: { data } }) => {
-              if (data.length !== 0) {
-                return (
-                  <NoticeCardHeader
-                    displayedDay={getDescriptiveDateDifference(data[0].date)}
-                  />
-                );
-              } else {
-                return null;
-              }
-            }}
+            onEndReached={fetchNoticeData}
             renderItem={(data) => (
               <NoticeCard
                 deptName={data.item.deptName}
