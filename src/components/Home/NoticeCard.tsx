@@ -67,10 +67,10 @@ export const NoticeCardHeader = ({
 };
 
 const NoticeCardItemTitle = ({
-  authorDept,
+  deptName,
   title,
 }: {
-  authorDept: string;
+  deptName: string;
   title: string;
 }) => {
   return (
@@ -81,7 +81,7 @@ const NoticeCardItemTitle = ({
         size={34}
         type={"circle"}
       >
-        {`${authorDept}`}
+        {`${deptName}`}
       </TextAvatar>
       <NoticeCardItemTitleText>{title}</NoticeCardItemTitleText>
     </NoticeCardItemTitleContainer>
@@ -126,7 +126,7 @@ export default function NoticeCard({
   return (
     <Ripple onPress={handleNoticeCardItemClick}>
       <NoticeCardContainer>
-        <NoticeCardItemTitle authorDept={authorDept} title={title} />
+        <NoticeCardItemTitle deptName={deptName} title={title} />
         <NoticeCardItemSubtitle
           date={date}
           author={author}

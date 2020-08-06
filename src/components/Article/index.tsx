@@ -2,44 +2,29 @@ import * as React from "react";
 import AppLayout from "modules/AppLayout";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
-import HTML from "react-native-render-html";
-import {
-  IGNORED_TAGS,
-  alterNode,
-  makeTableRenderer,
-} from "react-native-render-html-table-bridge";
-import WebView from "react-native-webview";
 import HeaderRightButton from "./HeaderRightButton";
 import theme from "theme";
 import { useSelector } from "react-redux";
 import { getArticleId } from "./redux/selectors";
 import { noticeFirestore } from "firebase/firestore";
 import { NoticeArticle } from "./redux/types";
-import { Linking } from "react-native";
 import { Dimensions } from "react-native";
-
-const config = {
-  WebViewComponent: WebView,
-  autoHeight: false,
-};
-
-const renderers = {
-  table: makeTableRenderer(config),
-};
-
-const htmlConfig = {
-  alterNode,
-  renderers,
-  ignoredTags: IGNORED_TAGS,
-};
+import AutoHeightWebView from "react-native-autoheight-webview";
 
 const ArticleContainer = styled.View`
   margin: 16px;
 `;
 
+const ArticleTitle = styled.Text`
+  color: ${theme.colors.black};
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+`;
+
 const ArticleAdditionalInformation = styled.Text`
   color: ${theme.colors.darkGrey};
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 `;
 
 export default function Article() {
@@ -79,40 +64,40 @@ export default function Article() {
     }
   };
 
-  const handleClickHtmlLink = React.useCallback((href: string) => {
-    if (typeof href !== "undefined") {
-      Linking.openURL(href).catch((err) =>
-        console.error("Couldn't load page", err)
-      );
-    }
-  }, []);
-
   React.useEffect(() => {
     fetchNoticeData();
   }, [articleId]);
   if (typeof noticeData !== "undefined") {
     return (
       <AppLayout
-        title={noticeData.title}
+        title="게시글"
         mode="BACK"
         rightComponent={<HeaderRightButton url={noticeData.url} />}
       >
-        <ScrollView>
+        <ScrollView scrollIndicatorInsets={{ right: 1 }}>
           <ArticleContainer>
+            <ArticleTitle>{noticeData.title}</ArticleTitle>
             <ArticleAdditionalInformation>
               {noticeData.createdDate}
             </ArticleAdditionalInformation>
             <ArticleAdditionalInformation>
               {`${noticeData.authorName} / ${noticeData.authorDept} / ${noticeData.deptName}`}
             </ArticleAdditionalInformation>
-            {/* @ts-ignore */}
-            <HTML
-              {...htmlConfig}
-              ignoredTags={[...IGNORED_TAGS]}
-              html={noticeData.contentHtml}
-              textSelectable={true}
-              imagesMaxWidth={Dimensions.get("window").width - 32}
-              onLinkPress={(_event, href) => handleClickHtmlLink(href)}
+            <AutoHeightWebView
+              originWhitelist={["*"]}
+              scrollEnabled={false}
+              overScrollMode={"never"}
+              scalesPageToFit={true}
+              source={{ html: noticeData.contentHtml }}
+              viewportContent={"width=device-width, user-scalable=no"}
+              customStyle={`
+                img {
+                  display: block; max-width: 100%; height: auto;
+                }
+              `}
+              style={{
+                width: Dimensions.get("window").width - 32,
+              }}
             />
           </ArticleContainer>
         </ScrollView>

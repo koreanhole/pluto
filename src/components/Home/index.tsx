@@ -67,7 +67,7 @@ export default function Home() {
 
   React.useEffect(() => {
     fetchNoticeData();
-  }, []);
+  }, [favoriteDepartmentList]);
   return (
     <AppLayout
       title="UOS공지사항 뷰어"
@@ -80,6 +80,7 @@ export default function Home() {
             data={flatListData}
             keyExtractor={(item, index) => item.title + index}
             onEndReached={fetchNoticeData}
+            scrollIndicatorInsets={{ right: 1 }}
             renderItem={(data) => (
               <NoticeCard
                 deptName={data.item.deptName}
