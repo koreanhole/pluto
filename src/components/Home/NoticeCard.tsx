@@ -102,7 +102,8 @@ const NoticeCardItemSubtitle = ({
   return (
     <NoticeCardItemSubtitleContainer>
       <NoticeCardItemSubtitleText>
-        {`${author} / ${authorDept}`}
+        {`${author}`}
+        {authorDept && ` / ${authorDept}`}
       </NoticeCardItemSubtitleText>
       <NoticeCardItemSubtitleText>{date}</NoticeCardItemSubtitleText>
     </NoticeCardItemSubtitleContainer>

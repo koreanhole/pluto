@@ -84,7 +84,9 @@ export default function Article() {
               {noticeData.createdDate}
             </ArticleAdditionalInformation>
             <ArticleAdditionalInformation>
-              {`${noticeData.authorName} / ${noticeData.authorDept} / ${noticeData.deptName}`}
+              {`${noticeData.authorName}`}
+              {noticeData.authorDept && ` / ${noticeData.authorDept}`}
+              {` / ${noticeData.deptName}`}
             </ArticleAdditionalInformation>
             <AutoHeightWebView
               originWhitelist={["*"]}
