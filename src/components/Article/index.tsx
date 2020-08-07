@@ -70,7 +70,12 @@ export default function Article() {
       <AppLayout
         title="게시글"
         mode="BACK"
-        rightComponent={<HeaderRightButton url={noticeData.url} />}
+        rightComponent={
+          <HeaderRightButton
+            url={noticeData.url}
+            attachment={noticeData.attachmentLink}
+          />
+        }
       >
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
           <ArticleContainer>

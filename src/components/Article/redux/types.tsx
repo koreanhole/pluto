@@ -1,5 +1,10 @@
+export type Attachment = {
+  file_link: string;
+  file_name: string;
+};
+
 export type NoticeArticle = {
-  attachmentLink: string[];
+  attachmentLink: Attachment[];
   authorDept: string;
   authorName: string;
   contentHtml: string;
