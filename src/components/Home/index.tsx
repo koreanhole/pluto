@@ -21,15 +21,12 @@ export default function Home() {
     new Date()
   );
 
-  const retrieveNoticeData = async (
-    favoriteDepartment: string,
-    createdDate: Date
-  ) => {
+  const retrieveNoticeData = async () => {
     try {
-      const fiveDaysBefore = subDays(createdDate, 5);
+      const fiveDaysBefore = subDays(noticeCreatedDate, 5);
       let noticeQuery = noticeFirestore
-        .collection(favoriteDepartment)
-        .where("createdDateTimestamp", "<", createdDate)
+        .where("deptName", "in", favoriteDepartmentList)
+        .where("createdDateTimestamp", "<", noticeCreatedDate)
         .where("createdDateTimestamp", ">", fiveDaysBefore)
         .orderBy("createdDateTimestamp", "desc");
       let noticeSnapshot = await noticeQuery.get();
@@ -59,9 +56,7 @@ export default function Home() {
 
   const fetchNoticeData = () => {
     if (favoriteDepartmentList !== null) {
-      favoriteDepartmentList.forEach((favoriteDepartment) => {
-        retrieveNoticeData(favoriteDepartment, noticeCreatedDate);
-      });
+      retrieveNoticeData();
     }
   };
 

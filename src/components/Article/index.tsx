@@ -34,9 +34,7 @@ export default function Article() {
 
   const fetchNoticeData = async () => {
     try {
-      let noticeRef = noticeFirestore
-        .collection(articleId.deptName)
-        .doc(articleId.listId);
+      let noticeRef = noticeFirestore.doc(articleId.listId);
 
       noticeRef.get().then((document) => {
         if (document.exists) {
