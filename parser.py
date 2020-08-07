@@ -23,15 +23,15 @@ def parseNotice(deptCode: str, listId: str):
     try:
         noticeSoup = soup.find("ul", class_="listType view")
         noticeHeaderSoup = noticeSoup.find("li")
+        noticeInformationSoup = noticeHeaderSoup.find("ul")
     except AttributeError:
         print("error: " + listId)
         return
 
-    noticeInformationSoup = noticeHeaderSoup.find("ul")
     # 글의 링크
     url = url
     # 글이 게제된 부서(ex. 일반공지)
-    deptName = getDeptName(deptCode)
+    deptName = getDeptName(deptCode).get("deptName")
     # 제목
     title = noticeHeaderSoup.find("span").text
     # 작성자
@@ -52,9 +52,10 @@ def parseNotice(deptCode: str, listId: str):
         attachmentLink.append(
             {"file_name": downloadSoup.text.lstrip(), "file_link": base_url+downloadSoup['href']})
     # 내용(html)
-    contentHtmlSoup = soup.find(id="view_content")
+    contentHtmlSoup = noticeSoup.find(id="view_content")
     # li tag 를 div tag로 바꿈
     contentHtmlSoup.name = "div"
+    # font-family attribute 삭제
     contentHtml = re.sub(
         r"\s*font-family\s*:\s*[^;]*;", "", str(contentHtmlSoup))
     # 내용(string)
@@ -80,7 +81,7 @@ def parseNotice(deptCode: str, listId: str):
     }
 
 
-def getNoticeLastid(deptCode: str):
+def getNoticeLastid(deptCode: str, deptType: str):
     query = "list_id=" + deptCode
 
     base_url = "https://www.uos.ac.kr"
@@ -92,8 +93,20 @@ def getNoticeLastid(deptCode: str):
     html = res.read()
 
     soup = BeautifulSoup(html, "html.parser")
-    noticeListSoup = soup.find("ul", class_="listType")
-    lastNoticeSoup = noticeListSoup.find("a", {"href": "#"})
+
+    # 전체 공지의 경우
+    if deptType == "전체공지":
+        noticeListSoup = soup.find("ul", class_="listType")
+        lastNoticeSoup = noticeListSoup.find("a", {"href": "#"})
+
+    # 공과대학 경우
+    elif deptType == "공과대학":
+        noticeListContainerSoup = soup.find("div", class_="table-style")
+        for noticeItemSoup in noticeListContainerSoup.find_all("div", class_="tb-body"):
+            if noticeItemSoup.find("ul", class_="clearfix"):
+                noticeListSoup = noticeItemSoup.find("ul", class_="clearfix")
+                break
+        lastNoticeSoup = noticeListSoup.find("a", {"href": "#a"})
 
     # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
     matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup["onclick"])

@@ -9,17 +9,32 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-deptCode = "FA35"
-deptName = getDeptName(deptCode)
-startListId = 412
-lastListId = getNoticeLastid(deptCode)
+# deptCode = "FA35"
+# deptName = getDeptName(deptCode)
+# startListId = 487
+# lastListId = getNoticeLastid(deptCode)
+
+# notice_ref = db.collection("notice")
+# for listId in range(startListId, lastListId + 1):
+#     notice_item_ref = notice_ref.document(str(listId))
+#     parsedNotice = parseNotice(deptCode, str(listId))
+#     if parsedNotice is not None:
+#         try:
+#             notice_item_ref.set(parsedNotice)
+#         except:
+#             print("error")
 
 notice_ref = db.collection("notice")
-for listId in range(startListId, lastListId + 1):
-    notice_item_ref = notice_ref.document(str(listId))
-    parsedNotice = parseNotice(deptCode, str(listId))
-    if parsedNotice is not None:
-        try:
-            notice_item_ref.set(parsedNotice)
-        except:
-            print("error")
+deptCode = "FA1"
+listId = 22536
+notice_item_ref = notice_ref.document(str(listId))
+parsedNotice = parseNotice(deptCode, str(listId))
+
+print(getNoticeLastid(deptCode, getDeptName(deptCode).get("deptType")))
+print(parsedNotice)
+
+if parsedNotice is not None:
+    try:
+        notice_item_ref.set(parsedNotice)
+    except:
+        print("error")
