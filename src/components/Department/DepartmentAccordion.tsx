@@ -20,7 +20,7 @@ type AccordionTextProps = {
 
 const ACCORDIONSECTIONS: AccordionSection[] = [
   {
-    departmentType: "전체",
+    departmentType: "전체공지",
     departmentList: [
       "일반공지",
       "학사공지",
@@ -33,8 +33,8 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
     ],
   },
   {
-    departmentType: "Second",
-    departmentList: ["Second content"],
+    departmentType: "공과대학",
+    departmentList: ["컴퓨터과학부"],
   },
 ];
 
