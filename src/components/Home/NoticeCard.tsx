@@ -8,6 +8,7 @@ import TextAvatar from "react-native-text-avatar";
 import { useNavigation } from "@react-navigation/native";
 import theme from "theme";
 import { setArticleId } from "components/Article/redux/actions";
+import randomColor from "randomcolor";
 
 export type NoticeCardItem = {
   deptName: string;
@@ -77,7 +78,7 @@ const NoticeCardItemTitle = ({
   return (
     <NoticeCardItemTitleContainer>
       <TextAvatar
-        backgroundColor={theme.colors.department.general}
+        backgroundColor={randomColor({ seed: deptName })}
         textColor={theme.colors.white}
         size={34}
         type={"circle"}

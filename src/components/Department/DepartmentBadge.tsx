@@ -6,6 +6,7 @@ import { Button, Icon } from "react-native-elements";
 import { deleteFromFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
+import randomColor from "randomcolor";
 
 const DepartmentBadgeContainer = styled.View`
   margin-top: 8px;
@@ -54,7 +55,10 @@ const DepartmentBadgeItem = ({
         marginRight: 8,
         marginBottom: 8,
       }}
-      buttonStyle={{ borderRadius: 100 }}
+      buttonStyle={{
+        borderRadius: 100,
+        backgroundColor: randomColor({ seed: departmentName }),
+      }}
       titleStyle={{ fontSize: 15 }}
     />
   );
