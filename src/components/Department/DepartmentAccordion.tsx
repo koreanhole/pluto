@@ -119,7 +119,6 @@ export default function DepartmentAccordion() {
       renderContent={AccordionContent}
       onChange={setActiveDepartmentSection}
       touchableComponent={Ripple}
-      expandMultiple={true}
       underlayColor={theme.colors.white}
     />
   );
