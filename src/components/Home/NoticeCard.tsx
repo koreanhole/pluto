@@ -47,6 +47,7 @@ const NoticeCardItemTitleText = styled.Text`
   padding-left: 8px;
   font-size: 15px;
   align-self: center;
+  flex: 1;
 `;
 
 const NoticeCardItemSubtitleText = styled.Text`
