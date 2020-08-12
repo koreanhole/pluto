@@ -99,12 +99,13 @@ def getNoticeLastid(deptCode: str, deptType: str):
         noticeListSoup = soup.find("ul", class_="listType")
         lastNoticeSoup = noticeListSoup.find("a", {"href": "#"})
 
-    # 공과대학 경우
-    elif deptType == "공과대학":
+    # 공과대학 / 정경대학 / 인문대학 / 자연과학대학 경우
+    elif deptType == "공과대학" or deptType == "정경대학" or deptType == "인문대학" or deptType == "자연과학대학":
         noticeListContainerSoup = soup.find("div", class_="table-style")
         for noticeItemSoup in noticeListContainerSoup.find_all("div", class_="tb-body"):
-            if noticeItemSoup.find("ul", class_="clearfix"):
-                noticeListSoup = noticeItemSoup.find("ul", class_="clearfix")
+            if noticeItemSoup.find(lambda tag: tag.name == "ul" and tag.get("class") == ['clearfix']):
+                noticeListSoup = noticeItemSoup.find(
+                    lambda tag: tag.name == "ul" and tag.get("class") == ['clearfix'])
                 break
         lastNoticeSoup = noticeListSoup.find("a", {"href": "#a"})
 

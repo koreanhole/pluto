@@ -1,6 +1,3 @@
-import datetime
-
-
 def getDeptName(deptCode: str):
     # 전체공지
     GeneralClassification = {
@@ -16,10 +13,25 @@ def getDeptName(deptCode: str):
     EngineeringClassification = {
         "20013DA1": "공과대학",
     }
+    # 정경대학
+    EconomicsClassification = {
+        "econo01": "정경대학",
+    }
+    # 인문대학
+    HumanityClassification = {
+        "human01": "인문대학",
+    }
+    # 자연과학대학
+    NaturalScienceClassification = {
+        "scien01": "자연과학대학",
+    }
     if GeneralClassification.get(deptCode):
         return {"deptType": "전체공지", "deptName": GeneralClassification.get(deptCode)}
     elif EngineeringClassification.get(deptCode):
         return {"deptType": "공과대학", "deptName": EngineeringClassification.get(deptCode)}
-
-
-print(getDeptName("20013DA1").get("deptName"))
+    elif EconomicsClassification.get(deptCode):
+        return {"deptType": "정경대학", "deptName": EconomicsClassification.get(deptCode)}
+    elif HumanityClassification.get(deptCode):
+        return {"deptType": "인문대학", "deptName": HumanityClassification.get(deptCode)}
+    elif NaturalScienceClassification.get(deptCode):
+        return {"deptType": "자연과학대학", "deptName": NaturalScienceClassification.get(deptCode)}
