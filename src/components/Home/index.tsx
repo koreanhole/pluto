@@ -16,7 +16,6 @@ const HomeContainer = styled(View)`
 export default function Home() {
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
-  const [isRefreshing, setIsRefreshing] = React.useState(true);
   const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
   const [noticeCreatedDate, setNoticeCreatedDate] = React.useState<Date>(
     new Date()
@@ -24,7 +23,6 @@ export default function Home() {
 
   const fetchNoticeData = async () => {
     try {
-      setIsRefreshing(true);
       const fiveDaysBefore = subDays(noticeCreatedDate, 5);
       let noticeQuery = noticeFirestore
         .where("deptName", "in", favoriteDepartmentList)
@@ -51,23 +49,17 @@ export default function Home() {
         setFlatListData(fetchedNoticeData);
       }
       setNoticeCreatedDate(fiveDaysBefore);
-      setIsRefreshing(false);
     } catch (error) {
       console.error(error);
     }
   };
-
-  const handleNoticeDataRefresh = React.useCallback(() => {
-    setNoticeCreatedDate(new Date());
-    fetchNoticeData();
-  }, []);
 
   React.useEffect(() => {
     fetchNoticeData();
   }, [favoriteDepartmentList]);
   return (
     <AppLayout
-      title="UOS공지사항 뷰어"
+      title="‍UOS 공지사항 🌋"
       mode="NONE"
       rightComponent={<HeaderRightButton />}
     >
@@ -78,8 +70,6 @@ export default function Home() {
             keyExtractor={(item, index) => item.title + index}
             onEndReached={fetchNoticeData}
             scrollIndicatorInsets={{ right: 1 }}
-            refreshing={isRefreshing}
-            onRefresh={handleNoticeDataRefresh}
             renderItem={(data) => (
               <NoticeCard
                 deptName={data.item.deptName}
