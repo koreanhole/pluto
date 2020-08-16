@@ -59,7 +59,7 @@ const DepartmentBadgeItem = ({
         borderRadius: 100,
         backgroundColor: randomColor({ seed: departmentName }),
       }}
-      titleStyle={{ fontSize: 15 }}
+      titleStyle={{ fontSize: 15, fontWeight: "bold" }}
     />
   );
 };

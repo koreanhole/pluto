@@ -28,8 +28,6 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
       "창업공지",
       "입찰공고",
       "시설공사",
-      "행사안내",
-      "비교과교육",
     ],
   },
   {
