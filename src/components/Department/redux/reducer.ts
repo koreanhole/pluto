@@ -8,7 +8,7 @@ import {
 import _ from "underscore";
 
 const reducer = combineReducers({
-  favoriteDepartment: createReducer<string[] | null>(null)
+  favoriteDepartment: createReducer<string[]>(["일반공지", "학사공지"])
     .handleAction(addToFavoriteDepartmentList, (state, action) => {
       if (state !== null) {
         if (state.includes(action.payload)) {
