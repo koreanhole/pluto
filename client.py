@@ -3,41 +3,59 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from data import Notice
 from util import getTypicalNoticeLastid, getDeptName
+from util import GeneralClassification, EngineeringClassification, EconomicsClassification, HumanityClassification, NaturalScienceClassification
 import ssl
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 
 cred = credentials.Certificate('./ServiceAccountKey.json')
 firebase_admin.initialize_app(cred)
-
 db = firestore.client()
-deptCode = "scien01"
-listId = 1023
 
 
-def uploadSingleNotice(deptCode: str, listId: str):
-    notice_ref = db.collection("notice").document("department")
+class FirebaseUpload(object):
 
-    query = "list_id=" + deptCode + "&seq=" + listId
-    base_url = "https://www.uos.ac.kr"
-    url = "https://www.uos.ac.kr/korNotice/view.do?" + query
+    @classmethod
+    def uploadSingleNotice(cls, deptCode: str, listId: int):
+        notice_ref = db.collection("notice").document(str(listId))
 
-    context = ssl._create_unverified_context()
-    req = Request(url)
-    res = urlopen(req, context=context)
-    html = res.read()
+        parsedNotice = Notice.to_dict(deptCode, listId)
 
-    parsedNotice = Notice.to_dict(html, url)
-    print(getTypicalNoticeLastid(deptCode))
-    print(parsedNotice)
-    notice_item_ref = notice_ref.collection(
-        parsedNotice.get("authorDept")).document(listId)
+        if parsedNotice is not None:
+            try:
+                notice_ref.set(parsedNotice)
+            except:
+                print("error")
 
-    if parsedNotice is not None:
-        try:
-            notice_item_ref.set(parsedNotice)
-        except:
-            print("error")
+    @classmethod
+    def saveLastVisitedListId(cls, deptCode: str, listId: int):
+        saved_list_id_dict = {
+            "deptName": getDeptName(deptCode),
+            "listId": listId,
+        }
+        saved_list_id_ref = db.collection("saved_list_id").document(deptCode)
+        saved_list_id_ref.set(saved_list_id_dict)
+
+    @classmethod
+    def getLastVisitedListId(cls, deptCode: str):
+        saved_list_id_ref = db.collection(
+            "saved_list_id").document(deptCode)
+
+        return saved_list_id_ref.get().to_dict()
+
+    @classmethod
+    def uploadMultiNotice(cls):
+        for deptCode in GeneralClassification:
+            lastSavedListId = cls.getLastVisitedListId(deptCode)
+            lastListId = getTypicalNoticeLastid(deptCode)
+            if lastSavedListId is not None:
+                lastSavedListId = lastSavedListId.get("listId")
+            else:
+                lastSavedListId = 0
+
+            for listId in range(lastSavedListId, lastListId):
+                print(deptCode, listId)
+                cls.uploadSingleNotice(deptCode, listId)
 
 
-uploadSingleNotice(deptCode, str(listId))
+FirebaseUpload.uploadMultiNotice()

@@ -12,7 +12,6 @@ GeneralClassification = {
     "FA35": "창업공지",
     "FA22": "입찰공고",
     "FA25": "시설공사",
-    "ED3": "비교과교육",
 }
 # 공과대학
 EngineeringClassification = {
