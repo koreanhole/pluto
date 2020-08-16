@@ -25,7 +25,6 @@ export default function Home() {
     try {
       const fiveDaysBefore = subDays(noticeCreatedDate, 5);
       let noticeQuery = noticeFirestore
-        .where("deptName", "in", favoriteDepartmentList)
         .where("createdDateTimestamp", "<", noticeCreatedDate)
         .where("createdDateTimestamp", ">", fiveDaysBefore)
         .orderBy("createdDateTimestamp", "desc");
@@ -56,7 +55,7 @@ export default function Home() {
 
   React.useEffect(() => {
     fetchNoticeData();
-  }, [favoriteDepartmentList]);
+  }, []);
   return (
     <AppLayout
       title="‍UOS 공지사항 🌋"
@@ -66,9 +65,12 @@ export default function Home() {
       <HomeContainer>
         {flatListData && (
           <FlatList
-            data={flatListData}
+            data={flatListData.filter((item) => {
+              return favoriteDepartmentList.includes(item.deptName) ?? item;
+            })}
             keyExtractor={(item, index) => item.title + index}
             onEndReached={fetchNoticeData}
+            extraData={flatListData}
             scrollIndicatorInsets={{ right: 1 }}
             renderItem={(data) => (
               <NoticeCard
