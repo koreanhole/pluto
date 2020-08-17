@@ -32,7 +32,44 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
   },
   {
     departmentType: "공과대학",
-    departmentList: ["컴퓨터과학부"],
+    departmentList: [
+      "전자전기컴퓨터공학부",
+      "컴퓨터과학부",
+      "화학공학과",
+      "기계정보공학과",
+      "신소재공학과",
+      "토목공학과",
+    ],
+  },
+  {
+    departmentType: "정경대학",
+    departmentList: [
+      "행정학과",
+      "국제관계학과",
+      "경제학부",
+      "사회복지학과",
+      "세무학과",
+    ],
+  },
+  {
+    departmentType: "인문대학",
+    departmentList: [
+      "영어영문학과",
+      "국어국문학과",
+      "국사학과",
+      "철학과",
+      "중국어문화학과",
+    ],
+  },
+  {
+    departmentType: "자연과학대학",
+    departmentList: [
+      "수학과",
+      "통계학과",
+      "물리학과",
+      "생명과학과",
+      "환경원예학과",
+    ],
   },
 ];
 
