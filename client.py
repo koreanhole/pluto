@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from data import Notice
-from util import getTypicalNoticeLastid, getDeptName
+from util import getTypicalNoticeLastid
 from util import GeneralClassification, EngineeringClassification, EconomicsClassification, HumanityClassification, NaturalScienceClassification
 import ssl
 from bs4 import BeautifulSoup
@@ -16,21 +16,32 @@ db = firestore.client()
 class FirebaseUpload(object):
 
     @classmethod
-    def uploadSingleNotice(cls, deptCode: str, listId: int):
-        notice_ref = db.collection("notice").document(str(listId))
+    def uploadSingleNotice(cls, deptCode: str):
 
-        parsedNotice = Notice.to_dict(deptCode, listId)
+        lastSavedListId = cls.getLastVisitedListId(deptCode)
+        lastListId = getTypicalNoticeLastid(deptCode)
+        if lastSavedListId is not None:
+            lastSavedListId = lastSavedListId.get("listId")
+        else:
+            lastSavedListId = 0
 
-        if parsedNotice is not None:
-            try:
-                notice_ref.set(parsedNotice)
-            except:
-                print("error")
+        for listId in range(lastSavedListId, lastListId + 1):
+            notice_ref = db.collection("notice").document(str(listId))
+            parsedNotice = Notice.to_dict(deptCode, listId)
+
+            print(deptCode, listId)
+            if parsedNotice is not None:
+                try:
+                    notice_ref.set(parsedNotice)
+                except:
+                    print("error")
+            newLastSavedListId = listId
+        cls.saveLastVisitedListId(deptCode, newLastSavedListId)
 
     @classmethod
     def saveLastVisitedListId(cls, deptCode: str, listId: int):
         saved_list_id_dict = {
-            "deptName": getDeptName(deptCode),
+            "deptName": deptCode,
             "listId": listId,
         }
         saved_list_id_ref = db.collection("saved_list_id").document(deptCode)
@@ -46,16 +57,16 @@ class FirebaseUpload(object):
     @classmethod
     def uploadMultiNotice(cls):
         for deptCode in GeneralClassification:
-            lastSavedListId = cls.getLastVisitedListId(deptCode)
-            lastListId = getTypicalNoticeLastid(deptCode)
-            if lastSavedListId is not None:
-                lastSavedListId = lastSavedListId.get("listId")
-            else:
-                lastSavedListId = 0
-
-            for listId in range(lastSavedListId, lastListId):
-                print(deptCode, listId)
-                cls.uploadSingleNotice(deptCode, listId)
+            cls.uploadSingleNotice(deptCode)
+        for deptCode in EngineeringClassification:
+            cls.uploadSingleNotice(deptCode)
+        for deptCode in EconomicsClassification:
+            cls.uploadSingleNotice(deptCode)
+        for deptCode in HumanityClassification:
+            cls.uploadSingleNotice(deptCode)
+        for deptCode in NaturalScienceClassification:
+            cls.uploadSingleNotice(deptCode)
 
 
 FirebaseUpload.uploadMultiNotice()
+# FirebaseUpload.saveLastVisitedListId("20013DA1", "11899")

@@ -13,22 +13,57 @@ GeneralClassification = {
     "FA22": "입찰공고",
     "FA25": "시설공사",
 }
+
 # 공과대학
 EngineeringClassification = {
     "20013DA1": "공과대학",
 }
+# 공과대학 학부
+EngineeringDepartment = [
+    "전자전기컴퓨터공학부",
+    "컴퓨터과학부",
+    "화학공학과",
+    "기계정보공학과",
+    "신소재공학과",
+    "토목공학과",
+]
+
 # 정경대학
 EconomicsClassification = {
     "econo01": "정경대학",
 }
+# 정경대학 학부
+EconomicsDepartment = [
+    "행정학과",
+    "국제관계학과",
+    "경제학부",
+    "사회복지학과",
+    "세무학과",
+]
 # 인문대학
 HumanityClassification = {
     "human01": "인문대학",
 }
+# 인문대학 학부
+HumanityDepartment = [
+    "영어영문학과",
+    "국어국문학과",
+    "국사학과",
+    "철학과",
+    "중국어문화학과",
+]
 # 자연과학대학
 NaturalScienceClassification = {
     "scien01": "자연과학대학",
 }
+# 자연과학대학 학부
+NaturalScienceDepartment = [
+    "수학과",
+    "통계학과",
+    "물리학과",
+    "생명과학과",
+    "환경원예학과",
+]
 
 
 class DepartmentType(Enum):
@@ -39,17 +74,29 @@ class DepartmentType(Enum):
     NaturalScience = "자연과학대학"
 
 
-def getDeptName(deptCode: str):
+def getDeptName(deptCode: str, authorDept: str):
     if GeneralClassification.get(deptCode):
         return GeneralClassification.get(deptCode)
     elif EngineeringClassification.get(deptCode):
-        return EngineeringClassification.get(deptCode)
+        if authorDept in EngineeringDepartment:
+            return authorDept
+        else:
+            return "공과대학"
     elif EconomicsClassification.get(deptCode):
-        return EconomicsClassification.get(deptCode)
+        if authorDept in EconomicsDepartment:
+            return authorDept
+        else:
+            return "정경대학"
     elif HumanityClassification.get(deptCode):
-        return HumanityClassification.get(deptCode)
+        if authorDept in HumanityDepartment:
+            return authorDept
+        else:
+            "인문대학"
     elif NaturalScienceClassification.get(deptCode):
-        return NaturalScienceClassification.get(deptCode)
+        if authorDept in NaturalScienceDepartment:
+            return authorDept
+        else:
+            "자연과학대학"
 
 
 def getDeptType(deptCode: str):

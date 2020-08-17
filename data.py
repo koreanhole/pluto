@@ -64,8 +64,6 @@ class Notice(object):
                 deptCode = deptCode
                 # 글 번호
                 listId = str(listId)
-                # 글이 게제된 부서(ex. 일반공지)
-                deptName = getDeptName(deptCode)
                 # 제목
                 title = noticeHeaderSoup.find("span").text
                 # 작성자
@@ -74,6 +72,8 @@ class Notice(object):
                 # 작성자 소속
                 authorDeptSoup = authorNameSoup.find_next_sibling()
                 authorDept = authorDeptSoup.text
+                # 글이 게제된 부서(ex. 일반공지)
+                deptName = getDeptName(deptCode, authorDept)
                 # 작성일
                 createdDateSoup = authorDeptSoup.find_next_sibling()
                 createdDate = createdDateSoup.text
