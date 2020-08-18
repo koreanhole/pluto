@@ -10,6 +10,7 @@ import { noticeFirestore } from "firebase/firestore";
 import { NoticeArticle } from "./redux/types";
 import { Dimensions } from "react-native";
 import AutoHeightWebView from "react-native-autoheight-webview";
+import { useNavigation } from "@react-navigation/native";
 
 const ArticleContainer = styled.View`
   margin: 16px;
@@ -28,6 +29,7 @@ const ArticleAdditionalInformation = styled.Text`
 `;
 
 export default function Article() {
+  const navigation = useNavigation();
   const articleId = useSelector(getArticleId);
 
   const [noticeData, setNoticeData] = React.useState<NoticeArticle>();
@@ -62,21 +64,27 @@ export default function Article() {
     }
   };
 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderRightButton
+          url={typeof noticeData !== "undefined" ? noticeData.url : ""}
+          attachment={
+            typeof noticeData !== "undefined"
+              ? noticeData.attachmentLink
+              : undefined
+          }
+        />
+      ),
+    });
+  });
+
   React.useEffect(() => {
     fetchNoticeData();
   }, [articleId]);
   if (typeof noticeData !== "undefined") {
     return (
-      <AppLayout
-        title="게시글"
-        mode="BACK"
-        rightComponent={
-          <HeaderRightButton
-            url={noticeData.url}
-            attachment={noticeData.attachmentLink}
-          />
-        }
-      >
+      <AppLayout>
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
           <ArticleContainer>
             <ArticleTitle>{noticeData.title}</ArticleTitle>
@@ -109,6 +117,6 @@ export default function Article() {
       </AppLayout>
     );
   } else {
-    return <AppLayout title="" mode="BACK" />;
+    return <AppLayout />;
   }
 }

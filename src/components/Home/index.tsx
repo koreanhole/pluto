@@ -8,18 +8,28 @@ import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
 import { noticeFirestore } from "firebase/firestore";
 import { subDays } from "date-fns";
+import { useNavigation } from "@react-navigation/native";
 
 const HomeContainer = styled(View)`
   flex: 1;
 `;
 
 export default function Home() {
+  const navigation = useNavigation();
+
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
   const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
   const [noticeCreatedDate, setNoticeCreatedDate] = React.useState<Date>(
     new Date()
   );
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "UOS 공지사항 🌋",
+      headerRight: () => <HeaderRightButton />,
+    });
+  });
 
   const fetchNoticeData = async () => {
     try {
@@ -57,11 +67,7 @@ export default function Home() {
     fetchNoticeData();
   }, []);
   return (
-    <AppLayout
-      title="‍UOS 공지사항 🌋"
-      mode="NONE"
-      rightComponent={<HeaderRightButton />}
-    >
+    <AppLayout>
       <HomeContainer>
         {flatListData && (
           <FlatList

@@ -11,21 +11,31 @@ const HeaderRightButtonContainer = styled.View`
   flex-direction: row;
 `;
 
+const StyledHeaderRightButton = styled(Icon)`
+  margin-right: 10px;
+`;
+
 export default function HeaderRightButton({
   url,
   attachment,
 }: {
   url?: string;
-  attachment: Attachment[];
+  attachment?: Attachment[];
 }) {
   const { showActionSheetWithOptions } = useActionSheet();
 
-  const fileLink = attachment.map((item) => {
-    return item.file_link;
-  });
-  const fileName = attachment.map((item) => {
-    return item.file_name;
-  });
+  const fileLink =
+    typeof attachment !== "undefined"
+      ? attachment.map((item) => {
+          return item.file_link;
+        })
+      : [];
+  const fileName =
+    typeof attachment !== "undefined"
+      ? attachment.map((item) => {
+          return item.file_name;
+        })
+      : [];
   fileName.splice(0, 0, "취소");
 
   const handleClickOpenInBrowserButton = React.useCallback(() => {
@@ -64,15 +74,15 @@ export default function HeaderRightButton({
   }, [fileName, fileLink]);
   return (
     <HeaderRightButtonContainer>
-      {attachment.length !== 0 && (
-        <Icon
+      {typeof attachment !== "undefined" && attachment.length !== 0 && (
+        <StyledHeaderRightButton
           name="cloud-download"
           type="material"
           onPress={handleClickDownloadButton}
-          style={{ marginRight: 10 }}
         />
       )}
-      <Icon
+
+      <StyledHeaderRightButton
         name="public"
         type="material"
         onPress={handleClickOpenInBrowserButton}
