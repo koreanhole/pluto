@@ -33,7 +33,7 @@ export default function Home() {
 
   const fetchNoticeData = async () => {
     try {
-      const fiveDaysBefore = subDays(noticeCreatedDate, 5);
+      const fiveDaysBefore = subDays(noticeCreatedDate, 10);
       let noticeQuery = noticeFirestore
         .where("createdDateTimestamp", "<", noticeCreatedDate)
         .where("createdDateTimestamp", ">", fiveDaysBefore)
