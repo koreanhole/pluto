@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Icon } from "react-native-elements";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import theme from "theme";
 
@@ -10,9 +10,9 @@ export default function HeaderRightButton() {
     navigation.navigate("Department");
   }, [navigation]);
   return (
-    <Icon
+    <MaterialIcons
       name="format-list-bulleted"
-      type="material"
+      size={theme.size.headerIconSize}
       onPress={handleClickHeaderRightButton}
       color={theme.colors.black}
       style={{ marginRight: 10 }}

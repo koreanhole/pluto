@@ -5,12 +5,12 @@ import Home from "components/Home";
 import Article from "components/Article";
 import Department from "components/Department";
 import theme from "theme";
-import { Icon } from "react-native-elements";
+import { MaterialIcons } from "@expo/vector-icons";
 import styled from "styled-components/native";
 
 const Stack = createStackNavigator();
 
-const StyledHeaderIcon = styled(Icon)`
+const StyledHeaderIcon = styled(MaterialIcons)`
   margin-left: 10px;
   color: ${theme.colors.black};
 `;
@@ -29,7 +29,7 @@ const PageNavigation = () => (
       },
       headerTitleAlign: "left",
       headerBackImage: () => (
-        <StyledHeaderIcon name="arrow-back" type="material" />
+        <StyledHeaderIcon name="arrow-back" size={theme.size.headerIconSize} />
       ),
       headerBackTitleVisible: false,
     }}

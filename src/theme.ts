@@ -10,6 +10,9 @@ const theme = {
       general: "#0a4e9b",
     },
   },
+  size: {
+    headerIconSize: 24,
+  },
 } as const;
 
 export default theme;

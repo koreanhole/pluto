@@ -2,7 +2,8 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components/native";
 import { Text, Alert } from "react-native";
-import { Button, Icon } from "react-native-elements";
+import { Button } from "react-native-elements";
+import { MaterialIcons } from "@expo/vector-icons";
 import { deleteFromFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
@@ -41,14 +42,7 @@ const DepartmentBadgeItem = ({
       raised={true}
       title={departmentName}
       onPress={handleClickDepartmentBadgeItem}
-      icon={
-        <Icon
-          name="clear"
-          type="material"
-          color={theme.colors.white}
-          size={15}
-        />
-      }
+      icon={<MaterialIcons name="clear" color={theme.colors.white} size={15} />}
       iconRight={true}
       containerStyle={{
         alignSelf: "flex-start",

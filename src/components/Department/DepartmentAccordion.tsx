@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { View } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 import styled from "styled-components/native";
-import { Divider, Icon } from "react-native-elements";
+import { Divider } from "react-native-elements";
 import Ripple from "react-native-material-ripple";
 import { addToFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
+import { MaterialIcons } from "@expo/vector-icons";
 
 type AccordionSection = {
   departmentType: string;
@@ -134,7 +135,11 @@ const AccrodionContentItem = ({
         <AccordionText type="CONTENT">{departmentName}</AccordionText>
         {favoriteDepartmentList !== null &&
         favoriteDepartmentList.includes(departmentName) ? (
-          <Icon name="check" type="material" color={theme.colors.green} />
+          <MaterialIcons
+            name="check"
+            color={theme.colors.green}
+            size={theme.size.headerIconSize}
+          />
         ) : null}
       </AccordionContentItemContainer>
     </Ripple>
