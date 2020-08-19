@@ -1,6 +1,6 @@
 import * as firebase from "firebase";
 import "@firebase/firestore";
-import ENV from "../../environment";
+import ENV from "environment";
 
 const firebaseConfig = {
   apiKey: ENV.API_KEY,
