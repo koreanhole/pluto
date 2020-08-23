@@ -24,6 +24,7 @@
     },
     "android": {
       "package": "com.koreanhole.pluto",
+      "googleServicesFile": "./google-services.json",
       "versionCode": 1
     },
     "entryPoint": "node_modules/expo/AppEntry.js"
