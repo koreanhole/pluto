@@ -14,13 +14,15 @@ from exponent_server_sdk import PushResponseError
 from exponent_server_sdk import PushServerError
 from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
+import attr
+import time
 
 cred = credentials.Certificate('./ServiceAccountKey.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 
-class FirebaseUpload(object):
+class FirestoreUpload(object):
 
     @classmethod
     def uploadSingleNotice(cls, deptCode: str):
@@ -75,8 +77,42 @@ class FirebaseUpload(object):
             cls.uploadSingleNotice(deptCode)
 
 
-class ExpoPushNotification(object):
+@attr.s(frozen=True)
+class FirestoreListener(object):
+    deptName: str = attr.ib()
+    title: str = attr.ib()
+    id: str = attr.ib()
+    initialState: bool = attr.ib()
+
     @classmethod
+    def on_snapshot(cls, col_snapshot, changes, read_time):
+        if not cls.initialState:
+            for change in changes:
+                addedDocument = change.document.to_dict()
+                if change.type.name == 'ADDED':
+                    print('deptName: ' + addedDocument.get("deptName"))
+                    print('title: ' + addedDocument.get("title"))
+                    print('noticeId: ' + change.document.id)
+                elif change.type.name == 'MODIFIED':
+                    print(addedDocument)
+                    print('deptName: ' + addedDocument.get("deptName"))
+                    print('title: ' + addedDocument.get("title"))
+                    print('noticeId: ' + change.document.id)
+        else:
+            cls.initialState = False
+
+    @classmethod
+    def getAddedNotice(cls):
+        cls.initialState = True
+        print(cls.initialState)
+        col_query = db.collection(u'notice')
+        query_watch = col_query.on_snapshot(cls.on_snapshot)
+        while True:
+            time.sleep(1)
+
+
+class ExpoPushNotification(object):
+    @ classmethod
     def send_push_message(cls, token, title, message, extra=None):
         try:
             response = PushClient().publish(
@@ -125,5 +161,10 @@ class ExpoPushNotification(object):
             raise self.retry(exc=exc)
 
 
-# FirebaseUpload.uploadMultiNotice()
-# FirebaseUpload.saveLastVisitedListId("20013DA1", "11899")
+# FirestoreUpload.uploadMultiNotice()
+# FirestoreUpload.saveLastVisitedListId("20013DA1", "11899")
+FirestoreListener.getAddedNotice()
+
+# if __name__ == "__main__":
+#     ExpoPushNotification.send_push_message(
+#         token = "ExponentPushToken[xJojsCLoziyuRWA29AuUPq]", title = "title1", message = "message1")
