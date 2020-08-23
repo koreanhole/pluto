@@ -6,7 +6,7 @@ import HeaderRightButton from "./HeaderRightButton";
 import theme from "theme";
 import { useSelector } from "react-redux";
 import { getArticleId } from "./redux/selectors";
-import { noticeFirestore } from "firebase/firestore";
+import { noticeFirestore } from "util/firebase/firestore";
 import { NoticeArticle } from "./redux/types";
 import { Dimensions } from "react-native";
 import AutoHeightWebView from "react-native-autoheight-webview";
