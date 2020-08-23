@@ -1,14 +1,16 @@
 import * as React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard, { NoticeCardItem } from "./NoticeCard";
 import { View, FlatList } from "react-native";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
-import { noticeFirestore } from "firebase/firestore";
+import { noticeFirestore } from "util/firebase/firestore";
 import { subDays } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
+import { registerForPushNotificationsAsync } from "util/pushNotification";
+import { setExpoPushToken } from "components/Department/redux/actions";
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -16,6 +18,7 @@ const HomeContainer = styled(View)`
 
 export default function Home() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
@@ -65,6 +68,9 @@ export default function Home() {
 
   React.useEffect(() => {
     fetchNoticeData();
+    registerForPushNotificationsAsync().then((token) =>
+      dispatch(setExpoPushToken(token))
+    );
   }, []);
   return (
     <AppLayout>

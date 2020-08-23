@@ -7,3 +7,7 @@ export const addToFavoriteDepartmentList = createAction(
 export const deleteFromFavoriteDepartmentList = createAction(
   "DELETE_FAVORITE_DEPARTMENT_LIST"
 )<string>();
+
+export const setExpoPushToken = createAction("SET_EXPO_PUSH_TOKEN")<
+  string | undefined
+>();

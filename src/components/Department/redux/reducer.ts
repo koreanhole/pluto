@@ -4,6 +4,7 @@ import { createReducer } from "typesafe-actions";
 import {
   addToFavoriteDepartmentList,
   deleteFromFavoriteDepartmentList,
+  setExpoPushToken,
 } from "./actions";
 import _ from "underscore";
 
@@ -30,6 +31,12 @@ const reducer = combineReducers({
         return state;
       }
     }),
+  expoPushToken: createReducer<string | undefined | null>(null).handleAction(
+    setExpoPushToken,
+    (_state, action) => {
+      return action.payload;
+    }
+  ),
 });
 
 export default reducer;
