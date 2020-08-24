@@ -74,6 +74,31 @@ class DepartmentType(Enum):
     NaturalScience = "자연과학대학"
 
 
+def getInitialListId(deptCode: str):
+    if deptCode == "FA1":
+        return 7254
+    elif deptCode == "FA2":
+        return 4244
+    elif deptCode == "FA34":
+        return 1
+    elif deptCode == "FA35":
+        return 1
+    elif deptCode == "FA22":
+        return 152
+    elif deptCode == "FA25":
+        return 31
+    elif deptCode == "20013DA1":
+        return 1
+    elif deptCode == "econo01":
+        return 1
+    elif deptCode == "human01":
+        return 1
+    elif deptCode == "scien01":
+        return 1
+    else:
+        return 1
+
+
 def getDeptName(deptCode: str, authorDept: str):
     if GeneralClassification.get(deptCode):
         return GeneralClassification.get(deptCode)
