@@ -110,7 +110,7 @@ class Notice(object):
                     contentString=contentString,
                 )
             except (AttributeError, UnboundLocalError):
-                print("error: " + str(listId))
+                print("notice not found error: " + str(listId))
                 pass
 
     @classmethod

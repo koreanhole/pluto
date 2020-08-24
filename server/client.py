@@ -36,13 +36,17 @@ class FirestoreUpload(object):
             lastSavedListId = getInitialListId(deptCode)
 
         for listId in range(lastSavedListId, lastListId + 1):
-            notice_ref = db.collection("notice").document(str(listId))
+            documnetPathName = "%s/%s" % (deptCode, str(listId))
+            notice_ref = db.collection("notice").document(documnetPathName)
             parsedNotice = Notice.to_dict(deptCode, listId)
             if parsedNotice is not None:
                 try:
                     notice_ref.set(parsedNotice)
+                    print("firestore upload completed deptCode: " +
+                          deptCode + " listId: " + listId)
                 except:
-                    print("error")
+                    print("firestore upload error deptCode: " +
+                          deptCode + " listId: " + listId)
             newLastSavedListId = listId
         cls.saveLastVisitedListId(deptCode, newLastSavedListId)
 
