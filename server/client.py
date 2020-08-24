@@ -16,7 +16,6 @@ from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
 import attr
 import time
-from multiprocessing import Process
 
 cred = credentials.Certificate('./ServiceAccountKey.json')
 firebase_admin.initialize_app(cred)
@@ -27,7 +26,6 @@ class FirestoreUpload(object):
 
     @classmethod
     def uploadSingleNotice(cls, deptCode: str):
-
         lastSavedListId = cls.getLastVisitedListId(deptCode)
         lastListId = getTypicalNoticeLastid(deptCode)
         if lastSavedListId is not None:
@@ -36,35 +34,45 @@ class FirestoreUpload(object):
             lastSavedListId = getInitialListId(deptCode)
 
         for listId in range(lastSavedListId, lastListId + 1):
-            documnetPathName = "%s/%s" % (deptCode, str(listId))
+            documnetPathName = "%s&%s" % (deptCode, str(listId))
             notice_ref = db.collection("notice").document(documnetPathName)
             parsedNotice = Notice.to_dict(deptCode, listId)
             if parsedNotice is not None:
                 try:
                     notice_ref.set(parsedNotice)
                     print("firestore upload completed deptCode: " +
-                          deptCode + " listId: " + listId)
-                except:
+                          deptCode + " listId: " + str(listId))
+                except Exception as error:
+                    cls.saveLastVisitedListId(deptCode, newLastSavedListId)
+                    print("----------------------------------")
                     print("firestore upload error deptCode: " +
-                          deptCode + " listId: " + listId)
+                          deptCode + " listId: " + str(listId))
+                    print(error)
+                    print("----------------------------------")
+
             newLastSavedListId = listId
         cls.saveLastVisitedListId(deptCode, newLastSavedListId)
 
     @classmethod
     def saveLastVisitedListId(cls, deptCode: str, listId: int):
         saved_list_id_dict = {
-            "deptName": deptCode,
+            "deptCode": deptCode,
             "listId": listId,
         }
-        saved_list_id_ref = db.collection("saved_list_id").document(deptCode)
+        saved_list_id_ref = db.collection("savedListId").document(deptCode)
         saved_list_id_ref.set(saved_list_id_dict)
 
     @classmethod
     def getLastVisitedListId(cls, deptCode: str):
-        saved_list_id_ref = db.collection(
-            "saved_list_id").document(deptCode)
+        try:
+            saved_list_id_ref = db.collection(
+                "savedListId").document(deptCode)
 
-        return saved_list_id_ref.get().to_dict()
+            return saved_list_id_ref.get().to_dict()
+        except Exception as error:
+            print("getLastVisited error")
+            print(error)
+            pass
 
     @classmethod
     def getPushTokenByDepartment(cls, deptName: str):

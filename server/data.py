@@ -47,13 +47,13 @@ class Notice(object):
             base_url = "https://www.uos.ac.kr"
             url = "https://www.uos.ac.kr/korNotice/view.do?" + query
 
-            context = ssl._create_unverified_context()
-            req = Request(url)
-            res = urlopen(req, context=context)
-            html = res.read()
-            soup = BeautifulSoup(html, "html.parser")
-            # 공지사항의 등록 여부 판단
             try:
+                context = ssl._create_unverified_context()
+                req = Request(url)
+                res = urlopen(req, context=context)
+                html = res.read()
+                soup = BeautifulSoup(html, "html.parser")
+                # 공지사항의 등록 여부 판단
                 noticeSoup = soup.find("ul", class_="listType view")
                 noticeHeaderSoup = noticeSoup.find("li")
                 noticeInformationSoup = noticeHeaderSoup.find("ul")
@@ -109,7 +109,7 @@ class Notice(object):
                     contentHtml=contentHtml,
                     contentString=contentString,
                 )
-            except (AttributeError, UnboundLocalError):
+            except:
                 print("notice not found error: " + str(listId))
                 pass
 
