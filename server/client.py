@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from data import Notice
-from util import getTypicalNoticeLastid
+from util import getTypicalNoticeLastid, getInitialListId
 from util import GeneralClassification, EngineeringClassification, EconomicsClassification, HumanityClassification, NaturalScienceClassification
 import ssl
 from bs4 import BeautifulSoup
@@ -16,6 +16,7 @@ from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
 import attr
 import time
+from multiprocessing import Process
 
 cred = credentials.Certificate('./ServiceAccountKey.json')
 firebase_admin.initialize_app(cred)
@@ -32,13 +33,11 @@ class FirestoreUpload(object):
         if lastSavedListId is not None:
             lastSavedListId = lastSavedListId.get("listId")
         else:
-            lastSavedListId = 0
+            lastSavedListId = getInitialListId(deptCode)
 
         for listId in range(lastSavedListId, lastListId + 1):
             notice_ref = db.collection("notice").document(str(listId))
             parsedNotice = Notice.to_dict(deptCode, listId)
-
-            print(deptCode, listId)
             if parsedNotice is not None:
                 try:
                     notice_ref.set(parsedNotice)
@@ -64,6 +63,15 @@ class FirestoreUpload(object):
         return saved_list_id_ref.get().to_dict()
 
     @classmethod
+    def getPushTokenByDepartment(cls, deptName: str):
+        userList = []
+        docs = db.collection("userData").where(
+            "favoriteDepartmentList", "array_contains", deptName).stream()
+        for doc in docs:
+            userList.append(doc.id)
+        return userList
+
+    @classmethod
     def uploadMultiNotice(cls):
         for deptCode in GeneralClassification:
             cls.uploadSingleNotice(deptCode)
@@ -79,9 +87,6 @@ class FirestoreUpload(object):
 
 @attr.s(frozen=True)
 class FirestoreListener(object):
-    deptName: str = attr.ib()
-    title: str = attr.ib()
-    id: str = attr.ib()
     initialState: bool = attr.ib()
 
     @classmethod
@@ -90,21 +95,20 @@ class FirestoreListener(object):
             for change in changes:
                 addedDocument = change.document.to_dict()
                 if change.type.name == 'ADDED':
-                    print('deptName: ' + addedDocument.get("deptName"))
-                    print('title: ' + addedDocument.get("title"))
-                    print('noticeId: ' + change.document.id)
-                elif change.type.name == 'MODIFIED':
-                    print(addedDocument)
-                    print('deptName: ' + addedDocument.get("deptName"))
-                    print('title: ' + addedDocument.get("title"))
-                    print('noticeId: ' + change.document.id)
+                    deptName = addedDocument.get("deptName")
+                    title = addedDocument.get("title")
+                    listId = change.document.id
+                    pushTokenList = FirestoreUpload.getPushTokenByDepartment(
+                        deptName=deptName)
+                    for token in pushTokenList:
+                        ExpoPushNotification.send_push_message(
+                            token=token, title=deptName, message=title)
         else:
             cls.initialState = False
 
     @classmethod
     def getAddedNotice(cls):
         cls.initialState = True
-        print(cls.initialState)
         col_query = db.collection(u'notice')
         query_watch = col_query.on_snapshot(cls.on_snapshot)
         while True:
@@ -163,8 +167,10 @@ class ExpoPushNotification(object):
 
 # FirestoreUpload.uploadMultiNotice()
 # FirestoreUpload.saveLastVisitedListId("20013DA1", "11899")
-FirestoreListener.getAddedNotice()
 
 # if __name__ == "__main__":
+#     FirestoreUpload.getPushTokenByDepartment("일반공지")
 #     ExpoPushNotification.send_push_message(
 #         token = "ExponentPushToken[xJojsCLoziyuRWA29AuUPq]", title = "title1", message = "message1")
+if __name__ == '__main__':
+    FirestoreUpload.uploadMultiNotice()
