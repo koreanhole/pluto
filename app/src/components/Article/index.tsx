@@ -11,6 +11,7 @@ import { NoticeArticle } from "./redux/types";
 import { Dimensions } from "react-native";
 import AutoHeightWebView from "react-native-autoheight-webview";
 import { useNavigation } from "@react-navigation/native";
+import { getNoticeDocumentId } from "util/firebase/firestore";
 
 const ArticleContainer = styled.View`
   margin: 16px;
@@ -36,7 +37,11 @@ export default function Article() {
 
   const fetchNoticeData = async () => {
     try {
-      let noticeRef = noticeFirestore.doc(articleId.listId);
+      const noticeDocumentId = getNoticeDocumentId(
+        articleId.deptCode,
+        articleId.listId
+      );
+      let noticeRef = noticeFirestore.doc(noticeDocumentId);
 
       noticeRef.get().then((document) => {
         if (document.exists) {

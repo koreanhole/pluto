@@ -11,6 +11,7 @@ import { setArticleId } from "components/Article/redux/actions";
 import randomColor from "randomcolor";
 
 export type NoticeCardItem = {
+  deptCode: string;
   deptName: string;
   authorDept: string;
   title: string;
@@ -111,6 +112,7 @@ const NoticeCardItemSubtitle = ({
 };
 
 export default function NoticeCard({
+  deptCode,
   deptName,
   authorDept,
   title,
@@ -123,7 +125,7 @@ export default function NoticeCard({
 
   const handleNoticeCardItemClick = React.useCallback(() => {
     navigation.navigate("Article");
-    dispatch(setArticleId({ deptName: deptName, listId: listId }));
+    dispatch(setArticleId({ deptCode: deptCode, listId: listId }));
   }, []);
 
   return (

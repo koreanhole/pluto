@@ -18,6 +18,6 @@ export type NoticeArticle = {
 };
 
 export type ArticleId = {
-  deptName: string;
+  deptCode: string;
   listId: string;
 };

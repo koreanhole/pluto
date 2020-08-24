@@ -5,7 +5,7 @@ import { ArticleId } from "./types";
 
 const reducer = combineReducers({
   articleId: createReducer<ArticleId>({
-    deptName: "",
+    deptCode: "",
     listId: "",
   }).handleAction(setArticleId, (_state, action) => {
     return action.payload;

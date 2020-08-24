@@ -46,6 +46,7 @@ export default function Home() {
         (document) => {
           const fetchedData = document.data();
           return {
+            deptCode: fetchedData.deptCode,
             deptName: fetchedData.deptName,
             authorDept: fetchedData.authorDept,
             title: fetchedData.title,
@@ -86,6 +87,7 @@ export default function Home() {
             scrollIndicatorInsets={{ right: 1 }}
             renderItem={(data) => (
               <NoticeCard
+                deptCode={data.item.deptCode}
                 deptName={data.item.deptName}
                 authorDept={data.item.authorDept}
                 title={data.item.title}
