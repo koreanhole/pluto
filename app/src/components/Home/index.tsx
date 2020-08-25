@@ -83,6 +83,7 @@ export default function Home() {
             })}
             keyExtractor={(item, index) => item.title + index}
             onEndReached={fetchNoticeData}
+            onEndReachedThreshold={0}
             extraData={flatListData}
             scrollIndicatorInsets={{ right: 1 }}
             renderItem={(data) => (

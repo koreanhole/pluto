@@ -1,13 +1,14 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components/native";
-import { Text, Alert } from "react-native";
+import { Text, Alert, View, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { deleteFromFavoriteDepartmentList } from "./redux/actions";
-import { getFavoriteDepartmentList } from "./redux/selectors";
+import { getFavoriteDepartmentList, getExpoPushToken } from "./redux/selectors";
 import theme from "theme";
 import randomColor from "randomcolor";
+import { userDataFirestore } from "util/firebase/firestore";
 
 const DepartmentBadgeContainer = styled.View`
   margin-top: 8px;
@@ -22,17 +23,29 @@ const DepartmentBadgeItem = ({
   departmentName: string;
 }) => {
   const dispatch = useDispatch();
+  const expoPushToken = useSelector(getExpoPushToken);
+  const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
+
+  const handleDeleteFromFavoriteDepartmentList = React.useCallback(() => {
+    dispatch(deleteFromFavoriteDepartmentList(departmentName));
+    if (typeof expoPushToken !== "undefined" && expoPushToken !== null) {
+      userDataFirestore.doc(expoPushToken).update({
+        favoriteDepartmentList: favoriteDepartmentList,
+        expoPushToken: expoPushToken,
+      });
+    }
+  }, []);
+
   const handleClickDepartmentBadgeItem = React.useCallback(() => {
-    Alert.alert(`${departmentName}`, "즐겨찾기에서 삭제합니다.", [
-      {
-        text: "삭제",
-        onPress: () =>
-          dispatch(deleteFromFavoriteDepartmentList(departmentName)),
-        style: "destructive",
-      },
+    Alert.alert("즐겨찾기에서 삭제하시겠습니까??", departmentName, [
       {
         text: "취소",
         style: "cancel",
+      },
+      {
+        text: "확인",
+        onPress: handleDeleteFromFavoriteDepartmentList,
+        style: "default",
       },
     ]);
   }, []);
@@ -42,7 +55,16 @@ const DepartmentBadgeItem = ({
       raised={true}
       title={departmentName}
       onPress={handleClickDepartmentBadgeItem}
-      icon={<MaterialIcons name="clear" color={theme.colors.white} size={15} />}
+      icon={
+        <View style={BadgeButtonStyles.badgeContainer}>
+          <MaterialCommunityIcons
+            name="bell"
+            size={15}
+            color={theme.colors.white}
+          />
+          <MaterialIcons name="clear" color={theme.colors.white} size={15} />
+        </View>
+      }
       iconRight={true}
       containerStyle={{
         alignSelf: "flex-start",
@@ -78,3 +100,9 @@ export default function DepartmentBadge() {
     </DepartmentBadgeContainer>
   );
 }
+
+const BadgeButtonStyles = StyleSheet.create({
+  badgeContainer: {
+    flexDirection: "row",
+  },
+});

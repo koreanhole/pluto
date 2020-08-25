@@ -131,7 +131,7 @@ const AccrodionContentItem = ({
   const handleClickDepartmentName = React.useCallback(() => {
     dispatch(addToFavoriteDepartmentList(departmentName));
     if (typeof expoPushToken !== "undefined" && expoPushToken !== null) {
-      userDataFirestore.doc(expoPushToken).set({
+      userDataFirestore.doc(expoPushToken).update({
         favoriteDepartmentList: favoriteDepartmentList,
         expoPushToken: expoPushToken,
       });
