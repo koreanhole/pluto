@@ -167,9 +167,15 @@ def getTypicalNoticeLastid(deptCode: str):
 
 def saveToJsonFile(data: dict):
     with open("fetchedLastVisitedListId.json", "w") as json_file:
-        json.dump(toSave, json_file)
+        json.dump(data, json_file)
 
 
 def loadFromJson():
     with open("fetchedLastVisitedListId.json", "r") as json_file:
         return json.load(json_file)
+
+
+def updateLastSavedListId(deptCode: str, listId: int):
+    savedListId = loadFromJson()
+    savedListId[deptCode] = listId
+    saveToJsonFile(savedListId)

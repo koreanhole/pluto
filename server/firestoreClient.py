@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from data import Notice
-from util import getTypicalNoticeLastid, getInitialListId, saveToJsonFile, loadFromJson
+from util import getTypicalNoticeLastid, getInitialListId, saveToJsonFile, loadFromJson, updateLastSavedListId
 from util import GeneralClassification, EngineeringClassification, EconomicsClassification, HumanityClassification, NaturalScienceClassification
 import ssl
 from bs4 import BeautifulSoup
@@ -29,49 +29,27 @@ class FirestoreUpload(object):
     def uploadSingleNotice(cls, deptCode: str):
         lastListId = getTypicalNoticeLastid(deptCode)
         lastSavedListId = loadFromJson().get(deptCode)
+        newLastSavedListId = 0
 
         for listId in range(lastSavedListId, lastListId + 1):
             documnetPathName = "%s&%s" % (deptCode, str(listId))
             notice_ref = db.collection("notice").document(documnetPathName)
             parsedNotice = Notice.to_dict(deptCode, listId)
+            newLastSavedListId = listId
             if parsedNotice is not None:
                 try:
                     notice_ref.set(parsedNotice)
                     print("firestore upload completed deptCode: " +
                           deptCode + " listId: " + str(listId))
                 except Exception as error:
-                    cls.saveLastVisitedListId(deptCode, newLastSavedListId)
+                    updateLastSavedListId(deptCode, newLastSavedListId)
                     print("----------------------------------")
                     print("firestore upload error deptCode: " +
                           deptCode + " listId: " + str(listId))
                     print(error)
                     print("----------------------------------")
-
-            newLastSavedListId = listId
-        cls.saveLastVisitedListId(deptCode, newLastSavedListId)
-
-    @classmethod
-    def saveLastVisitedListId(cls, deptCode: str, listId: int):
-        try:
-            saved_list_id_ref = db.collection(
-                "server").document("lastVisitedListId")
-            saved_list_id_ref.update({deptCode: listId})
-        except Exception as error:
-            print("getLastVisited error")
-            print(error)
-            pass
-
-    @classmethod
-    def getLastVisitedListId(cls):
-        try:
-            saved_list_id_ref = db.collection(
-                "server").document("lastVisitedListId")
-
-            return saved_list_id_ref.get().to_dict()
-        except Exception as error:
-            print("getLastVisited error")
-            print(error)
-            pass
+        if newLastSavedListId != 0:
+            updateLastSavedListId(deptCode, newLastSavedListId)
 
     @classmethod
     def getPushTokenByDepartment(cls, deptName: str):
@@ -177,10 +155,6 @@ class ExpoPushNotification(object):
 
 
 if __name__ == '__main__':
-    lastVisitedDict = FirestoreUpload.getLastVisitedListId()
-    if lastSavedListId None:
-        lastVisitedDict = getInitialListId()
-    saveToJsonFile(lastVisitedDict)
     while True:
         FirestoreUpload.uploadMultiNotice()
         time.sleep(1)
