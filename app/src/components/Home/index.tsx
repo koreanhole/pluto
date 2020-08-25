@@ -57,9 +57,10 @@ export default function Home() {
     registerForPushNotificationsAsync().then((token) =>
       dispatch(setExpoPushToken(token))
     );
-    Notifications.addNotificationResponseReceivedListener(
+    const subscription = Notifications.addNotificationResponseReceivedListener(
       handleNotificationResponse
     );
+    return () => subscription.remove();
   }, []);
 
   const fetchNoticeData = async () => {
