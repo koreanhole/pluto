@@ -12,6 +12,13 @@ import { Dimensions } from "react-native";
 import AutoHeightWebView from "react-native-autoheight-webview";
 import { useNavigation } from "@react-navigation/native";
 import { getNoticeDocumentId } from "util/firebase/firestore";
+import {
+  AdMobBanner,
+  AdMobInterstitial,
+  PublisherBanner,
+  AdMobRewarded,
+  setTestDeviceIDAsync,
+} from "expo-ads-admob";
 
 const ArticleContainer = styled.View`
   margin: 16px;
@@ -91,6 +98,11 @@ export default function Article() {
     return (
       <AppLayout>
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+          <AdMobBanner
+            bannerSize="fullBanner"
+            adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+            servePersonalizedAds
+          />
           <ArticleContainer>
             <ArticleTitle>{noticeData.title}</ArticleTitle>
             <ArticleAdditionalInformation>

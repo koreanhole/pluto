@@ -17,7 +17,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.koreanhole.pluto",
-      "buildNumber": "1.0.3"
+      "buildNumber": "1.0.3",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -25,7 +28,10 @@
     "android": {
       "package": "com.koreanhole.pluto",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 1
+      "versionCode": 1,
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713"
+      }
     },
     "entryPoint": "node_modules/expo/AppEntry.js"
   }

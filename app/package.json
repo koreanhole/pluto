@@ -61,7 +61,8 @@
     "redux-persist-expo-filesystem": "^2.0.0",
     "styled-components": "^5.1.1",
     "typesafe-actions": "^5.1.0",
-    "underscore": "^1.10.2"
+    "underscore": "^1.10.2",
+    "expo-ads-admob": "~8.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
