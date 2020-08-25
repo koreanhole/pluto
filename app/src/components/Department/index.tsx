@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ScrollView } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import DepartmentAccordion from "./DepartmentAccordion";
 import DepartmentBadge from "./DepartmentBadge";

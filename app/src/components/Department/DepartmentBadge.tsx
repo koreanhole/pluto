@@ -8,7 +8,6 @@ import { deleteFromFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
 import randomColor from "randomcolor";
-import { userDataFirestore } from "util/firebase/firestore";
 
 const DepartmentBadgeContainer = styled.View`
   margin-top: 8px;

@@ -9,7 +9,6 @@ import { addToFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
 import { MaterialIcons } from "@expo/vector-icons";
-import { userDataFirestore } from "util/firebase/firestore";
 
 type AccordionSection = {
   departmentType: string;
