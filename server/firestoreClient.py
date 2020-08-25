@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from data import Notice
-from util import getTypicalNoticeLastid, getInitialListId
+from util import getTypicalNoticeLastid, getInitialListId, saveToJsonFile, loadFromJson
 from util import GeneralClassification, EngineeringClassification, EconomicsClassification, HumanityClassification, NaturalScienceClassification
 import ssl
 from bs4 import BeautifulSoup
@@ -22,16 +22,13 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 
+@attr.s(frozen=True)
 class FirestoreUpload(object):
 
     @classmethod
     def uploadSingleNotice(cls, deptCode: str):
-        lastSavedListId = cls.getLastVisitedListId(deptCode)
         lastListId = getTypicalNoticeLastid(deptCode)
-        if lastSavedListId is not None:
-            lastSavedListId = lastSavedListId.get("listId")
-        else:
-            lastSavedListId = getInitialListId(deptCode)
+        lastSavedListId = loadFromJson().get(deptCode)
 
         for listId in range(lastSavedListId, lastListId + 1):
             documnetPathName = "%s&%s" % (deptCode, str(listId))
@@ -55,18 +52,20 @@ class FirestoreUpload(object):
 
     @classmethod
     def saveLastVisitedListId(cls, deptCode: str, listId: int):
-        saved_list_id_dict = {
-            "deptCode": deptCode,
-            "listId": listId,
-        }
-        saved_list_id_ref = db.collection("savedListId").document(deptCode)
-        saved_list_id_ref.set(saved_list_id_dict)
-
-    @classmethod
-    def getLastVisitedListId(cls, deptCode: str):
         try:
             saved_list_id_ref = db.collection(
-                "savedListId").document(deptCode)
+                "server").document("lastVisitedListId")
+            saved_list_id_ref.update({deptCode: listId})
+        except Exception as error:
+            print("getLastVisited error")
+            print(error)
+            pass
+
+    @classmethod
+    def getLastVisitedListId(cls):
+        try:
+            saved_list_id_ref = db.collection(
+                "server").document("lastVisitedListId")
 
             return saved_list_id_ref.get().to_dict()
         except Exception as error:
@@ -177,12 +176,11 @@ class ExpoPushNotification(object):
             raise self.retry(exc=exc)
 
 
-# FirestoreUpload.uploadMultiNotice()
-# FirestoreUpload.saveLastVisitedListId("20013DA1", "11899")
-
-# if __name__ == "__main__":
-#     FirestoreUpload.getPushTokenByDepartment("일반공지")
-#     ExpoPushNotification.send_push_message(
-#         token = "ExponentPushToken[xJojsCLoziyuRWA29AuUPq]", title = "title1", message = "message1")
 if __name__ == '__main__':
-    FirestoreUpload.uploadMultiNotice()
+    lastVisitedDict = FirestoreUpload.getLastVisitedListId()
+    if lastSavedListId None:
+        lastVisitedDict = getInitialListId()
+    saveToJsonFile(lastVisitedDict)
+    while True:
+        FirestoreUpload.uploadMultiNotice()
+        time.sleep(1)

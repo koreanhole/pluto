@@ -3,6 +3,7 @@ import re
 from bs4 import BeautifulSoup
 import ssl
 from urllib.request import Request, urlopen
+import json
 
 # 전체공지
 GeneralClassification = {
@@ -74,29 +75,19 @@ class DepartmentType(Enum):
     NaturalScience = "자연과학대학"
 
 
-def getInitialListId(deptCode: str):
-    if deptCode == "FA1":
-        return 7254
-    elif deptCode == "FA2":
-        return 4244
-    elif deptCode == "FA34":
-        return 1
-    elif deptCode == "FA35":
-        return 1
-    elif deptCode == "FA22":
-        return 152
-    elif deptCode == "FA25":
-        return 31
-    elif deptCode == "20013DA1":
-        return 1
-    elif deptCode == "econo01":
-        return 1
-    elif deptCode == "human01":
-        return 1
-    elif deptCode == "scien01":
-        return 1
-    else:
-        return 1
+def getInitialListId():
+    return {
+        "FA1": 7254,
+        "FA2": 4244,
+        "FA34": 1,
+        "FA35": 1,
+        "FA22": 152,
+        "FA25": 31,
+        "20013DA1": 1,
+        "econo01": 1,
+        "human01": 1,
+        "scien01": 1
+    }
 
 
 def getDeptName(deptCode: str, authorDept: str):
@@ -172,3 +163,13 @@ def getTypicalNoticeLastid(deptCode: str):
     # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
     lastId = paramList[1].replace("'", "")
     return int(lastId)
+
+
+def saveToJsonFile(data: dict):
+    with open("fetchedLastVisitedListId.json", "w") as json_file:
+        json.dump(toSave, json_file)
+
+
+def loadFromJson():
+    with open("fetchedLastVisitedListId.json", "r") as json_file:
+        return json.load(json_file)
