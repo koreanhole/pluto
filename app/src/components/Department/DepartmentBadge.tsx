@@ -5,7 +5,7 @@ import { Text, Alert, View, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { deleteFromFavoriteDepartmentList } from "./redux/actions";
-import { getFavoriteDepartmentList, getExpoPushToken } from "./redux/selectors";
+import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
 import randomColor from "randomcolor";
 import { userDataFirestore } from "util/firebase/firestore";
@@ -23,18 +23,11 @@ const DepartmentBadgeItem = ({
   departmentName: string;
 }) => {
   const dispatch = useDispatch();
-  const expoPushToken = useSelector(getExpoPushToken);
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
   const handleDeleteFromFavoriteDepartmentList = React.useCallback(() => {
     dispatch(deleteFromFavoriteDepartmentList(departmentName));
-    if (typeof expoPushToken !== "undefined" && expoPushToken !== null) {
-      userDataFirestore.doc(expoPushToken).update({
-        favoriteDepartmentList: favoriteDepartmentList,
-        expoPushToken: expoPushToken,
-      });
-    }
-  }, []);
+  }, [favoriteDepartmentList]);
 
   const handleClickDepartmentBadgeItem = React.useCallback(() => {
     Alert.alert("즐겨찾기에서 삭제하시겠습니까??", departmentName, [

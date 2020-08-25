@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 import { Divider } from "react-native-elements";
 import Ripple from "react-native-material-ripple";
 import { addToFavoriteDepartmentList } from "./redux/actions";
-import { getFavoriteDepartmentList, getExpoPushToken } from "./redux/selectors";
+import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import { userDataFirestore } from "util/firebase/firestore";
@@ -126,17 +126,10 @@ const AccrodionContentItem = ({
   const dispatch = useDispatch();
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
-  const expoPushToken = useSelector(getExpoPushToken);
 
   const handleClickDepartmentName = React.useCallback(() => {
     dispatch(addToFavoriteDepartmentList(departmentName));
-    if (typeof expoPushToken !== "undefined" && expoPushToken !== null) {
-      userDataFirestore.doc(expoPushToken).update({
-        favoriteDepartmentList: favoriteDepartmentList,
-        expoPushToken: expoPushToken,
-      });
-    }
-  }, []);
+  }, [favoriteDepartmentList]);
   return (
     <Ripple onPress={handleClickDepartmentName}>
       <AccordionContentItemContainer>
