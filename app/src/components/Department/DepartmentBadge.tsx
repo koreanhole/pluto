@@ -29,7 +29,7 @@ const DepartmentBadgeItem = ({
   }, [favoriteDepartmentList]);
 
   const handleClickDepartmentBadgeItem = React.useCallback(() => {
-    Alert.alert("즐겨찾기에서 삭제하시겠습니까??", departmentName, [
+    Alert.alert("즐겨찾기에서 삭제하시겠습니까?", departmentName, [
       {
         text: "취소",
         style: "cancel",

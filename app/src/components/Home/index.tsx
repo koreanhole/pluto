@@ -1,8 +1,8 @@
 import * as React from "react";
+import { View, ActivityIndicator, StyleSheet, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard, { NoticeCardItem } from "./NoticeCard";
-import { View, FlatList } from "react-native";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
@@ -76,7 +76,7 @@ export default function Home() {
   return (
     <AppLayout>
       <HomeContainer>
-        {flatListData && (
+        {typeof flatListData !== "undefined" ? (
           <FlatList
             data={flatListData.filter((item) => {
               return favoriteDepartmentList.includes(item.deptName) ?? item;
@@ -98,8 +98,19 @@ export default function Home() {
               />
             )}
           />
+        ) : (
+          <View style={HomeStyles.ActivityIndicatorContainer}>
+            <ActivityIndicator />
+          </View>
         )}
       </HomeContainer>
     </AppLayout>
   );
 }
+
+const HomeStyles = StyleSheet.create({
+  ActivityIndicatorContainer: {
+    marginTop: 16,
+    justifyContent: "center",
+  },
+});
