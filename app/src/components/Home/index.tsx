@@ -11,6 +11,8 @@ import { subDays } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
+import { setArticleId } from "components/Article/redux/actions";
+import * as Notifications from "expo-notifications";
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -33,6 +35,32 @@ export default function Home() {
       headerRight: () => <HeaderRightButton />,
     });
   });
+
+  const handleNotificationResponse = React.useCallback(
+    (respone: Notifications.NotificationResponse) => {
+      const responseData = respone.notification.request.content.data.body;
+      navigation.navigate("Article");
+      dispatch(
+        setArticleId({
+          // @ts-ignore Object is of type 'unknown'.ts(2571)
+          deptCode: responseData.deptCode,
+          // @ts-ignore Object is of type 'unknown'.ts(2571)
+          listId: responseData.listId,
+        })
+      );
+    },
+    []
+  );
+
+  React.useEffect(() => {
+    fetchNoticeData();
+    registerForPushNotificationsAsync().then((token) =>
+      dispatch(setExpoPushToken(token))
+    );
+    Notifications.addNotificationResponseReceivedListener(
+      handleNotificationResponse
+    );
+  }, []);
 
   const fetchNoticeData = async () => {
     try {
@@ -67,12 +95,6 @@ export default function Home() {
     }
   };
 
-  React.useEffect(() => {
-    fetchNoticeData();
-    registerForPushNotificationsAsync().then((token) =>
-      dispatch(setExpoPushToken(token))
-    );
-  }, []);
   return (
     <AppLayout>
       <HomeContainer>

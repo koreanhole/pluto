@@ -84,14 +84,19 @@ class FirestoreListener(object):
             for change in changes:
                 addedDocument = change.document.to_dict()
                 if change.type.name == 'ADDED':
+                    deptCode = addedDocument.get("deptCode")
                     deptName = addedDocument.get("deptName")
                     title = addedDocument.get("title")
-                    listId = change.document.id
+                    listId = addedDocument.get("listId")
                     pushTokenList = FirestoreUpload.getPushTokenByDepartment(
                         deptName=deptName)
+                    extraData = {
+                        "deptCode": deptCode,
+                        "listId": str(listId)
+                    }
                     for token in pushTokenList:
                         ExpoPushNotification.send_push_message(
-                            token=token, title=deptName, message=title)
+                            token=token, title=deptName, message=title, extra=extraData)
         else:
             cls.initialState = False
 
