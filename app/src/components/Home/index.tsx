@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, ActivityIndicator, StyleSheet, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard, { NoticeCardItem } from "./NoticeCard";
@@ -13,6 +13,7 @@ import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
 import { setArticleId } from "components/Article/redux/actions";
 import * as Notifications from "expo-notifications";
+import _ from "underscore";
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -24,6 +25,7 @@ export default function Home() {
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
+  const [isRefreshing, setIsRefreshing] = React.useState(true);
   const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
   const [noticeCreatedDate, setNoticeCreatedDate] = React.useState<Date>(
     new Date()
@@ -52,22 +54,12 @@ export default function Home() {
     []
   );
 
-  React.useEffect(() => {
-    fetchNoticeData();
-    registerForPushNotificationsAsync().then((token) =>
-      dispatch(setExpoPushToken(token))
-    );
-    const subscription = Notifications.addNotificationResponseReceivedListener(
-      handleNotificationResponse
-    );
-    return () => subscription.remove();
-  }, []);
-
-  const fetchNoticeData = async () => {
-    try {
-      const fiveDaysBefore = subDays(noticeCreatedDate, 10);
+  const fetchNoticeData = React.useCallback(
+    async (baseTime: Date) => {
+      const fiveDaysBefore = subDays(baseTime, 5);
       let noticeQuery = noticeFirestore
-        .where("createdDateTimestamp", "<", noticeCreatedDate)
+        .where("deptName", "in", favoriteDepartmentList)
+        .where("createdDateTimestamp", "<", baseTime)
         .where("createdDateTimestamp", ">", fiveDaysBefore)
         .orderBy("createdDateTimestamp", "desc");
       let noticeSnapshot = await noticeQuery.get();
@@ -75,6 +67,7 @@ export default function Home() {
         (document) => {
           const fetchedData = document.data();
           return {
+            createdDateTimestamp: fetchedData.createdDateTimestamp,
             deptCode: fetchedData.deptCode,
             deptName: fetchedData.deptName,
             authorDept: fetchedData.authorDept,
@@ -85,29 +78,59 @@ export default function Home() {
           };
         }
       );
-      if (typeof flatListData !== "undefined") {
-        setFlatListData(flatListData.concat(fetchedNoticeData));
-      } else {
+      return fetchedNoticeData;
+    },
+    [favoriteDepartmentList]
+  );
+
+  React.useEffect(() => {
+    registerForPushNotificationsAsync().then((token) =>
+      dispatch(setExpoPushToken(token))
+    );
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      handleNotificationResponse
+    );
+    return () => subscription.remove();
+  }, []);
+
+  const fetchInitialNoticeData = () => {
+    fetchNoticeData(new Date())
+      .then((fetchedNoticeData) => {
         setFlatListData(fetchedNoticeData);
-      }
-      setNoticeCreatedDate(fiveDaysBefore);
-    } catch (error) {
-      console.error(error);
-    }
+      })
+      .finally(() => {
+        setNoticeCreatedDate(subDays(new Date(), 5));
+        setIsRefreshing(false);
+      });
   };
+
+  const fetchMoreNoticeData = () => {
+    fetchNoticeData(noticeCreatedDate)
+      .then((data) => {
+        if (typeof flatListData !== "undefined") {
+          setFlatListData(flatListData.concat(data));
+        }
+      })
+      .finally(() => {
+        setNoticeCreatedDate(subDays(noticeCreatedDate, 5));
+        setIsRefreshing(false);
+      });
+  };
+
+  React.useEffect(fetchInitialNoticeData, [favoriteDepartmentList]);
 
   return (
     <AppLayout>
       <HomeContainer>
-        {typeof flatListData !== "undefined" ? (
+        {typeof flatListData !== "undefined" && (
           <FlatList
-            data={flatListData.filter((item) => {
-              return favoriteDepartmentList.includes(item.deptName) ?? item;
-            })}
+            data={flatListData}
             keyExtractor={(item, index) => item.title + index}
-            onEndReached={fetchNoticeData}
-            onEndReachedThreshold={0}
+            onEndReached={fetchMoreNoticeData}
+            onEndReachedThreshold={0.3}
             extraData={flatListData}
+            refreshing={isRefreshing}
+            onRefresh={fetchInitialNoticeData}
             scrollIndicatorInsets={{ right: 1 }}
             renderItem={(data) => (
               <NoticeCard
@@ -118,22 +141,12 @@ export default function Home() {
                 date={data.item.date}
                 author={data.item.author}
                 listId={data.item.listId}
+                createdDateTimestamp={data.item.createdDateTimestamp}
               />
             )}
           />
-        ) : (
-          <View style={HomeStyles.ActivityIndicatorContainer}>
-            <ActivityIndicator />
-          </View>
         )}
       </HomeContainer>
     </AppLayout>
   );
 }
-
-const HomeStyles = StyleSheet.create({
-  ActivityIndicatorContainer: {
-    marginTop: 16,
-    justifyContent: "center",
-  },
-});

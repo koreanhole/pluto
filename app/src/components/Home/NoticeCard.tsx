@@ -18,6 +18,7 @@ export type NoticeCardItem = {
   date: string;
   author: string;
   listId: string;
+  createdDateTimestamp: string;
 };
 
 const NoticeCardContainer = styled.View`
@@ -111,15 +112,8 @@ const NoticeCardItemSubtitle = ({
   );
 };
 
-export default function NoticeCard({
-  deptCode,
-  deptName,
-  authorDept,
-  title,
-  date,
-  author,
-  listId,
-}: NoticeCardItem) {
+export default function NoticeCard(props: NoticeCardItem) {
+  const { deptCode, deptName, authorDept, title, date, author, listId } = props;
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
