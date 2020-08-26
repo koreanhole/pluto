@@ -80,7 +80,7 @@ export default function Home() {
     );
     setNoticeCreatedDate(fiveDaysBefore);
     return fetchedNoticeData;
-  }, [noticeCreatedDate]);
+  }, [noticeCreatedDate, favoriteDepartmentList]);
 
   React.useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
