@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, ActivityIndicator, StyleSheet, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard, { NoticeCardItem } from "./NoticeCard";
