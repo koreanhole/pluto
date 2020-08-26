@@ -53,34 +53,34 @@ export default function Home() {
     []
   );
 
-  const fetchNoticeData = React.useCallback(async () => {
-    const fiveDaysBefore = subDays(noticeCreatedDate, 5);
-    console.log("refreshed");
-    console.log(noticeCreatedDate);
-    let noticeQuery = noticeFirestore
-      .where("deptName", "in", favoriteDepartmentList)
-      .where("createdDateTimestamp", "<", noticeCreatedDate)
-      .where("createdDateTimestamp", ">", fiveDaysBefore)
-      .orderBy("createdDateTimestamp", "desc");
-    let noticeSnapshot = await noticeQuery.get();
-    let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
-      (document) => {
-        const fetchedData = document.data();
-        return {
-          createdDateTimestamp: fetchedData.createdDateTimestamp,
-          deptCode: fetchedData.deptCode,
-          deptName: fetchedData.deptName,
-          authorDept: fetchedData.authorDept,
-          title: fetchedData.title,
-          date: fetchedData.createdDate,
-          author: fetchedData.authorName,
-          listId: fetchedData.listId,
-        };
-      }
-    );
-    setNoticeCreatedDate(fiveDaysBefore);
-    return fetchedNoticeData;
-  }, [noticeCreatedDate, favoriteDepartmentList]);
+  const fetchNoticeData = React.useCallback(
+    async (baseTime: Date) => {
+      const fiveDaysBefore = subDays(baseTime, 5);
+      let noticeQuery = noticeFirestore
+        .where("deptName", "in", favoriteDepartmentList)
+        .where("createdDateTimestamp", "<", baseTime)
+        .where("createdDateTimestamp", ">", fiveDaysBefore)
+        .orderBy("createdDateTimestamp", "desc");
+      let noticeSnapshot = await noticeQuery.get();
+      let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
+        (document) => {
+          const fetchedData = document.data();
+          return {
+            createdDateTimestamp: fetchedData.createdDateTimestamp,
+            deptCode: fetchedData.deptCode,
+            deptName: fetchedData.deptName,
+            authorDept: fetchedData.authorDept,
+            title: fetchedData.title,
+            date: fetchedData.createdDate,
+            author: fetchedData.authorName,
+            listId: fetchedData.listId,
+          };
+        }
+      );
+      return fetchedNoticeData;
+    },
+    [favoriteDepartmentList]
+  );
 
   React.useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
@@ -93,20 +93,21 @@ export default function Home() {
   }, []);
 
   const fetchInitialNoticeData = () => {
-    setNoticeCreatedDate(new Date());
-    fetchNoticeData()
+    fetchNoticeData(new Date())
       .then((fetchedNoticeData) => {
         setFlatListData(fetchedNoticeData);
       })
-      .catch((error) => console.log(error));
+      .finally(() => setNoticeCreatedDate(subDays(new Date(), 5)));
   };
 
   const fetchMoreNoticeData = () => {
-    fetchNoticeData().then((data) => {
-      if (typeof flatListData !== "undefined") {
-        setFlatListData(flatListData.concat(data));
-      }
-    });
+    fetchNoticeData(noticeCreatedDate)
+      .then((data) => {
+        if (typeof flatListData !== "undefined") {
+          setFlatListData(flatListData.concat(data));
+        }
+      })
+      .finally(() => setNoticeCreatedDate(subDays(noticeCreatedDate, 5)));
   };
 
   React.useEffect(fetchInitialNoticeData, [favoriteDepartmentList]);
@@ -119,7 +120,7 @@ export default function Home() {
             data={flatListData}
             keyExtractor={(item, index) => item.title + index}
             onEndReached={fetchMoreNoticeData}
-            onEndReachedThreshold={1}
+            onEndReachedThreshold={0.3}
             extraData={flatListData}
             scrollIndicatorInsets={{ right: 1 }}
             renderItem={(data) => (
