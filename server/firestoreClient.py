@@ -31,7 +31,7 @@ class FirestoreUpload(object):
         lastSavedListId = loadFromJson().get(deptCode)
         newLastSavedListId = 0
 
-        for listId in range(lastSavedListId, lastListId + 1):
+        for listId in range(lastSavedListId + 1, lastListId + 1):
             documnetPathName = "%s&%s" % (deptCode, str(listId))
             notice_ref = db.collection("notice").document(documnetPathName)
             parsedNotice = Notice.to_dict(deptCode, listId)
