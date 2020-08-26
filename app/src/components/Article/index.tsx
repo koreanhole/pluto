@@ -12,13 +12,7 @@ import { Dimensions } from "react-native";
 import AutoHeightWebView from "react-native-autoheight-webview";
 import { useNavigation } from "@react-navigation/native";
 import { getNoticeDocumentId } from "util/firebase/firestore";
-import {
-  AdMobBanner,
-  AdMobInterstitial,
-  PublisherBanner,
-  AdMobRewarded,
-  setTestDeviceIDAsync,
-} from "expo-ads-admob";
+import { AdMobBanner } from "expo-ads-admob";
 
 const ArticleContainer = styled.View`
   margin: 16px;
