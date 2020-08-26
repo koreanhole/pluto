@@ -25,6 +25,7 @@ export default function Home() {
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
+  const [isRefreshing, setIsRefreshing] = React.useState(true);
   const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
   const [noticeCreatedDate, setNoticeCreatedDate] = React.useState<Date>(
     new Date()
@@ -97,7 +98,10 @@ export default function Home() {
       .then((fetchedNoticeData) => {
         setFlatListData(fetchedNoticeData);
       })
-      .finally(() => setNoticeCreatedDate(subDays(new Date(), 5)));
+      .finally(() => {
+        setNoticeCreatedDate(subDays(new Date(), 5));
+        setIsRefreshing(false);
+      });
   };
 
   const fetchMoreNoticeData = () => {
@@ -107,7 +111,10 @@ export default function Home() {
           setFlatListData(flatListData.concat(data));
         }
       })
-      .finally(() => setNoticeCreatedDate(subDays(noticeCreatedDate, 5)));
+      .finally(() => {
+        setNoticeCreatedDate(subDays(noticeCreatedDate, 5));
+        setIsRefreshing(false);
+      });
   };
 
   React.useEffect(fetchInitialNoticeData, [favoriteDepartmentList]);
@@ -115,13 +122,15 @@ export default function Home() {
   return (
     <AppLayout>
       <HomeContainer>
-        {typeof flatListData !== "undefined" ? (
+        {typeof flatListData !== "undefined" && (
           <FlatList
             data={flatListData}
             keyExtractor={(item, index) => item.title + index}
             onEndReached={fetchMoreNoticeData}
             onEndReachedThreshold={0.3}
             extraData={flatListData}
+            refreshing={isRefreshing}
+            onRefresh={fetchInitialNoticeData}
             scrollIndicatorInsets={{ right: 1 }}
             renderItem={(data) => (
               <NoticeCard
@@ -136,19 +145,8 @@ export default function Home() {
               />
             )}
           />
-        ) : (
-          <View style={HomeStyles.ActivityIndicatorContainer}>
-            <ActivityIndicator />
-          </View>
         )}
       </HomeContainer>
     </AppLayout>
   );
 }
-
-const HomeStyles = StyleSheet.create({
-  ActivityIndicatorContainer: {
-    marginTop: 16,
-    justifyContent: "center",
-  },
-});
