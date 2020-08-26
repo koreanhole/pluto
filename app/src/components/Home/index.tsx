@@ -13,6 +13,7 @@ import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
 import { setArticleId } from "components/Article/redux/actions";
 import * as Notifications from "expo-notifications";
+import _ from "underscore";
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -52,8 +53,36 @@ export default function Home() {
     []
   );
 
+  const fetchNoticeData = React.useCallback(async () => {
+    const fiveDaysBefore = subDays(noticeCreatedDate, 5);
+    console.log("refreshed");
+    console.log(noticeCreatedDate);
+    let noticeQuery = noticeFirestore
+      .where("deptName", "in", favoriteDepartmentList)
+      .where("createdDateTimestamp", "<", noticeCreatedDate)
+      .where("createdDateTimestamp", ">", fiveDaysBefore)
+      .orderBy("createdDateTimestamp", "desc");
+    let noticeSnapshot = await noticeQuery.get();
+    let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
+      (document) => {
+        const fetchedData = document.data();
+        return {
+          createdDateTimestamp: fetchedData.createdDateTimestamp,
+          deptCode: fetchedData.deptCode,
+          deptName: fetchedData.deptName,
+          authorDept: fetchedData.authorDept,
+          title: fetchedData.title,
+          date: fetchedData.createdDate,
+          author: fetchedData.authorName,
+          listId: fetchedData.listId,
+        };
+      }
+    );
+    setNoticeCreatedDate(fiveDaysBefore);
+    return fetchedNoticeData;
+  }, [noticeCreatedDate]);
+
   React.useEffect(() => {
-    fetchNoticeData();
     registerForPushNotificationsAsync().then((token) =>
       dispatch(setExpoPushToken(token))
     );
@@ -63,50 +92,34 @@ export default function Home() {
     return () => subscription.remove();
   }, []);
 
-  const fetchNoticeData = async () => {
-    try {
-      const fiveDaysBefore = subDays(noticeCreatedDate, 10);
-      let noticeQuery = noticeFirestore
-        .where("createdDateTimestamp", "<", noticeCreatedDate)
-        .where("createdDateTimestamp", ">", fiveDaysBefore)
-        .orderBy("createdDateTimestamp", "desc");
-      let noticeSnapshot = await noticeQuery.get();
-      let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
-        (document) => {
-          const fetchedData = document.data();
-          return {
-            deptCode: fetchedData.deptCode,
-            deptName: fetchedData.deptName,
-            authorDept: fetchedData.authorDept,
-            title: fetchedData.title,
-            date: fetchedData.createdDate,
-            author: fetchedData.authorName,
-            listId: fetchedData.listId,
-          };
-        }
-      );
-      if (typeof flatListData !== "undefined") {
-        setFlatListData(flatListData.concat(fetchedNoticeData));
-      } else {
+  const fetchInitialNoticeData = () => {
+    setNoticeCreatedDate(new Date());
+    fetchNoticeData()
+      .then((fetchedNoticeData) => {
         setFlatListData(fetchedNoticeData);
-      }
-      setNoticeCreatedDate(fiveDaysBefore);
-    } catch (error) {
-      console.error(error);
-    }
+      })
+      .catch((error) => console.log(error));
   };
+
+  const fetchMoreNoticeData = () => {
+    fetchNoticeData().then((data) => {
+      if (typeof flatListData !== "undefined") {
+        setFlatListData(flatListData.concat(data));
+      }
+    });
+  };
+
+  React.useEffect(fetchInitialNoticeData, [favoriteDepartmentList]);
 
   return (
     <AppLayout>
       <HomeContainer>
         {typeof flatListData !== "undefined" ? (
           <FlatList
-            data={flatListData.filter((item) => {
-              return favoriteDepartmentList.includes(item.deptName) ?? item;
-            })}
+            data={flatListData}
             keyExtractor={(item, index) => item.title + index}
-            onEndReached={fetchNoticeData}
-            onEndReachedThreshold={0}
+            onEndReached={fetchMoreNoticeData}
+            onEndReachedThreshold={1}
             extraData={flatListData}
             scrollIndicatorInsets={{ right: 1 }}
             renderItem={(data) => (
@@ -118,6 +131,7 @@ export default function Home() {
                 date={data.item.date}
                 author={data.item.author}
                 listId={data.item.listId}
+                createdDateTimestamp={data.item.createdDateTimestamp}
               />
             )}
           />
