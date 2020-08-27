@@ -81,7 +81,6 @@ export const pushNotifications = functions.firestore
       .then((querySnapShot) => {
         querySnapShot.forEach((doc) => {
           if (doc.exists) {
-            console.log(`pushToken: ${doc.id}`);
             pushTokenList.push(doc.id);
           } else {
             console.log("document not exists");
