@@ -1,20 +1,12 @@
 import * as firebase from "firebase";
 import "@firebase/firestore";
-import ENV from "environment";
+import * as FirebaseCore from "expo-firebase-core";
 
-const firebaseConfig = {
-  apiKey: ENV.API_KEY,
-  authDomain: ENV.AUTH_DOMAIN,
-  databaseURL: ENV.DATABASE_URL,
-  projectId: ENV.PROJECT_ID,
-  storageBucket: ENV.STORAGE_BUCKET,
-  messagingSenderId: ENV.MESSAGING_SENDER_ID,
-  appId: ENV.APP_ID,
-  measurementId: ENV.MEASUREMENT_ID,
-};
-
+const firebaseConfig = FirebaseCore.DEFAULT_APP_OPTIONS;
 if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+  if (typeof firebaseConfig !== "undefined") {
+    firebase.initializeApp(firebaseConfig);
+  }
 }
 
 export { firebase };
