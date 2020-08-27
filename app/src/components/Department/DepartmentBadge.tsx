@@ -8,6 +8,7 @@ import { deleteFromFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
 import randomColor from "randomcolor";
+import * as Haptics from "expo-haptics";
 
 const DepartmentBadgeContainer = styled.View`
   margin-top: 8px;
@@ -26,6 +27,7 @@ const DepartmentBadgeItem = ({
 
   const handleDeleteFromFavoriteDepartmentList = React.useCallback(() => {
     dispatch(deleteFromFavoriteDepartmentList(departmentName));
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, [favoriteDepartmentList]);
 
   const handleClickDepartmentBadgeItem = React.useCallback(() => {

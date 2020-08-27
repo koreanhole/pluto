@@ -9,6 +9,7 @@ import { addToFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
 import { MaterialIcons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 
 type AccordionSection = {
   departmentType: string;
@@ -128,6 +129,7 @@ const AccrodionContentItem = ({
 
   const handleClickDepartmentName = React.useCallback(() => {
     dispatch(addToFavoriteDepartmentList(departmentName));
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   }, [favoriteDepartmentList]);
   return (
     <Ripple onPress={handleClickDepartmentName}>
