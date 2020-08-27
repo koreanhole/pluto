@@ -6,33 +6,8 @@ import { pushNotificationExtraData } from "./types";
 admin.initializeApp();
 
 const db = admin.firestore();
-let expo = new Expo();
 
-export const pushNotifications = functions.firestore
-  .document("notice/{deptCode&listId}")
-  .onCreate((change, _context) => {
-    let pushTokenList: string[] = [];
-    const addedNotice = change.data();
-    const title: string = addedNotice.deptName;
-    const body: string = addedNotice.title;
-    const extraData: pushNotificationExtraData = {
-      deptCode: addedNotice.deptCode,
-      listId: addedNotice.listId.toString(),
-    };
-
-    db.collection("userData")
-      .where("favoriteDepartmentList", "array-contains", addedNotice.deptName)
-      .get()
-      .then((querySnapShot) => {
-        querySnapShot.forEach((doc) => {
-          pushTokenList.push(doc.id);
-        });
-      });
-
-    sendPushNotification({ pushTokenList, title, body, extraData });
-  });
-
-function sendPushNotification({
+async function sendPushNotification({
   pushTokenList,
   title,
   body,
@@ -43,7 +18,9 @@ function sendPushNotification({
   body: string;
   extraData: pushNotificationExtraData;
 }) {
+  let expo = new Expo();
   let messages: ExpoPushMessage[] = [];
+
   for (let pushToken of pushTokenList) {
     // Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
 
@@ -73,7 +50,6 @@ function sendPushNotification({
     for (let chunk of chunks) {
       try {
         let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-        console.log(ticketChunk);
         tickets.push(...ticketChunk);
         // NOTE: If a ticket contains an error code in ticket.details.error, you
         // must handle it appropriately. The error codes are listed in the Expo
@@ -85,3 +61,34 @@ function sendPushNotification({
     }
   })();
 }
+
+export const pushNotifications = functions.firestore
+  .document("/notice/{deptCodeAndlistId}")
+  .onCreate((change, _context) => {
+    let pushTokenList: string[] = [];
+    const addedNotice = change.data();
+    const title: string = addedNotice.deptName;
+    const body: string = addedNotice.title;
+    const extraData: pushNotificationExtraData = {
+      deptCode: addedNotice.deptCode,
+      listId: addedNotice.listId.toString(),
+    };
+
+    const getData = db
+      .collection("userData")
+      .where("favoriteDepartmentList", "array-contains", title)
+      .get()
+      .then((querySnapShot) => {
+        querySnapShot.forEach((doc) => {
+          if (doc.exists) {
+            pushTokenList.push(doc.id);
+          } else {
+            console.log("document not exists");
+          }
+        });
+        sendPushNotification({ pushTokenList, title, body, extraData });
+      })
+      .catch((error) => console.error(error));
+
+    return getData;
+  });
