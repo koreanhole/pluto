@@ -1,6 +1,6 @@
 import * as React from "react";
 import AppLayout from "modules/AppLayout";
-import { ScrollView } from "react-native";
+import { ScrollView, Platform } from "react-native";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import theme from "theme";
@@ -89,14 +89,16 @@ export default function Article() {
     fetchNoticeData();
   }, [articleId]);
   if (typeof noticeData !== "undefined") {
+    let adUnitId: string | null = null;
+    if (Platform.OS == "ios") {
+      adUnitId = "ca-app-pub-2034052364864446~9247757959";
+    } else if (Platform.OS == "android") {
+      adUnitId = "ca-app-pub-2034052364864446~6709418041";
+    }
+
     return (
       <AppLayout>
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-          <AdMobBanner
-            bannerSize="fullBanner"
-            adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
-            servePersonalizedAds
-          />
           <ArticleContainer>
             <ArticleTitle>{noticeData.title}</ArticleTitle>
             <ArticleAdditionalInformation>
@@ -107,6 +109,13 @@ export default function Article() {
               {noticeData.authorDept && ` / ${noticeData.authorDept}`}
               {` / ${noticeData.deptName}`}
             </ArticleAdditionalInformation>
+            {adUnitId !== null && (
+              <AdMobBanner
+                bannerSize="fullBanner"
+                adUnitID={adUnitId}
+                servePersonalizedAds
+              />
+            )}
             <AutoHeightWebView
               originWhitelist={["*"]}
               scrollEnabled={false}
