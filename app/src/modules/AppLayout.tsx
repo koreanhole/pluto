@@ -1,6 +1,7 @@
 import * as React from "react";
-import { View, StatusBar, Platform } from "react-native";
+import { View } from "react-native";
 import styled from "styled-components/native";
+import { StatusBar } from "expo-status-bar";
 
 type AppLayoutProps = {
   children?: React.ReactNode;
@@ -16,11 +17,7 @@ export default function AppLayout(props: AppLayoutProps) {
   return (
     <React.Fragment>
       <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-        {Platform.OS == "ios" ? (
-          <StatusBar barStyle="dark-content" />
-        ) : (
-          <StatusBar barStyle="light-content" />
-        )}
+        <StatusBar style="dark" />
         <MainSection>{children}</MainSection>
       </View>
     </React.Fragment>
