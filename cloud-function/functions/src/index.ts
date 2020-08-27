@@ -43,6 +43,7 @@ async function sendPushNotification({
   }
   let chunks = expo.chunkPushNotifications(messages);
   let tickets = [];
+  // tslint:disable-next-line:no-floating-promises
   (async () => {
     // Send the chunks to the Expo push notification service. There are
     // different strategies you could use. A simple one is to send one chunk at a
@@ -51,6 +52,7 @@ async function sendPushNotification({
       try {
         let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
         tickets.push(...ticketChunk);
+        console.log("notification sent");
         // NOTE: If a ticket contains an error code in ticket.details.error, you
         // must handle it appropriately. The error codes are listed in the Expo
         // documentation:
@@ -62,8 +64,9 @@ async function sendPushNotification({
   })();
 }
 
-export const pushNotifications = functions.firestore
-  .document("/notice/{deptCodeAndlistId}")
+export const pushNotifications = functions
+  .region("asia-northeast1")
+  .firestore.document("/notice/{deptCodeAndlistId}")
   .onCreate((change, _context) => {
     let pushTokenList: string[] = [];
     const addedNotice = change.data();
@@ -86,7 +89,12 @@ export const pushNotifications = functions.firestore
             console.log("document not exists");
           }
         });
-        sendPushNotification({ pushTokenList, title, body, extraData });
+        sendPushNotification({
+          pushTokenList,
+          title,
+          body,
+          extraData,
+        }).catch((error) => console.error(error));
       })
       .catch((error) => console.error(error));
 
