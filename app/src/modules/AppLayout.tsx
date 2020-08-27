@@ -17,8 +17,8 @@ export default function AppLayout(props: AppLayoutProps) {
   return (
     <React.Fragment>
       <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-        <StatusBar style="dark" />
         <MainSection>{children}</MainSection>
+        <StatusBar style="dark" />
       </View>
     </React.Fragment>
   );
