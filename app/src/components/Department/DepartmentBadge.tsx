@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components/native";
-import { Text, Alert, View, StyleSheet } from "react-native";
+import { Text, Alert, View, StyleSheet, Platform } from "react-native";
 import { Button } from "react-native-elements";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { deleteFromFavoriteDepartmentList } from "./redux/actions";
@@ -27,7 +27,9 @@ const DepartmentBadgeItem = ({
 
   const handleDeleteFromFavoriteDepartmentList = React.useCallback(() => {
     dispatch(deleteFromFavoriteDepartmentList(departmentName));
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (Platform.OS == "ios") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
   }, [favoriteDepartmentList]);
 
   const handleClickDepartmentBadgeItem = React.useCallback(() => {
