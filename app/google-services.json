@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "791742542785",
+    "firebase_url": "https://pluto-application.firebaseio.com",
+    "project_id": "pluto-application",
+    "storage_bucket": "pluto-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791742542785:android:7ad391161bd3dfde667540",
+        "android_client_info": {
+          "package_name": "com.koreanhole.pluto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "791742542785-2ebma3plqgokv9n5jcrud1n7dpdn0i26.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQ5g9K7BmY20w_K7_k8GVB9pcce5eCLV0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "791742542785-2ebma3plqgokv9n5jcrud1n7dpdn0i26.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
