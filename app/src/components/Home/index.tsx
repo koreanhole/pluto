@@ -127,7 +127,7 @@ export default function Home() {
             data={flatListData}
             keyExtractor={(item, index) => item.title + index}
             onEndReached={fetchMoreNoticeData}
-            onEndReachedThreshold={0.3}
+            onEndReachedThreshold={0.1}
             extraData={flatListData}
             refreshing={isRefreshing}
             onRefresh={fetchInitialNoticeData}
