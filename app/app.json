@@ -2,8 +2,8 @@
   "expo": {
     "name": "UOS 공지사항",
     "slug": "pluto-app-1",
-    "version": "1.0.2",
-    "orientation": "portrait",
+    "version": "1.0.0",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -18,7 +18,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.koreanhole.pluto",
       "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "1.0.3",
+      "buildNumber": "1",
+      "userInterfaceStyle": "light",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~9247757959"
       }
@@ -30,6 +31,7 @@
       "package": "com.koreanhole.pluto",
       "googleServicesFile": "./google-services.json",
       "versionCode": 1,
+      "userInterfaceStyle": "light",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~6709418041"
       }
