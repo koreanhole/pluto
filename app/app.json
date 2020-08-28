@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "UOS 공지사항",
+    "name": "UOS공지사항",
     "slug": "pluto-app-1",
     "version": "1.0.0",
     "orientation": "default",
@@ -32,6 +32,7 @@
       "googleServicesFile": "./google-services.json",
       "versionCode": 1,
       "userInterfaceStyle": "light",
+      "useNextNotificationsApi": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~6709418041"
       }
