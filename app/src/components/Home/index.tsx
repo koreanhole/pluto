@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard, { NoticeCardItem } from "./NoticeCard";
@@ -122,7 +122,7 @@ export default function Home() {
   return (
     <AppLayout>
       <HomeContainer>
-        {typeof flatListData !== "undefined" && (
+        {typeof flatListData !== "undefined" ? (
           <FlatList
             data={flatListData}
             keyExtractor={(item, index) => item.title + index}
@@ -145,8 +145,19 @@ export default function Home() {
               />
             )}
           />
+        ) : (
+          <View style={LoadingStyles.container}>
+            <ActivityIndicator animating={true} size="large" />
+          </View>
         )}
       </HomeContainer>
     </AppLayout>
   );
 }
+
+const LoadingStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+});
