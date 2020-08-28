@@ -32,6 +32,7 @@
       "googleServicesFile": "./google-services.json",
       "versionCode": 1,
       "userInterfaceStyle": "light",
+      "useNextNotificationsApi": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~6709418041"
       }
