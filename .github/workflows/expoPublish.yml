@@ -7,8 +7,8 @@ jobs:
   publish:
     name: Install and publish
     runs-on: ubuntu-latest
+    working-directory: ./app
     steps:
-      - working-directory: ./app
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
