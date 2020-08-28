@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:791742542785:android:7ad391161bd3dfde667540",
+        "mobilesdk_app_id": "1:791742542785:android:5ca2beb7f53ace6a667540",
         "android_client_info": {
-          "package_name": "com.koreanhole.pluto"
+          "package_name": "com.koreanhole.app.pluto"
         }
       },
       "oauth_client": [
@@ -30,6 +30,13 @@
             {
               "client_id": "791742542785-2ebma3plqgokv9n5jcrud1n7dpdn0i26.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "791742542785-fgqpgu3pfjopqdfmtoqfclp0vj1cboch.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.koreanhole.app.pluto"
+              }
             }
           ]
         }
