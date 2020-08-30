@@ -92,7 +92,7 @@ export default function Article() {
     return (
       <AppLayout>
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-          <AdMobBanner
+          {/* <AdMobBanner
             bannerSize="smartBannerPortrait"
             adUnitID={
               Platform.OS == "ios"
@@ -100,7 +100,7 @@ export default function Article() {
                 : "ca-app-pub-2034052364864446/5161544413"
             }
             servePersonalizedAds
-          />
+          /> */}
           <ArticleContainer>
             <ArticleTitle>{noticeData.title}</ArticleTitle>
             <ArticleAdditionalInformation>
