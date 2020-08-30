@@ -18,8 +18,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.koreanhole.app.pluto",
       "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "2",
-      "userInterfaceStyle": "light",
+      "buildNumber": "4",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~9247757959"
       }
@@ -31,7 +30,6 @@
       "package": "com.koreanhole.app.pluto",
       "googleServicesFile": "./google-services.json",
       "versionCode": 1,
-      "userInterfaceStyle": "light",
       "useNextNotificationsApi": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~6709418041"
