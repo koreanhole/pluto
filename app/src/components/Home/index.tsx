@@ -33,7 +33,7 @@ export default function Home() {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "UOS 공지사항 🏄🏼‍♂️",
+      headerTitle: "UOS 공지사항 😷",
       headerRight: () => <HeaderRightButton />,
     });
   });
@@ -91,7 +91,7 @@ export default function Home() {
       handleNotificationResponse
     );
     return () => subscription.remove();
-  }, []);
+  }, [navigation]);
 
   const fetchInitialNoticeData = () => {
     fetchNoticeData(new Date())
