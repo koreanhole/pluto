@@ -44,6 +44,10 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
     ],
   },
   {
+    departmentType: "경영대학",
+    departmentList: ["경영학부"],
+  },
+  {
     departmentType: "정경대학",
     departmentList: [
       "행정학과",
