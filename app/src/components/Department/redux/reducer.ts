@@ -4,6 +4,7 @@ import {
   addToFavoriteDepartmentList,
   deleteFromFavoriteDepartmentList,
   setExpoPushToken,
+  setShowSnackBar,
 } from "./actions";
 import _ from "underscore";
 
@@ -27,6 +28,12 @@ const reducer = combineReducers({
     }),
   expoPushToken: createReducer<string | undefined | null>(null).handleAction(
     setExpoPushToken,
+    (_state, action) => {
+      return action.payload;
+    }
+  ),
+  showSnackBar: createReducer<boolean>(false).handleAction(
+    setShowSnackBar,
     (_state, action) => {
       return action.payload;
     }

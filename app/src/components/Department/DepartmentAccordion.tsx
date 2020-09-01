@@ -5,7 +5,7 @@ import Accordion from "react-native-collapsible/Accordion";
 import styled from "styled-components/native";
 import { Divider } from "react-native-paper";
 import Ripple from "react-native-material-ripple";
-import { addToFavoriteDepartmentList } from "./redux/actions";
+import { addToFavoriteDepartmentList, setShowSnackBar } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -129,6 +129,7 @@ const AccrodionContentItem = ({
 
   const handleClickDepartmentName = React.useCallback(() => {
     dispatch(addToFavoriteDepartmentList(departmentName));
+    dispatch(setShowSnackBar(true));
     if (Platform.OS == "ios") {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }

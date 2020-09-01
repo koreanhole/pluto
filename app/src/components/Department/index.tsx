@@ -1,17 +1,30 @@
 import * as React from "react";
 import { ScrollView } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
+import { Snackbar } from "react-native-paper";
 import DepartmentAccordion from "./DepartmentAccordion";
 import DepartmentBadge from "./DepartmentBadge";
 import { useNavigation } from "@react-navigation/native";
-import { getFavoriteDepartmentList, getExpoPushToken } from "./redux/selectors";
+import { setShowSnackBar } from "./redux/actions";
+import {
+  getFavoriteDepartmentList,
+  getExpoPushToken,
+  getShowSnackBar,
+} from "./redux/selectors";
 import { userDataFirestore } from "util/firebase/firestore";
 
 export default function Department() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
   const expoPushToken = useSelector(getExpoPushToken);
+  const showSnackBar = useSelector(getShowSnackBar);
+
+  const handleDismissSnackbar = React.useCallback(() => {
+    dispatch(setShowSnackBar(false));
+  }, []);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,6 +47,15 @@ export default function Department() {
         <DepartmentBadge />
         <DepartmentAccordion />
       </ScrollView>
+      {showSnackBar && (
+        <Snackbar
+          visible={showSnackBar}
+          onDismiss={handleDismissSnackbar}
+          duration={1000}
+        >
+          새로운 공지사항에 대해 알림을 수신합니다.
+        </Snackbar>
+      )}
     </AppLayout>
   );
 }
