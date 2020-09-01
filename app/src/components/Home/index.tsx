@@ -1,19 +1,20 @@
 import * as React from "react";
-import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { View, SectionList, ActivityIndicator, StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
 import AppLayout from "modules/AppLayout";
-import NoticeCard, { NoticeCardItem } from "./NoticeCard";
+import NoticeCard, { NoticeCardItem, NoticeCardHeader } from "./NoticeCard";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
 import { noticeFirestore } from "util/firebase/firestore";
 import { subDays } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
-import { registerForPushNotificationsAsync } from "util/pushNotification";
-import { setExpoPushToken } from "components/Department/redux/actions";
-import { setArticleId } from "components/Article/redux/actions";
-import * as Notifications from "expo-notifications";
 import _ from "underscore";
+import { getDescriptiveDateDifference } from "./util";
+
+type SectionListData = {
+  data: NoticeCardItem[];
+};
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -21,12 +22,14 @@ const HomeContainer = styled(View)`
 
 export default function Home() {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
   const [isRefreshing, setIsRefreshing] = React.useState(true);
-  const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
+  const [sectionListData, setSectionListData] = React.useState<
+    SectionListData[]
+  >();
+  // const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
   const [noticeCreatedDate, setNoticeCreatedDate] = React.useState<Date>(
     new Date()
   );
@@ -38,25 +41,9 @@ export default function Home() {
     });
   });
 
-  const handleNotificationResponse = React.useCallback(
-    (respone: Notifications.NotificationResponse) => {
-      const responseData = respone.notification.request.content.data.body;
-      navigation.navigate("Article");
-      dispatch(
-        setArticleId({
-          // @ts-ignore Object is of type 'unknown'.ts(2571)
-          deptCode: responseData.deptCode,
-          // @ts-ignore Object is of type 'unknown'.ts(2571)
-          listId: responseData.listId,
-        })
-      );
-    },
-    []
-  );
-
   const fetchNoticeData = React.useCallback(
     async (baseTime: Date) => {
-      const fiveDaysBefore = subDays(baseTime, 5);
+      const fiveDaysBefore = subDays(baseTime, 1);
       let noticeQuery = noticeFirestore
         .where("deptName", "in", favoriteDepartmentList)
         .where("createdDateTimestamp", "<", baseTime)
@@ -83,36 +70,26 @@ export default function Home() {
     [favoriteDepartmentList]
   );
 
-  React.useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      dispatch(setExpoPushToken(token))
-    );
-    const subscription = Notifications.addNotificationResponseReceivedListener(
-      handleNotificationResponse
-    );
-    return () => subscription.remove();
-  }, [navigation]);
-
   const fetchInitialNoticeData = () => {
     fetchNoticeData(new Date())
       .then((fetchedNoticeData) => {
-        setFlatListData(fetchedNoticeData);
+        setSectionListData([{ data: fetchedNoticeData }]);
       })
       .finally(() => {
-        setNoticeCreatedDate(subDays(new Date(), 5));
+        setNoticeCreatedDate(subDays(new Date(), 1));
         setIsRefreshing(false);
       });
   };
 
   const fetchMoreNoticeData = () => {
     fetchNoticeData(noticeCreatedDate)
-      .then((data) => {
-        if (typeof flatListData !== "undefined") {
-          setFlatListData(flatListData.concat(data));
+      .then((fetchedNoticeData) => {
+        if (typeof sectionListData !== "undefined") {
+          setSectionListData([...sectionListData, { data: fetchedNoticeData }]);
         }
       })
       .finally(() => {
-        setNoticeCreatedDate(subDays(noticeCreatedDate, 5));
+        setNoticeCreatedDate(subDays(noticeCreatedDate, 1));
         setIsRefreshing(false);
       });
   };
@@ -122,16 +99,27 @@ export default function Home() {
   return (
     <AppLayout>
       <HomeContainer>
-        {typeof flatListData !== "undefined" ? (
-          <FlatList
-            data={flatListData}
+        {typeof sectionListData !== "undefined" ? (
+          <SectionList
+            sections={sectionListData}
             keyExtractor={(item, index) => item.title + index}
             onEndReached={fetchMoreNoticeData}
             onEndReachedThreshold={0.1}
-            extraData={flatListData}
+            extraData={sectionListData}
             refreshing={isRefreshing}
             onRefresh={fetchInitialNoticeData}
             scrollIndicatorInsets={{ right: 1 }}
+            renderSectionHeader={({ section: { data } }) => {
+              if (data.length !== 0) {
+                return (
+                  <NoticeCardHeader
+                    displayedDay={getDescriptiveDateDifference(data[0].date)}
+                  />
+                );
+              } else {
+                return null;
+              }
+            }}
             renderItem={(data) => (
               <NoticeCard
                 deptCode={data.item.deptCode}

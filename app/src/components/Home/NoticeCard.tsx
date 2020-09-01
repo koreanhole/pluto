@@ -26,11 +26,12 @@ const NoticeCardContainer = styled.View`
 `;
 
 export const NoticeCardHeaderContainer = styled.View`
-  margin: 16px 16px 0 16px;
+  padding: 8px 16px;
+  background-color: ${theme.colors.ligthGrey};
 `;
 
 const NoticeCardHeaderText = styled.Text`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
 `;
 
@@ -111,7 +112,7 @@ const NoticeCardItemSubtitle = ({
         {`${author}`}
         {authorDept && ` / ${authorDept}`}
       </NoticeCardItemSubtitleText>
-      <NoticeCardItemSubtitleText>{date}</NoticeCardItemSubtitleText>
+      <NoticeCardItemSubtitleText>{`${date}`}</NoticeCardItemSubtitleText>
     </NoticeCardItemSubtitleContainer>
   );
 };
