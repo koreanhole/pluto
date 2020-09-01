@@ -131,7 +131,7 @@ export default function Home() {
             keyExtractor={(item, index) => item.title + index}
             onEndReached={fetchMoreNoticeData}
             onEndReachedThreshold={0.1}
-            extraData={sectionListData}
+            extraData={noticeCreatedDate}
             refreshing={isRefreshing}
             onRefresh={fetchInitialNoticeData}
             scrollIndicatorInsets={{ right: 1 }}
