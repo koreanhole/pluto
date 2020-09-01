@@ -66,6 +66,15 @@ NaturalScienceDepartment = [
     "환경원예학과",
 ]
 
+# 경영대학
+BusinessClassification = {
+    "20008N2": "경영대학"
+}
+# 경영대학 학부
+BusinessDepartment = [
+    "경영학부"
+]
+
 
 class DepartmentType(Enum):
     General = "전체공지"
@@ -73,6 +82,7 @@ class DepartmentType(Enum):
     Economics = "정경대학"
     Humanities = "인문대학"
     NaturalScience = "자연과학대학"
+    Business = "경영대학"
 
 
 def getInitialListId():
@@ -86,7 +96,8 @@ def getInitialListId():
         "20013DA1": 1,
         "econo01": 1,
         "human01": 1,
-        "scien01": 1
+        "scien01": 1,
+        "list_id=20008N2": 1,
     }
 
 
@@ -113,6 +124,11 @@ def getDeptName(deptCode: str, authorDept: str):
             return authorDept
         else:
             "자연과학대학"
+    elif BusinessClassification.get(deptCode):
+        if authorDept in BusinessDepartment:
+            return authorDept
+        else:
+            "경영대학"
 
 
 def getDeptType(deptCode: str):
@@ -126,29 +142,46 @@ def getDeptType(deptCode: str):
         return DepartmentType.Humanities
     elif NaturalScienceClassification.get(deptCode):
         return DepartmentType.Humanities
+    elif BusinessClassification.get(deptCode):
+        return DepartmentType.Business
 
 
 def getTypicalNoticeLastid(deptCode: str):
     deptType = getDeptType(deptCode)
     query = "list_id=" + deptCode
 
-    base_url = "https://www.uos.ac.kr"
-    url = "https://www.uos.ac.kr/korNotice/list.do?" + query
-
-    context = ssl._create_unverified_context()
-    req = Request(url)
-    res = urlopen(req, context=context)
-    html = res.read()
-
-    soup = BeautifulSoup(html, "html.parser")
-
     # 전체 공지의 경우
     if deptType == DepartmentType.General:
+        url = "https://www.uos.ac.kr/korNotice/list.do?" + query
+
+        context = ssl._create_unverified_context()
+        req = Request(url)
+        res = urlopen(req, context=context)
+        html = res.read()
+
+        soup = BeautifulSoup(html, "html.parser")
+
         noticeListSoup = soup.find("ul", class_="listType")
         lastNoticeSoup = noticeListSoup.find("a", {"href": "#"})
 
+        # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
+        matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup["onclick"])
+        paramList = matched[1].split(",")
+        # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
+        lastId = paramList[1].replace("'", "")
+        return int(lastId)
+
     # 공과대학 / 정경대학 / 인문대학 / 자연과학대학 경우
     elif deptType == DepartmentType.Engineering or deptType == DepartmentType.Economics or deptType == DepartmentType.Humanities or deptType == DepartmentType.NaturalScience:
+        url = "https://www.uos.ac.kr/korNotice/list.do?" + query
+
+        context = ssl._create_unverified_context()
+        req = Request(url)
+        res = urlopen(req, context=context)
+        html = res.read()
+
+        soup = BeautifulSoup(html, "html.parser")
+
         noticeListContainerSoup = soup.find("div", class_="table-style")
         for noticeItemSoup in noticeListContainerSoup.find_all("div", class_="tb-body"):
             if noticeItemSoup.find(lambda tag: tag.name == "ul" and tag.get("class") == ['clearfix']):
@@ -157,12 +190,31 @@ def getTypicalNoticeLastid(deptCode: str):
                 break
         lastNoticeSoup = noticeListSoup.find("a", {"href": "#a"})
 
-    # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
-    matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup["onclick"])
-    paramList = matched[1].split(",")
-    # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
-    lastId = paramList[1].replace("'", "")
-    return int(lastId)
+        # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
+        matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup["onclick"])
+        paramList = matched[1].split(",")
+        # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
+        lastId = paramList[1].replace("'", "")
+        return int(lastId)
+
+    # 경영대학의 경우
+    elif deptType == DepartmentType.Business:
+        url = "https://biz.uos.ac.kr/korNotice/list.do?" + query
+
+        context = ssl._create_unverified_context()
+        req = Request(url)
+        res = urlopen(req, context=context)
+        html = res.read()
+
+        soup = BeautifulSoup(html, "html.parser")
+        lastNoticeSoup = soup.select(
+            "#container > div > ul > li:nth-child(6) > a")[0].get("href")
+        # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
+        matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
+        paramList = matched[1].split(",")
+        # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
+        lastId = paramList[1].replace("'", "")
+        return int(lastId)
 
 
 def saveToJsonFile(data: dict):
