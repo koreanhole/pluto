@@ -99,7 +99,6 @@ export default function Article() {
                 ? "ca-app-pub-2034052364864446/2682349606"
                 : "ca-app-pub-2034052364864446/5161544413"
             }
-            servePersonalizedAds
           />
           <ArticleContainer>
             <ArticleTitle>{noticeData.title}</ArticleTitle>

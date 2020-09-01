@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, SectionList, ActivityIndicator, StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard, { NoticeCardItem, NoticeCardHeader } from "./NoticeCard";
 import styled from "styled-components/native";
@@ -11,6 +11,10 @@ import { subDays } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
 import _ from "underscore";
 import { getDescriptiveDateDifference } from "./util";
+import { registerForPushNotificationsAsync } from "util/pushNotification";
+import { setExpoPushToken } from "components/Department/redux/actions";
+import { setArticleId } from "components/Article/redux/actions";
+import * as Notifications from "expo-notifications";
 
 type SectionListData = {
   data: NoticeCardItem[];
@@ -22,6 +26,7 @@ const HomeContainer = styled(View)`
 
 export default function Home() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
@@ -93,6 +98,27 @@ export default function Home() {
         setIsRefreshing(false);
       });
   };
+
+  React.useEffect(() => {
+    registerForPushNotificationsAsync().then((token) =>
+      dispatch(setExpoPushToken(token))
+    );
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        const responseData = response.notification.request.content.data.body;
+        navigation.navigate("Article");
+        dispatch(
+          setArticleId({
+            // @ts-ignore Object is of type 'unknown'.ts(2571)
+            deptCode: responseData.deptCode,
+            // @ts-ignore Object is of type 'unknown'.ts(2571)
+            listId: responseData.listId,
+          })
+        );
+      }
+    );
+    return () => subscription.remove();
+  }, [navigation]);
 
   React.useEffect(fetchInitialNoticeData, [favoriteDepartmentList]);
 
