@@ -21,6 +21,9 @@
       "buildNumber": "4",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~9247757959"
+      },
+      "infoPlist": {
+        "UIUserInterfaceStyle": "Light"
       }
     },
     "web": {
