@@ -31,7 +31,7 @@ export const NoticeCardHeaderContainer = styled.View`
 `;
 
 const NoticeCardHeaderText = styled.Text`
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
 `;
 

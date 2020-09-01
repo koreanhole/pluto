@@ -25,7 +25,7 @@ const PageNavigation = () => (
       headerTintColor: `${theme.colors.black}`,
       headerTitleStyle: {
         fontWeight: "bold",
-        fontSize: 19,
+        fontSize: 20,
       },
       headerTitleAlign: "left",
       headerBackImage: () => (
