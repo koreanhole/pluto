@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { useDispatch } from "react-redux";
 import Ripple from "react-native-material-ripple";
-import { Divider } from "react-native-elements";
+import { Divider } from "react-native-paper";
 // @ts-ignore
 import TextAvatar from "react-native-text-avatar";
 import { useNavigation } from "@react-navigation/native";
@@ -80,7 +80,11 @@ const NoticeCardItemTitle = ({
   return (
     <NoticeCardItemTitleContainer>
       <TextAvatar
-        backgroundColor={randomColor({ seed: deptName })}
+        backgroundColor={randomColor({
+          seed: deptName,
+          luminosity: "bright",
+          alpha: 1,
+        })}
         textColor={theme.colors.white}
         size={34}
         type={"circle"}

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { View, Platform } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 import styled from "styled-components/native";
-import { Divider } from "react-native-elements";
+import { Divider } from "react-native-paper";
 import Ripple from "react-native-material-ripple";
 import { addToFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
