@@ -18,7 +18,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.koreanhole.app.pluto",
       "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "1",
+      "buildNumber": "2",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~9247757959"
       },
