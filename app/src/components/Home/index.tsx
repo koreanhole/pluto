@@ -1,5 +1,11 @@
 import * as React from "react";
-import { View, SectionList, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  View,
+  SectionList,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard, { NoticeCardItem, NoticeCardHeader } from "./NoticeCard";
@@ -15,6 +21,7 @@ import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
 import { setArticleId } from "components/Article/redux/actions";
 import * as Notifications from "expo-notifications";
+import { Button } from "react-native-paper";
 
 type SectionListData = {
   data: NoticeCardItem[];
@@ -160,7 +167,9 @@ export default function Home() {
             )}
             ListFooterComponent={
               <View style={LoadingStyles.listFooter}>
-                <ActivityIndicator animating={true} size="small" />
+                <Button loading={true} onPress={fetchMoreNoticeData}>
+                  더 불러오기
+                </Button>
               </View>
             }
           />
@@ -180,6 +189,8 @@ const LoadingStyles = StyleSheet.create({
     justifyContent: "center",
   },
   listFooter: {
-    marginVertical: 16,
+    marginTop: 8,
+    marginBottom: 32,
+    alignSelf: "center",
   },
 });
