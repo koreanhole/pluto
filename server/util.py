@@ -75,6 +75,15 @@ BusinessDepartment = [
     "경영학부"
 ]
 
+# 국제교육원
+InterChangeClassification = {
+    "40013F1": "국제교류과"
+}
+
+InterChange = [
+    "국제교육원"
+]
+
 
 class DepartmentType(Enum):
     General = "전체공지"
@@ -83,6 +92,7 @@ class DepartmentType(Enum):
     Humanities = "인문대학"
     NaturalScience = "자연과학대학"
     Business = "경영대학"
+    InterChange = "국제교류과"
 
 
 def getInitialListId():
@@ -97,7 +107,8 @@ def getInitialListId():
         "econo01": 1,
         "human01": 1,
         "scien01": 1,
-        "list_id=20008N2": 1,
+        "20008N2": 1,
+        "40013F1": 1,
     }
 
 
@@ -129,6 +140,11 @@ def getDeptName(deptCode: str, authorDept: str):
             return authorDept
         else:
             "경영대학"
+    elif InterChangeClassification.get(deptCode):
+        if authorDept in InterChange:
+            return authorDept
+        else:
+            "국제교류과"
 
 
 def getDeptType(deptCode: str):
@@ -144,6 +160,8 @@ def getDeptType(deptCode: str):
         return DepartmentType.Humanities
     elif BusinessClassification.get(deptCode):
         return DepartmentType.Business
+    elif InterChangeClassification.get(deptCode):
+        return DepartmentType.InterChange
 
 
 def getTypicalNoticeLastid(deptCode: str):
@@ -209,6 +227,24 @@ def getTypicalNoticeLastid(deptCode: str):
         soup = BeautifulSoup(html, "html.parser")
         lastNoticeSoup = soup.select(
             "#container > div > ul > li:nth-child(6) > a")[0].get("href")
+        # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
+        matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
+        paramList = matched[1].split(",")
+        # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
+        lastId = paramList[1].replace("'", "")
+        return int(lastId)
+    # 국제교류과의 경우
+    elif deptType == DepartmentType.InterChange:
+        url = "https://kiice.uos.ac.kr/korNotice/list.do?list_id=40013F1&epTicket=INV" + query
+
+        context = ssl._create_unverified_context()
+        req = Request(url)
+        res = urlopen(req, context=context)
+        html = res.read()
+
+        soup = BeautifulSoup(html, "html.parser")
+        lastNoticeSoup = soup.select(
+            "#subContents > table > tbody > tr:nth-child(3) > td.title > a")[0].get("onclick")
         # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
         matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
         paramList = matched[1].split(",")
