@@ -254,7 +254,7 @@ def getTypicalNoticeLastid(deptCode: str):
 
     # 국제교류과의 경우
     elif deptType == DepartmentType.InterChange:
-        url = "https://kiice.uos.ac.kr/korNotice/list.do?l" + query
+        url = "https://kiice.uos.ac.kr/korNotice/list.do?" + query
 
         context = ssl._create_unverified_context()
         req = Request(url)
