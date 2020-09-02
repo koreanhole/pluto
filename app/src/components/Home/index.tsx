@@ -158,6 +158,11 @@ export default function Home() {
                 createdDateTimestamp={data.item.createdDateTimestamp}
               />
             )}
+            ListFooterComponent={
+              <View style={LoadingStyles.listFooter}>
+                <ActivityIndicator animating={true} size="small" />
+              </View>
+            }
           />
         ) : (
           <View style={LoadingStyles.container}>
@@ -173,5 +178,8 @@ const LoadingStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+  },
+  listFooter: {
+    marginVertical: 16,
   },
 });
