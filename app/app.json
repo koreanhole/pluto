@@ -2,7 +2,7 @@
   "expo": {
     "name": "UOS공지사항",
     "slug": "koreanhole-pluto-app",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,9 +19,11 @@
       "bundleIdentifier": "com.koreanhole.app.pluto",
       "googleServicesFile": "./GoogleService-Info.plist",
       "buildNumber": "2",
-      "userInterfaceStyle": "light",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~9247757959"
+      },
+      "infoPlist": {
+        "UIUserInterfaceStyle": "Light"
       }
     },
     "web": {
@@ -31,7 +33,6 @@
       "package": "com.koreanhole.app.pluto",
       "googleServicesFile": "./google-services.json",
       "versionCode": 1,
-      "userInterfaceStyle": "light",
       "useNextNotificationsApi": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~6709418041"

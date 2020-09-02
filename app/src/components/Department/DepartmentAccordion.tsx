@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { View, Platform } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 import styled from "styled-components/native";
-import { Divider } from "react-native-elements";
+import { Divider } from "react-native-paper";
 import Ripple from "react-native-material-ripple";
-import { addToFavoriteDepartmentList } from "./redux/actions";
+import { addToFavoriteDepartmentList, setShowSnackBar } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -44,6 +44,10 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
     ],
   },
   {
+    departmentType: "경영대학",
+    departmentList: ["경영학부"],
+  },
+  {
     departmentType: "정경대학",
     departmentList: [
       "행정학과",
@@ -72,6 +76,10 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
       "생명과학과",
       "환경원예학과",
     ],
+  },
+  {
+    departmentType: "그 밖의 부서",
+    departmentList: ["생활관", "국제교육원"],
   },
 ];
 
@@ -129,6 +137,7 @@ const AccrodionContentItem = ({
 
   const handleClickDepartmentName = React.useCallback(() => {
     dispatch(addToFavoriteDepartmentList(departmentName));
+    dispatch(setShowSnackBar(true));
     if (Platform.OS == "ios") {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }

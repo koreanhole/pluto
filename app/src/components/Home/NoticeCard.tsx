@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { useDispatch } from "react-redux";
 import Ripple from "react-native-material-ripple";
-import { Divider } from "react-native-elements";
+import { Divider } from "react-native-paper";
 // @ts-ignore
 import TextAvatar from "react-native-text-avatar";
 import { useNavigation } from "@react-navigation/native";
@@ -26,11 +26,12 @@ const NoticeCardContainer = styled.View`
 `;
 
 export const NoticeCardHeaderContainer = styled.View`
-  margin: 16px 16px 0 16px;
+  padding: 8px 16px;
+  background-color: ${theme.colors.ligthGrey};
 `;
 
 const NoticeCardHeaderText = styled.Text`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
 `;
 
@@ -80,7 +81,11 @@ const NoticeCardItemTitle = ({
   return (
     <NoticeCardItemTitleContainer>
       <TextAvatar
-        backgroundColor={randomColor({ seed: deptName })}
+        backgroundColor={randomColor({
+          seed: deptName,
+          luminosity: "bright",
+          alpha: 1,
+        })}
         textColor={theme.colors.white}
         size={34}
         type={"circle"}
@@ -107,7 +112,7 @@ const NoticeCardItemSubtitle = ({
         {`${author}`}
         {authorDept && ` / ${authorDept}`}
       </NoticeCardItemSubtitleText>
-      <NoticeCardItemSubtitleText>{date}</NoticeCardItemSubtitleText>
+      <NoticeCardItemSubtitleText>{`${date}`}</NoticeCardItemSubtitleText>
     </NoticeCardItemSubtitleContainer>
   );
 };
