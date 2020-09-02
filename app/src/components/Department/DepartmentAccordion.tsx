@@ -77,6 +77,10 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
       "환경원예학과",
     ],
   },
+  {
+    departmentType: "그 밖의 부서",
+    departmentList: ["생활관", "국제교육원"],
+  },
 ];
 
 const AccordionHeaderContainer = styled.View`
