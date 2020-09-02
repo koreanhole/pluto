@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  View,
-  SectionList,
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-} from "react-native";
+import { View, SectionList, ActivityIndicator, StyleSheet } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard, { NoticeCardItem, NoticeCardHeader } from "./NoticeCard";
