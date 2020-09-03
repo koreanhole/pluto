@@ -147,20 +147,11 @@ def getDeptName(deptCode: str, authorDept: str):
         else:
             "자연과학대학"
     elif BusinessClassification.get(deptCode):
-        if authorDept in BusinessDepartment:
-            return authorDept
-        else:
-            "경영대학"
+        return "경영학부"
     elif InterChangeClassification.get(deptCode):
-        if authorDept in InterChange:
-            return authorDept
-        else:
-            "국제교류과"
+        return "국제교육원"
     elif DormitoryClassification.get(deptCode):
-        if authorDept in Dormitory:
-            return authorDept
-        else:
-            "생활관"
+        return "생활관"
 
 
 def getDeptType(deptCode: str):
