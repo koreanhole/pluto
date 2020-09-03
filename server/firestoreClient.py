@@ -3,7 +3,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from data import Notice
 from util import getTypicalNoticeLastid, getInitialListId, saveToJsonFile, loadFromJson, updateLastSavedListId
-from util import GeneralClassification, EngineeringClassification, EconomicsClassification, HumanityClassification, NaturalScienceClassification, BusinessClassification
+from util import GeneralClassification, EngineeringClassification, EconomicsClassification, HumanityClassification, NaturalScienceClassification, BusinessClassification, DormitoryClassification
 import ssl
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
@@ -16,6 +16,7 @@ from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
 import attr
 import time
+import pprint
 
 cred = credentials.Certificate('./ServiceAccountKey.json')
 firebase_admin.initialize_app(cred)
@@ -35,6 +36,7 @@ class FirestoreUpload(object):
             documnetPathName = "%s&%s" % (deptCode, str(listId))
             notice_ref = db.collection("notice").document(documnetPathName)
             parsedNotice = Notice.to_dict(deptCode, listId)
+            pprint.pprint(parsedNotice)
             newLastSavedListId = listId
             if parsedNotice is not None:
                 try:
@@ -73,6 +75,8 @@ class FirestoreUpload(object):
         for deptCode in NaturalScienceClassification:
             cls.uploadSingleNotice(deptCode)
         for deptCode in BusinessClassification:
+            cls.uploadSingleNotice(deptCode)
+        for deptCode in DormitoryClassification:
             cls.uploadSingleNotice(deptCode)
 
 
