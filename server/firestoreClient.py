@@ -3,7 +3,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from data import Notice
 from util import getTypicalNoticeLastid, getInitialListId, saveToJsonFile, loadFromJson, updateLastSavedListId
-from util import GeneralClassification, EngineeringClassification, EconomicsClassification, HumanityClassification, NaturalScienceClassification, BusinessClassification, DormitoryClassification
+from util import GeneralClassification, EngineeringClassification, EconomicsClassification, HumanityClassification, NaturalScienceClassification, BusinessClassification, DormitoryClassification, InterChangeClassification
 import ssl
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
@@ -77,6 +77,8 @@ class FirestoreUpload(object):
         for deptCode in BusinessClassification:
             cls.uploadSingleNotice(deptCode)
         for deptCode in DormitoryClassification:
+            cls.uploadSingleNotice(deptCode)
+        for deptCode in InterChangeClassification:
             cls.uploadSingleNotice(deptCode)
 
 
