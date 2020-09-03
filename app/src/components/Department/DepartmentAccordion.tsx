@@ -35,6 +35,7 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
   {
     departmentType: "공과대학",
     departmentList: [
+      "공과대학",
       "전자전기컴퓨터공학부",
       "컴퓨터과학부",
       "화학공학과",
@@ -50,6 +51,7 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
   {
     departmentType: "정경대학",
     departmentList: [
+      "정경대학",
       "행정학과",
       "국제관계학과",
       "경제학부",
@@ -60,6 +62,7 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
   {
     departmentType: "인문대학",
     departmentList: [
+      "인문대학",
       "영어영문학과",
       "국어국문학과",
       "국사학과",
@@ -70,6 +73,7 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
   {
     departmentType: "자연과학대학",
     departmentList: [
+      "자연과학대학",
       "수학과",
       "통계학과",
       "물리학과",
@@ -79,7 +83,7 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
   },
   {
     departmentType: "그 밖의 부서",
-    departmentList: ["생활관"],
+    departmentList: ["생활관", "국제교육원"],
   },
 ];
 
