@@ -79,7 +79,7 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
   },
   {
     departmentType: "그 밖의 부서",
-    departmentList: ["생활관", "국제교육원"],
+    departmentList: ["생활관"],
   },
 ];
 
