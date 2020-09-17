@@ -17,6 +17,7 @@
     "@react-native-community/async-storage": "~1.11.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/drawer": "^5.8.7",
+    "@react-navigation/material-bottom-tabs": "^5.2.16",
     "@react-navigation/native": "^5.7.1",
     "@react-navigation/stack": "^5.7.1",
     "@types/randomcolor": "^0.5.5",

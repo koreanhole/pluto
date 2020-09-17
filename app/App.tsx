@@ -2,7 +2,7 @@ import React from "react";
 import { YellowBox } from "react-native";
 import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
 import { Provider as StoreProvider } from "react-redux";
-import AppNavigator from "navigators/AppNavigator";
+import RootNavigator from "navigators/RootNavigator";
 import createReduxStore from "redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
@@ -26,7 +26,7 @@ export default function App() {
       <PersistGate loading={null} persistor={persistor}>
         <ActionSheetProvider>
           <PaperProvider theme={theme}>
-            <AppNavigator />
+            <RootNavigator />
           </PaperProvider>
         </ActionSheetProvider>
       </PersistGate>

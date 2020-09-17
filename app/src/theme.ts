@@ -7,6 +7,7 @@ const theme = {
     grey: "#bdbdbd",
     darkGrey: "#828282",
     green: "#27AE60",
+    red: "#FF0000",
     department: {
       general: "#0a4e9b",
     },
