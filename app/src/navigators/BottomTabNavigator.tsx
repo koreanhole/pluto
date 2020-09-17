@@ -1,7 +1,7 @@
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import * as React from "react";
 import HomeStackNavigator from "./stack/HomeStackNavigator";
-import SavedArticles from "components/SavedArticles";
+import FavoriteStackNavigator from "./stack/FavoriteStackNavigator";
 import theme from "theme";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -15,7 +15,7 @@ export default function BottomTabNavigator() {
       shifting={true}
       activeColor={theme.colors.primary}
       inactiveColor={theme.colors.black}
-      sceneAnimationEnabled={false}
+      sceneAnimationEnabled={true}
     >
       <Tab.Screen
         name="Home"
@@ -32,8 +32,8 @@ export default function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="SavedArticles"
-        component={SavedArticles}
+        name="Favorite"
+        component={FavoriteStackNavigator}
         options={{
           tabBarLabel: "즐겨찾기",
           tabBarColor: theme.colors.ligthGrey,
