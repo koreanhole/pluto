@@ -1,21 +1,32 @@
-import { enableScreens } from "react-native-screens";
-import { createNativeStackNavigator } from "react-native-screens/native-stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import Favorite from "components/Favorite";
 import theme from "theme";
+import { StyledHeaderIcon } from "./base";
 
-enableScreens();
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export default function FavoriteStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: `${theme.colors.white}`,
+          backgroundColor: `${theme.colors.ligthGrey}`,
         },
-        headerLargeTitle: true,
-        headerHideShadow: true,
+        headerTitle: "",
+        headerTintColor: `${theme.colors.black}`,
+        headerTitleStyle: {
+          fontWeight: "bold",
+          fontSize: 20,
+        },
+        headerTitleAlign: "left",
+        headerBackImage: () => (
+          <StyledHeaderIcon
+            name="arrow-back"
+            size={theme.size.headerIconSize}
+          />
+        ),
+        headerBackTitleVisible: false,
       }}
     >
       <Stack.Screen name="Favorite" component={Favorite} />

@@ -14,7 +14,7 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.koreanhole.app.pluto",
@@ -22,9 +22,6 @@
       "buildNumber": "3",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~9247757959"
-      },
-      "infoPlist": {
-        "UIUserInterfaceStyle": "Light"
       }
     },
     "web": {

@@ -6,7 +6,6 @@ import theme from "theme";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createMaterialBottomTabNavigator();
-// tabBarColor: theme.colors.ligthGrey,
 
 export default function BottomTabNavigator() {
   return (
@@ -26,7 +25,7 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ focused, color }) => {
             let iconName = focused ? "home" : "home-outline";
             return (
-              <MaterialCommunityIcons name={iconName} size={23} color={color} />
+              <MaterialCommunityIcons name={iconName} size={25} color={color} />
             );
           },
         }}
@@ -39,7 +38,7 @@ export default function BottomTabNavigator() {
           tabBarColor: theme.colors.ligthGrey,
           tabBarIcon: ({ focused, color }) => {
             let iconName = focused ? "favorite" : "favorite-border";
-            return <MaterialIcons name={iconName} size={23} color={color} />;
+            return <MaterialIcons name={iconName} size={25} color={color} />;
           },
         }}
       />

@@ -4,15 +4,9 @@ import Home from "components/Home";
 import Article from "components/Article";
 import Department from "components/Department";
 import theme from "theme";
-import { MaterialIcons } from "@expo/vector-icons";
-import styled from "styled-components/native";
+import { StyledHeaderIcon } from "./base";
 
 const Stack = createStackNavigator();
-
-const StyledHeaderIcon = styled(MaterialIcons)`
-  margin-left: 10px;
-  color: ${theme.colors.black};
-`;
 
 export default function HomeStackNavigator() {
   return (
