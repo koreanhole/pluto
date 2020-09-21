@@ -78,4 +78,5 @@ class FirestoreUpload(object):
 if __name__ == '__main__':
     while True:
         FirestoreUpload.uploadMultiNotice()
-        time.sleep(1)
+        # 30분마다 실행
+        time.sleep(1800)
