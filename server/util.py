@@ -191,12 +191,15 @@ def getTypicalNoticeLastid(deptCode: str):
         noticeListSoup = soup.find("ul", class_="listType")
         lastNoticeSoup = noticeListSoup.find("a", {"href": "#"})
 
-        # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
-        matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup["onclick"])
-        paramList = matched[1].split(",")
-        # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
-        lastId = paramList[1].replace("'", "")
-        return int(lastId)
+        try:
+            # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
+            matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup["onclick"])
+            paramList = matched[1].split(",")
+            # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
+            lastId = paramList[1].replace("'", "")
+            return int(lastId)
+        except:
+            print("공지사항 마지막 listId를 불러오는데 실패" + deptCode)
 
     # 공과대학 / 정경대학 / 인문대학 / 자연과학대학 경우
     elif deptType == DepartmentType.Engineering or deptType == DepartmentType.Economics or deptType == DepartmentType.Humanities or deptType == DepartmentType.NaturalScience:
@@ -216,13 +219,15 @@ def getTypicalNoticeLastid(deptCode: str):
                     lambda tag: tag.name == "ul" and tag.get("class") == ['clearfix'])
                 break
         lastNoticeSoup = noticeListSoup.find("a", {"href": "#a"})
-
-        # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
-        matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup["onclick"])
-        paramList = matched[1].split(",")
-        # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
-        lastId = paramList[1].replace("'", "")
-        return int(lastId)
+        try:
+            # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
+            matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup["onclick"])
+            paramList = matched[1].split(",")
+            # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
+            lastId = paramList[1].replace("'", "")
+            return int(lastId)
+        except:
+            print("공지사항 마지막 listId를 불러오는데 실패" + deptCode)
 
     # 경영대학의 경우
     elif deptType == DepartmentType.Business:
@@ -236,12 +241,16 @@ def getTypicalNoticeLastid(deptCode: str):
         soup = BeautifulSoup(html, "html.parser")
         lastNoticeSoup = soup.select(
             "#container > div > ul > li:nth-child(6) > a")[0].get("href")
-        # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
-        matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
-        paramList = matched[1].split(",")
-        # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
-        lastId = paramList[1].replace("'", "")
-        return int(lastId)
+
+        try:
+            # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
+            matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
+            paramList = matched[1].split(",")
+            # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
+            lastId = paramList[1].replace("'", "")
+            return int(lastId)
+        except:
+            print("공지사항 마지막 listId를 불러오는데 실패" + deptCode)
 
     # 국제교류과의 경우
     elif deptType == DepartmentType.InterChange:
@@ -255,12 +264,15 @@ def getTypicalNoticeLastid(deptCode: str):
         soup = BeautifulSoup(html, "html.parser")
         lastNoticeSoup = soup.select(
             "#subContents > table > tbody > tr:nth-child(3) > td.title > a")[0].get("onclick")
-        # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
-        matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
-        paramList = matched[1].split(",")
-        # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
-        lastId = paramList[1].replace("'", "")
-        return int(lastId)
+        try:
+            # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
+            matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
+            paramList = matched[1].split(",")
+            # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
+            lastId = paramList[1].replace("'", "")
+            return int(lastId)
+        except:
+            print("공지사항 마지막 listId를 불러오는데 실패" + deptCode)
 
     # 생활관의 경우
     elif deptType == DepartmentType.Dormitory:
@@ -274,12 +286,15 @@ def getTypicalNoticeLastid(deptCode: str):
         soup = BeautifulSoup(html, "html.parser")
         lastNoticeSoup = soup.select(
             "#container > div.subCont > div.contents > ul > li:nth-child(1) > a")[0].get("href")
-        # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
-        matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
-        paramList = matched[1].split(",")
-        # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
-        lastId = paramList[1].replace("'", "")
-        return int(lastId)
+        try:
+            # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
+            matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
+            paramList = matched[1].split(",")
+            # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
+            lastId = paramList[1].replace("'", "")
+            return int(lastId)
+        except:
+            print("공지사항 마지막 listId를 불러오는데 실패" + deptCode)
 
 
 def saveToJsonFile(data: dict):
