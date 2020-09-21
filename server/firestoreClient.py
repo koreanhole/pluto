@@ -36,7 +36,6 @@ class FirestoreUpload(object):
             documnetPathName = "%s&%s" % (deptCode, str(listId))
             notice_ref = db.collection("notice").document(documnetPathName)
             parsedNotice = Notice.to_dict(deptCode, listId)
-            pprint.pprint(parsedNotice)
             newLastSavedListId = listId
             if parsedNotice is not None:
                 try:
