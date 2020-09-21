@@ -1,9 +1,8 @@
 # pluto
 
 Monolithic Repository for Pluto aka UOS공지사항
-iOS: https://apps.apple.com/us/app/id1529569963
-Android: https://play.google.com/store/apps/details?id=com.koreanhole.app.pluto
-
+* iOS: https://apps.apple.com/us/app/id1529569963
+* Android: https://play.google.com/store/apps/details?id=com.koreanhole.app.pluto
 ## app
 * React-Native(Typescript) 및 Expo을 사용한 cross-platfrom app
 ## cloud-function
