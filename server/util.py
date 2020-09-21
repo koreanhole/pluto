@@ -187,17 +187,16 @@ def getTypicalNoticeLastid(deptCode: str):
     if deptType == DepartmentType.General:
         url = "https://www.uos.ac.kr/korNotice/list.do?" + query
 
-        context = ssl._create_unverified_context()
-        req = Request(url)
-        res = urlopen(req, context=context)
-        html = res.read()
-
-        soup = BeautifulSoup(html, "html.parser")
-
-        noticeListSoup = soup.find("ul", class_="listType")
-        lastNoticeSoup = noticeListSoup.find("a", {"href": "#"})
-
         try:
+            context = ssl._create_unverified_context()
+            req = Request(url)
+            res = urlopen(req, context=context)
+            html = res.read()
+
+            soup = BeautifulSoup(html, "html.parser")
+
+            noticeListSoup = soup.find("ul", class_="listType")
+            lastNoticeSoup = noticeListSoup.find("a", {"href": "#"})
             # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
             matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup["onclick"])
             paramList = matched[1].split(",")
@@ -211,21 +210,21 @@ def getTypicalNoticeLastid(deptCode: str):
     elif deptType == DepartmentType.Engineering or deptType == DepartmentType.Humanities or deptType == DepartmentType.NaturalScience:
         url = "https://www.uos.ac.kr/korNotice/list.do?" + query
 
-        context = ssl._create_unverified_context()
-        req = Request(url)
-        res = urlopen(req, context=context)
-        html = res.read()
-
-        soup = BeautifulSoup(html, "html.parser")
-
-        noticeListContainerSoup = soup.find("div", class_="table-style")
-        for noticeItemSoup in noticeListContainerSoup.find_all("div", class_="tb-body"):
-            if noticeItemSoup.find(lambda tag: tag.name == "ul" and tag.get("class") == ['clearfix']):
-                noticeListSoup = noticeItemSoup.find(
-                    lambda tag: tag.name == "ul" and tag.get("class") == ['clearfix'])
-                break
-        lastNoticeSoup = noticeListSoup.find("a", {"href": "#a"})
         try:
+            context = ssl._create_unverified_context()
+            req = Request(url)
+            res = urlopen(req, context=context)
+            html = res.read()
+
+            soup = BeautifulSoup(html, "html.parser")
+
+            noticeListContainerSoup = soup.find("div", class_="table-style")
+            for noticeItemSoup in noticeListContainerSoup.find_all("div", class_="tb-body"):
+                if noticeItemSoup.find(lambda tag: tag.name == "ul" and tag.get("class") == ['clearfix']):
+                    noticeListSoup = noticeItemSoup.find(
+                        lambda tag: tag.name == "ul" and tag.get("class") == ['clearfix'])
+                    break
+            lastNoticeSoup = noticeListSoup.find("a", {"href": "#a"})
             # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
             matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup["onclick"])
             paramList = matched[1].split(",")
@@ -270,12 +269,12 @@ def getTypicalNoticeLastid(deptCode: str):
 
 
 def saveToJsonFile(data: dict):
-    with open("fetchedLastVisitedListId.json", "w") as json_file:
+    with open("./fetchedLastVisitedListId.json", "w") as json_file:
         json.dump(data, json_file)
 
 
 def loadFromJson():
-    with open("fetchedLastVisitedListId.json", "r") as json_file:
+    with open("./fetchedLastVisitedListId.json", "r") as json_file:
         return json.load(json_file)
 
 
@@ -286,14 +285,15 @@ def updateLastSavedListId(deptCode: str, listId: int):
 
 
 def getLastNoticeListId(deptCode: str, url: str, selector: str, attributeType: AttributeType):
-    context = ssl._create_unverified_context()
-    req = Request(url)
-    res = urlopen(req, context=context)
-    html = res.read()
 
-    soup = BeautifulSoup(html, "html.parser")
-    lastNoticeSoup = soup.select(selector)[0].get(attributeType.value)
     try:
+        context = ssl._create_unverified_context()
+        req = Request(url)
+        res = urlopen(req, context=context)
+        html = res.read()
+
+        soup = BeautifulSoup(html, "html.parser")
+        lastNoticeSoup = soup.select(selector)[0].get(attributeType.value)
         # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
         matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
         paramList = matched[1].split(",")
