@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import ssl
 from urllib.request import Request, urlopen
 import json
+import pprint
 
 # 전체공지
 GeneralClassification = {
@@ -199,10 +200,10 @@ def getTypicalNoticeLastid(deptCode: str):
             lastId = paramList[1].replace("'", "")
             return int(lastId)
         except:
-            print("공지사항 마지막 listId를 불러오는데 실패" + deptCode)
+            print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
 
     # 공과대학 / 정경대학 / 인문대학 / 자연과학대학 경우
-    elif deptType == DepartmentType.Engineering or deptType == DepartmentType.Economics or deptType == DepartmentType.Humanities or deptType == DepartmentType.NaturalScience:
+    elif deptType == DepartmentType.Engineering or deptType == DepartmentType.Humanities or deptType == DepartmentType.NaturalScience:
         url = "https://www.uos.ac.kr/korNotice/list.do?" + query
 
         context = ssl._create_unverified_context()
@@ -227,7 +228,7 @@ def getTypicalNoticeLastid(deptCode: str):
             lastId = paramList[1].replace("'", "")
             return int(lastId)
         except:
-            print("공지사항 마지막 listId를 불러오는데 실패" + deptCode)
+            print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
 
     # 경영대학의 경우
     elif deptType == DepartmentType.Business:
@@ -250,7 +251,7 @@ def getTypicalNoticeLastid(deptCode: str):
             lastId = paramList[1].replace("'", "")
             return int(lastId)
         except:
-            print("공지사항 마지막 listId를 불러오는데 실패" + deptCode)
+            print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
 
     # 국제교류과의 경우
     elif deptType == DepartmentType.InterChange:
@@ -272,7 +273,7 @@ def getTypicalNoticeLastid(deptCode: str):
             lastId = paramList[1].replace("'", "")
             return int(lastId)
         except:
-            print("공지사항 마지막 listId를 불러오는데 실패" + deptCode)
+            print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
 
     # 생활관의 경우
     elif deptType == DepartmentType.Dormitory:
@@ -294,7 +295,31 @@ def getTypicalNoticeLastid(deptCode: str):
             lastId = paramList[1].replace("'", "")
             return int(lastId)
         except:
-            print("공지사항 마지막 listId를 불러오는데 실패" + deptCode)
+            print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
+
+    # 정경대학의 경우
+    elif deptType == DepartmentType.Economics:
+        subQuery = "&cate_id2=000010005"
+        url = "https://www.uos.ac.kr/social/korNotice/list.do?" + query + subQuery
+
+        context = ssl._create_unverified_context()
+        req = Request(url)
+        res = urlopen(req, context=context)
+        html = res.read()
+
+        soup = BeautifulSoup(html, "html.parser")
+        lastNoticeSoup = soup.select(
+            "#content02 > div.sc-right > div.table-style > div:nth-child(2) > ul > li.tb-wid02.txl > a")[0].get("onclick")
+
+        try:
+            # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
+            matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
+            paramList = matched[1].split(",")
+            # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
+            lastId = paramList[1].replace("'", "")
+            return int(lastId)
+        except:
+            print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
 
 
 def saveToJsonFile(data: dict):
