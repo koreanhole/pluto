@@ -239,7 +239,7 @@ def getTypicalNoticeLastid(deptCode: str):
     elif deptType == DepartmentType.Business:
         url = "https://biz.uos.ac.kr/korNotice/list.do?" + query
         selector = "#container > div > ul > li:nth-child(6) > a"
-        attributType = AttributeType.Href
+        attributeType = AttributeType.Href
 
         return getLastNoticeListId(deptCode, url, selector, attributeType)
 
