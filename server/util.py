@@ -106,6 +106,11 @@ class DepartmentType(Enum):
     Dormitory = "생활관"
 
 
+class AttributeType(Enum):
+    Href = "href"
+    Onclick = "onclick"
+
+
 def getInitialListId():
     return {
         "FA1": 7254,
@@ -233,93 +238,35 @@ def getTypicalNoticeLastid(deptCode: str):
     # 경영대학의 경우
     elif deptType == DepartmentType.Business:
         url = "https://biz.uos.ac.kr/korNotice/list.do?" + query
+        selector = "#container > div > ul > li:nth-child(6) > a"
+        attributType = AttributeType.Href
 
-        context = ssl._create_unverified_context()
-        req = Request(url)
-        res = urlopen(req, context=context)
-        html = res.read()
-
-        soup = BeautifulSoup(html, "html.parser")
-        lastNoticeSoup = soup.select(
-            "#container > div > ul > li:nth-child(6) > a")[0].get("href")
-
-        try:
-            # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
-            matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
-            paramList = matched[1].split(",")
-            # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
-            lastId = paramList[1].replace("'", "")
-            return int(lastId)
-        except:
-            print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
+        return getLastNoticeListId(deptCode, url, selector, attributeType)
 
     # 국제교류과의 경우
     elif deptType == DepartmentType.InterChange:
         url = "https://kiice.uos.ac.kr/korNotice/list.do?" + query
+        selector = "#subContents > table > tbody > tr:nth-child(3) > td.title > a"
+        attributeType = AttributeType.Onclick
 
-        context = ssl._create_unverified_context()
-        req = Request(url)
-        res = urlopen(req, context=context)
-        html = res.read()
-
-        soup = BeautifulSoup(html, "html.parser")
-        lastNoticeSoup = soup.select(
-            "#subContents > table > tbody > tr:nth-child(3) > td.title > a")[0].get("onclick")
-        try:
-            # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
-            matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
-            paramList = matched[1].split(",")
-            # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
-            lastId = paramList[1].replace("'", "")
-            return int(lastId)
-        except:
-            print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
+        return getLastNoticeListId(deptCode, url, selector, attributeType)
 
     # 생활관의 경우
     elif deptType == DepartmentType.Dormitory:
         url = "https://dormitory.uos.ac.kr/korNotice/list.do?" + query
+        selector = "#container > div.subCont > div.contents > ul > li:nth-child(1) > a"
+        attributeType = AttributeType.Href
 
-        context = ssl._create_unverified_context()
-        req = Request(url)
-        res = urlopen(req, context=context)
-        html = res.read()
-
-        soup = BeautifulSoup(html, "html.parser")
-        lastNoticeSoup = soup.select(
-            "#container > div.subCont > div.contents > ul > li:nth-child(1) > a")[0].get("href")
-        try:
-            # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
-            matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
-            paramList = matched[1].split(",")
-            # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
-            lastId = paramList[1].replace("'", "")
-            return int(lastId)
-        except:
-            print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
+        return getLastNoticeListId(deptCode, url, selector, attributeType)
 
     # 정경대학의 경우
     elif deptType == DepartmentType.Economics:
         subQuery = "&cate_id2=000010005"
         url = "https://www.uos.ac.kr/social/korNotice/list.do?" + query + subQuery
+        selector = "#content02 > div.sc-right > div.table-style > div:nth-child(2) > ul > li.tb-wid02.txl > a"
+        attributeType = AttributeType.Onclick
 
-        context = ssl._create_unverified_context()
-        req = Request(url)
-        res = urlopen(req, context=context)
-        html = res.read()
-
-        soup = BeautifulSoup(html, "html.parser")
-        lastNoticeSoup = soup.select(
-            "#content02 > div.sc-right > div.table-style > div:nth-child(2) > ul > li.tb-wid02.txl > a")[0].get("onclick")
-
-        try:
-            # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
-            matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
-            paramList = matched[1].split(",")
-            # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
-            lastId = paramList[1].replace("'", "")
-            return int(lastId)
-        except:
-            print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
+        return getLastNoticeListId(deptCode, url, selector, attributeType)
 
 
 def saveToJsonFile(data: dict):
@@ -336,3 +283,22 @@ def updateLastSavedListId(deptCode: str, listId: int):
     savedListId = loadFromJson()
     savedListId[deptCode] = listId
     saveToJsonFile(savedListId)
+
+
+def getLastNoticeListId(deptCode: str, url: str, selector: str, attributeType: AttributeType):
+    context = ssl._create_unverified_context()
+    req = Request(url)
+    res = urlopen(req, context=context)
+    html = res.read()
+
+    soup = BeautifulSoup(html, "html.parser")
+    lastNoticeSoup = soup.select(selector)[0].get(attributeType.value)
+    try:
+        # onclick = fnView('1', '22529'); 에서 함수 파라미터만 추출
+        matched = re.match(r"[^(]*\(([^)]*)\)", lastNoticeSoup)
+        paramList = matched[1].split(",")
+        # 파라미터 중 두번째 파라미터가 listId이므로 이것만 반환
+        lastId = paramList[1].replace("'", "")
+        return int(lastId)
+    except:
+        print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
