@@ -29,6 +29,9 @@ class FirestoreUpload(object):
     @classmethod
     def uploadSingleNotice(cls, deptCode: str):
         lastListId = getTypicalNoticeLastid(deptCode)
+        # lastListId를 가져오지 못할 경우 그냥 지나침
+        if lastListId == None:
+            return
         lastSavedListId = loadFromJson().get(deptCode)
         newLastSavedListId = 0
 
