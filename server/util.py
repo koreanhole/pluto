@@ -129,14 +129,11 @@ def getInitialListId():
     }
 
 
-def getDeptName(deptCode: str, authorDept: str):
+def getDeptName(deptCode: str, authorDept: str, listId: int):
     if GeneralClassification.get(deptCode):
         return GeneralClassification.get(deptCode)
     elif EngineeringClassification.get(deptCode):
-        if authorDept in EngineeringDepartment:
-            return authorDept
-        else:
-            return "공과대학"
+        return getDeptNameEngineering(listId)
     elif EconomicsClassification.get(deptCode):
         if authorDept in EconomicsDepartment:
             return authorDept
@@ -302,3 +299,34 @@ def getLastNoticeListId(deptCode: str, url: str, selector: str, attributeType: A
         return int(lastId)
     except:
         print("공지사항 마지막 listId를 불러오는데 실패 -> " + deptCode)
+
+
+def getDeptNameEngineering(listId: int):
+
+    EngineeringDepartments = {
+        "000010058": "전자전기컴퓨터공학부",
+        "000010059": "화학공학과",
+        "000010060": "기계정보공학과",
+        "000010061": "신소재공학과",
+        "000010382": "토목공학과",
+        "000010383": "컴퓨터과학부",
+        "000010007": "공과대학"
+    }
+
+    for subDeptCode in EngineeringDepartments.keys():
+        query = "list_id=20013DA1" + "&cate_id2=" + subDeptCode
+        url = "https://www.uos.ac.kr/korNotice/list.do?"
+        try:
+            context = ssl._create_unverified_context()
+            req = Request(url + query)
+            res = urlopen(req, context=context)
+            html = res.read()
+            soup = BeautifulSoup(html, "html.parser")
+
+        except:
+            print("공지사항 목록을 불러오는데 실패함")
+        result = soup.find('a', onclick=re.compile(rf'{listId}'))
+        if result is not None:
+            return EngineeringDepartments.get(subDeptCode)
+        else:
+            continue
