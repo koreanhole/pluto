@@ -49,11 +49,11 @@ export default function Home() {
 
   const fetchNoticeData = React.useCallback(
     async (baseTime: Date) => {
-      const fiveDaysBefore = subDays(baseTime, 1);
+      const oneDayBefore = subDays(baseTime, 1);
       let noticeQuery = noticeFirestore
         .where("deptName", "in", favoriteDepartmentList)
         .where("createdDateTimestamp", "<", baseTime)
-        .where("createdDateTimestamp", ">", fiveDaysBefore)
+        .where("createdDateTimestamp", ">", oneDayBefore)
         .orderBy("createdDateTimestamp", "desc");
       let noticeSnapshot = await noticeQuery.get();
       let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
@@ -82,13 +82,12 @@ export default function Home() {
         setSectionListData([{ data: fetchedNoticeData }]);
       })
       .finally(() => {
-        setNoticeCreatedDate(subDays(new Date(), 1));
         setIsRefreshing(false);
       });
   };
 
   const fetchMoreNoticeData = () => {
-    fetchNoticeData(noticeCreatedDate)
+    fetchNoticeData(subDays(noticeCreatedDate, 1))
       .then((fetchedNoticeData) => {
         if (typeof sectionListData !== "undefined") {
           setSectionListData([...sectionListData, { data: fetchedNoticeData }]);
@@ -132,7 +131,7 @@ export default function Home() {
             keyExtractor={(item, index) => item.title + index}
             onEndReached={fetchMoreNoticeData}
             onEndReachedThreshold={0.1}
-            extraData={noticeCreatedDate}
+            extraData={[noticeCreatedDate, isRefreshing]}
             refreshing={isRefreshing}
             onRefresh={fetchInitialNoticeData}
             scrollIndicatorInsets={{ right: 1 }}
