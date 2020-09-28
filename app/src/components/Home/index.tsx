@@ -161,7 +161,11 @@ export default function Home() {
             )}
             ListFooterComponent={
               <View style={LoadingStyles.listFooter}>
-                <Button loading={true} onPress={fetchMoreNoticeData}>
+                <Button
+                  loading={true}
+                  mode="outlined"
+                  onPress={fetchMoreNoticeData}
+                >
                   더 불러오기
                 </Button>
               </View>
@@ -183,7 +187,7 @@ const LoadingStyles = StyleSheet.create({
     justifyContent: "center",
   },
   listFooter: {
-    marginTop: 8,
+    marginTop: 16,
     marginBottom: 32,
     alignSelf: "center",
   },

@@ -34,7 +34,7 @@ export default function BottomTabNavigator() {
         name="Favorite"
         component={FavoriteStackNavigator}
         options={{
-          tabBarLabel: "즐겨찾기",
+          tabBarLabel: "저장",
           tabBarColor: theme.colors.ligthGrey,
           tabBarIcon: ({ focused, color }) => {
             let iconName = focused ? "favorite" : "favorite-border";
