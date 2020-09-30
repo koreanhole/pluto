@@ -32,7 +32,7 @@ const DepartmentBadgeItem = ({
   }, [favoriteDepartmentList]);
 
   const handleClickDepartmentBadgeItem = React.useCallback(() => {
-    if (departmentName == "일반공지" || departmentName == "학사공지") {
+    if (favoriteDepartmentList.length == 1) {
       Alert.alert("즐겨찾기에서 삭제할 수 없습니다.", departmentName, [
         {
           text: "확인",

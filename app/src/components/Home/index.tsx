@@ -7,14 +7,12 @@ import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
 import { noticeFirestore } from "util/firebase/firestore";
-import { subDays } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
 import _ from "underscore";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
 import { setArticleId } from "components/Article/redux/actions";
 import * as Notifications from "expo-notifications";
-import { Button } from "react-native-paper";
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -25,31 +23,18 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
-
-  const [isRefreshing, setIsRefreshing] = React.useState(true);
-
   const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
-  const [noticeCreatedDate, setNoticeCreatedDate] = React.useState<Date>(
-    new Date()
-  );
+  const [initialLoading, setInitialLoading] = React.useState(true);
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: "UOS 공지사항 😷",
-      headerRight: () => <HeaderRightButton />,
-    });
-  });
+  const fetchInitialNotice = () => {
+    const query = noticeFirestore
+      .where("deptName", "in", favoriteDepartmentList)
+      .orderBy("createdDateTimestamp", "desc")
+      .limit(50);
 
-  const fetchNoticeData = React.useCallback(
-    async (baseTime: Date) => {
-      const fiveDaysBefore = subDays(baseTime, 5);
-      let noticeQuery = noticeFirestore
-        .where("deptName", "in", favoriteDepartmentList)
-        .where("createdDateTimestamp", "<", baseTime)
-        .where("createdDateTimestamp", ">", fiveDaysBefore)
-        .orderBy("createdDateTimestamp", "desc");
-      let noticeSnapshot = await noticeQuery.get();
-      let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
+    setInitialLoading(true);
+    query.get().then((documentSnapshots) => {
+      let fetchedNoticeData: NoticeCardItem[] = documentSnapshots.docs.map(
         (document) => {
           const fetchedData = document.data();
           return {
@@ -64,34 +49,19 @@ export default function Home() {
           };
         }
       );
-      return fetchedNoticeData;
-    },
-    [favoriteDepartmentList]
-  );
-
-  const fetchInitialNoticeData = () => {
-    fetchNoticeData(new Date())
-      .then((fetchedNoticeData) => {
-        setFlatListData(fetchedNoticeData);
-      })
-      .finally(() => {
-        setNoticeCreatedDate(subDays(new Date(), 5));
-        setIsRefreshing(false);
-      });
+      setFlatListData(fetchedNoticeData);
+      setInitialLoading(false);
+    });
   };
 
-  const fetchMoreNoticeData = () => {
-    fetchNoticeData(noticeCreatedDate)
-      .then((fetchedNoticeData) => {
-        if (typeof flatListData !== "undefined") {
-          setFlatListData(flatListData.concat(fetchedNoticeData));
-        }
-      })
-      .finally(() => {
-        setNoticeCreatedDate(subDays(noticeCreatedDate, 5));
-        setIsRefreshing(false);
-      });
-  };
+  React.useEffect(fetchInitialNotice, [favoriteDepartmentList]);
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "UOS 공지사항 😷",
+      headerRight: () => <HeaderRightButton />,
+    });
+  });
 
   React.useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
@@ -114,8 +84,6 @@ export default function Home() {
     return () => subscription.remove();
   }, [navigation]);
 
-  React.useEffect(fetchInitialNoticeData, [favoriteDepartmentList]);
-
   return (
     <AppLayout>
       <HomeContainer>
@@ -123,12 +91,8 @@ export default function Home() {
           <FlatList
             data={flatListData}
             keyExtractor={(item, index) => item.title + index}
-            onEndReached={fetchMoreNoticeData}
-            onEndReachedThreshold={0.1}
-            extraData={[noticeCreatedDate, isRefreshing]}
-            refreshing={isRefreshing}
-            onRefresh={fetchInitialNoticeData}
-            scrollIndicatorInsets={{ right: 1 }}
+            refreshing={initialLoading}
+            onRefresh={fetchInitialNotice}
             renderItem={(data) => (
               <NoticeCard
                 deptCode={data.item.deptCode}
@@ -141,17 +105,6 @@ export default function Home() {
                 createdDateTimestamp={data.item.createdDateTimestamp}
               />
             )}
-            ListFooterComponent={
-              <View style={LoadingStyles.listFooter}>
-                <Button
-                  loading={true}
-                  mode="outlined"
-                  onPress={fetchMoreNoticeData}
-                >
-                  더 불러오기
-                </Button>
-              </View>
-            }
           />
         ) : (
           <View style={LoadingStyles.container}>
