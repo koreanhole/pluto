@@ -2,6 +2,7 @@ import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
+import theme from "theme";
 
 export async function registerForPushNotificationsAsync() {
   let token;
@@ -15,11 +16,10 @@ export async function registerForPushNotificationsAsync() {
       finalStatus = status;
     }
     if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
+      alert("알림 설정을 하는데 실패했습니다. 설정을 확인해주세요");
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
   } else {
     alert("Must use physical device for Push Notifications");
   }
@@ -29,7 +29,7 @@ export async function registerForPushNotificationsAsync() {
       name: "default",
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
+      lightColor: theme.colors.primary,
     });
   }
   return token;

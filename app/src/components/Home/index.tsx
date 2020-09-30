@@ -1,5 +1,11 @@
 import * as React from "react";
-import { View, ActivityIndicator, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  ActivityIndicator,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard, { NoticeCardItem } from "./NoticeCard";
@@ -13,6 +19,7 @@ import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
 import { setArticleId } from "components/Article/redux/actions";
 import * as Notifications from "expo-notifications";
+import theme from "theme";
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -31,10 +38,9 @@ export default function Home() {
       .where("deptName", "in", favoriteDepartmentList)
       .orderBy("createdDateTimestamp", "desc")
       .limit(50);
-
     setInitialLoading(true);
     query.get().then((documentSnapshots) => {
-      let fetchedNoticeData: NoticeCardItem[] = documentSnapshots.docs.map(
+      const fetchedNoticeData: NoticeCardItem[] = documentSnapshots.docs.map(
         (document) => {
           const fetchedData = document.data();
           return {
@@ -61,7 +67,7 @@ export default function Home() {
       headerTitle: "UOS 공지사항 😷",
       headerRight: () => <HeaderRightButton />,
     });
-  });
+  }, [navigation]);
 
   React.useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
@@ -91,8 +97,14 @@ export default function Home() {
           <FlatList
             data={flatListData}
             keyExtractor={(item, index) => item.title + index}
-            refreshing={initialLoading}
-            onRefresh={fetchInitialNotice}
+            refreshControl={
+              <RefreshControl
+                refreshing={initialLoading}
+                onRefresh={fetchInitialNotice}
+                tintColor={theme.colors.primary}
+                title="아래로 내려서 공지사항 새로고침"
+              />
+            }
             renderItem={(data) => (
               <NoticeCard
                 deptCode={data.item.deptCode}
@@ -108,7 +120,11 @@ export default function Home() {
           />
         ) : (
           <View style={LoadingStyles.container}>
-            <ActivityIndicator animating={true} size="large" />
+            <ActivityIndicator
+              animating={true}
+              size="large"
+              color={theme.colors.primary}
+            />
           </View>
         )}
       </HomeContainer>
