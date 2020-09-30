@@ -1,8 +1,8 @@
 import * as React from "react";
-import { View, SectionList, ActivityIndicator, StyleSheet } from "react-native";
+import { View, ActivityIndicator, StyleSheet, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
-import NoticeCard, { NoticeCardItem, NoticeCardHeader } from "./NoticeCard";
+import NoticeCard, { NoticeCardItem } from "./NoticeCard";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
@@ -10,16 +10,11 @@ import { noticeFirestore } from "util/firebase/firestore";
 import { subDays } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
 import _ from "underscore";
-import { getDescriptiveDateDifference } from "./util";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
 import { setArticleId } from "components/Article/redux/actions";
 import * as Notifications from "expo-notifications";
 import { Button } from "react-native-paper";
-
-type SectionListData = {
-  data: NoticeCardItem[];
-};
 
 const HomeContainer = styled(View)`
   flex: 1;
@@ -32,10 +27,8 @@ export default function Home() {
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
   const [isRefreshing, setIsRefreshing] = React.useState(true);
-  const [sectionListData, setSectionListData] = React.useState<
-    SectionListData[]
-  >();
-  // const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
+
+  const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
   const [noticeCreatedDate, setNoticeCreatedDate] = React.useState<Date>(
     new Date()
   );
@@ -47,39 +40,13 @@ export default function Home() {
     });
   });
 
-  // const fetchNoticeData = async (baseTime: Date) => {
-  //   const oneDayBefore = subDays(baseTime, 1);
-  //   let noticeQuery = noticeFirestore
-  //     .where("deptName", "in", favoriteDepartmentList)
-  //     .where("createdDateTimestamp", "<", baseTime)
-  //     .where("createdDateTimestamp", ">", oneDayBefore)
-  //     .orderBy("createdDateTimestamp", "desc");
-  //   let noticeSnapshot = await noticeQuery.get();
-  //   let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
-  //     (document) => {
-  //       const fetchedData = document.data();
-  //       return {
-  //         createdDateTimestamp: fetchedData.createdDateTimestamp,
-  //         deptCode: fetchedData.deptCode,
-  //         deptName: fetchedData.deptName,
-  //         authorDept: fetchedData.authorDept,
-  //         title: fetchedData.title,
-  //         date: fetchedData.createdDate,
-  //         author: fetchedData.authorName,
-  //         listId: fetchedData.listId,
-  //       };
-  //     }
-  //   );
-  //   return fetchedNoticeData;
-  // };
-
   const fetchNoticeData = React.useCallback(
     async (baseTime: Date) => {
-      const oneDayBefore = subDays(baseTime, 1);
+      const fiveDaysBefore = subDays(baseTime, 5);
       let noticeQuery = noticeFirestore
         .where("deptName", "in", favoriteDepartmentList)
         .where("createdDateTimestamp", "<", baseTime)
-        .where("createdDateTimestamp", ">", oneDayBefore)
+        .where("createdDateTimestamp", ">", fiveDaysBefore)
         .orderBy("createdDateTimestamp", "desc");
       let noticeSnapshot = await noticeQuery.get();
       let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
@@ -105,10 +72,10 @@ export default function Home() {
   const fetchInitialNoticeData = () => {
     fetchNoticeData(new Date())
       .then((fetchedNoticeData) => {
-        setSectionListData([{ data: fetchedNoticeData }]);
+        setFlatListData(fetchedNoticeData);
       })
       .finally(() => {
-        setNoticeCreatedDate(subDays(new Date(), 1));
+        setNoticeCreatedDate(subDays(new Date(), 5));
         setIsRefreshing(false);
       });
   };
@@ -116,12 +83,12 @@ export default function Home() {
   const fetchMoreNoticeData = () => {
     fetchNoticeData(noticeCreatedDate)
       .then((fetchedNoticeData) => {
-        if (typeof sectionListData !== "undefined") {
-          setSectionListData([...sectionListData, { data: fetchedNoticeData }]);
+        if (typeof flatListData !== "undefined") {
+          setFlatListData(flatListData.concat(fetchedNoticeData));
         }
       })
       .finally(() => {
-        setNoticeCreatedDate(subDays(noticeCreatedDate, 1));
+        setNoticeCreatedDate(subDays(noticeCreatedDate, 5));
         setIsRefreshing(false);
       });
   };
@@ -152,9 +119,9 @@ export default function Home() {
   return (
     <AppLayout>
       <HomeContainer>
-        {typeof sectionListData !== "undefined" ? (
-          <SectionList
-            sections={sectionListData}
+        {typeof flatListData !== "undefined" ? (
+          <FlatList
+            data={flatListData}
             keyExtractor={(item, index) => item.title + index}
             onEndReached={fetchMoreNoticeData}
             onEndReachedThreshold={0.1}
@@ -162,17 +129,6 @@ export default function Home() {
             refreshing={isRefreshing}
             onRefresh={fetchInitialNoticeData}
             scrollIndicatorInsets={{ right: 1 }}
-            renderSectionHeader={({ section: { data } }) => {
-              if (data.length !== 0) {
-                return (
-                  <NoticeCardHeader
-                    displayedDay={getDescriptiveDateDifference(data[0].date)}
-                  />
-                );
-              } else {
-                return null;
-              }
-            }}
             renderItem={(data) => (
               <NoticeCard
                 deptCode={data.item.deptCode}
