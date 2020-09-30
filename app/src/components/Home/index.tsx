@@ -47,6 +47,32 @@ export default function Home() {
     });
   });
 
+  // const fetchNoticeData = async (baseTime: Date) => {
+  //   const oneDayBefore = subDays(baseTime, 1);
+  //   let noticeQuery = noticeFirestore
+  //     .where("deptName", "in", favoriteDepartmentList)
+  //     .where("createdDateTimestamp", "<", baseTime)
+  //     .where("createdDateTimestamp", ">", oneDayBefore)
+  //     .orderBy("createdDateTimestamp", "desc");
+  //   let noticeSnapshot = await noticeQuery.get();
+  //   let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
+  //     (document) => {
+  //       const fetchedData = document.data();
+  //       return {
+  //         createdDateTimestamp: fetchedData.createdDateTimestamp,
+  //         deptCode: fetchedData.deptCode,
+  //         deptName: fetchedData.deptName,
+  //         authorDept: fetchedData.authorDept,
+  //         title: fetchedData.title,
+  //         date: fetchedData.createdDate,
+  //         author: fetchedData.authorName,
+  //         listId: fetchedData.listId,
+  //       };
+  //     }
+  //   );
+  //   return fetchedNoticeData;
+  // };
+
   const fetchNoticeData = React.useCallback(
     async (baseTime: Date) => {
       const oneDayBefore = subDays(baseTime, 1);
@@ -82,12 +108,13 @@ export default function Home() {
         setSectionListData([{ data: fetchedNoticeData }]);
       })
       .finally(() => {
+        setNoticeCreatedDate(subDays(new Date(), 1));
         setIsRefreshing(false);
       });
   };
 
   const fetchMoreNoticeData = () => {
-    fetchNoticeData(subDays(noticeCreatedDate, 1))
+    fetchNoticeData(noticeCreatedDate)
       .then((fetchedNoticeData) => {
         if (typeof sectionListData !== "undefined") {
           setSectionListData([...sectionListData, { data: fetchedNoticeData }]);
