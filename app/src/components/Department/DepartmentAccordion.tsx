@@ -89,6 +89,9 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
 
 const AccordionHeaderContainer = styled.View`
   padding: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const AccordionText = styled.Text<AccordionTextProps>`
@@ -101,14 +104,25 @@ const AccordionContentItemContainer = styled.View`
   flex-direction: row;
   margin-horizontal: 24px;
   margin-vertical: 8px;
+  align-items: center;
   justify-content: space-between;
 `;
 
-const AccordionHeader = (section: AccordionSection) => {
+const AccordionHeader = (
+  section: AccordionSection,
+  _index: number,
+  isActive: boolean,
+  _sections: AccordionSection[]
+) => {
   return (
     <>
       <AccordionHeaderContainer>
         <AccordionText type="HEADER">{section.departmentType}</AccordionText>
+        {isActive ? (
+          <MaterialIcons name="keyboard-arrow-up" size={24} color="black" />
+        ) : (
+          <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
+        )}
       </AccordionHeaderContainer>
       <Divider style={{ backgroundColor: theme.colors.grey }} />
     </>
@@ -152,11 +166,7 @@ const AccrodionContentItem = ({
         <AccordionText type="CONTENT">{departmentName}</AccordionText>
         {favoriteDepartmentList !== null &&
         favoriteDepartmentList.includes(departmentName) ? (
-          <MaterialIcons
-            name="check"
-            color={theme.colors.green}
-            size={theme.size.headerIconSize}
-          />
+          <MaterialIcons name="check" color={theme.colors.green} size={20} />
         ) : null}
       </AccordionContentItemContainer>
     </Ripple>
@@ -164,9 +174,9 @@ const AccrodionContentItem = ({
 };
 
 export default function DepartmentAccordion() {
-  const [activeDepartmentSection, setActiveDepartmentSection] = React.useState([
-    0,
-  ]);
+  const [activeDepartmentSection, setActiveDepartmentSection] = React.useState<
+    number[]
+  >([]);
 
   return (
     <Accordion
