@@ -47,6 +47,7 @@ export default function Home() {
             date: fetchedData.createdDate,
             author: fetchedData.authorName,
             listId: fetchedData.listId,
+            favoriteCount: fetchedData.favoriteCount,
           };
         }
       );
@@ -110,6 +111,7 @@ export default function Home() {
                 author={data.item.author}
                 listId={data.item.listId}
                 createdDateTimestamp={data.item.createdDateTimestamp}
+                favoriteCount={data.item.favoriteCount}
               />
             )}
           />

@@ -22,6 +22,7 @@ export type NoticeCardItem = {
   author: string;
   listId: string;
   createdDateTimestamp: string;
+  favoriteCount?: number;
 };
 
 const NoticeCardContainer = styled.View`
@@ -52,12 +53,26 @@ const NoticeCardItemSubtitleText = styled.Text`
   color: ${theme.colors.darkGrey};
 `;
 
-export const NoticeCardHeader = ({ date }: { date: string }) => {
+export const NoticeCardHeader = ({
+  date,
+  favoriteCount,
+}: {
+  date: string;
+  favoriteCount?: number;
+}) => {
   return (
     <View style={NoticeCardStyle.header}>
       <Text
         style={NoticeCardStyle.headerText}
       >{`#${getDescriptiveDateDifference(date)}`}</Text>
+      {typeof favoriteCount !== "undefined" && favoriteCount > 0 && (
+        <View style={NoticeCardStyle.favoriteContainer}>
+          <MaterialIcons name="favorite-border" color={theme.colors.darkGrey} />
+          <Text style={NoticeCardStyle.favoriteCounterText}>
+            {favoriteCount}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -109,7 +124,16 @@ const NoticeCardItemSubtitle = ({
 };
 
 export default function NoticeCard(props: NoticeCardItem) {
-  const { deptCode, deptName, authorDept, title, date, author, listId } = props;
+  const {
+    deptCode,
+    deptName,
+    authorDept,
+    title,
+    date,
+    author,
+    listId,
+    favoriteCount,
+  } = props;
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -121,7 +145,7 @@ export default function NoticeCard(props: NoticeCardItem) {
   return (
     <Ripple onPress={handleNoticeCardItemClick}>
       <NoticeCardContainer>
-        <NoticeCardHeader date={date} />
+        <NoticeCardHeader date={date} favoriteCount={favoriteCount} />
         <NoticeCardItemTitle deptName={deptName} title={title} />
         <NoticeCardItemSubtitle
           date={date}
@@ -139,8 +163,18 @@ const NoticeCardStyle = StyleSheet.create({
     marginVertical: 8,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   headerText: {
+    color: theme.colors.darkGrey,
+    fontSize: 12,
+  },
+  favoriteContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  favoriteCounterText: {
+    marginLeft: 2,
     color: theme.colors.darkGrey,
     fontSize: 12,
   },
