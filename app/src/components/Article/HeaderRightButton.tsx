@@ -4,10 +4,10 @@ import styled from "styled-components/native";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { Attachment } from "./redux/types";
 import * as FileSystem from "expo-file-system";
-import * as Linking from "expo-linking";
 import * as Sharing from "expo-sharing";
 import theme from "theme";
 import { Alert } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 
 const HeaderRightButtonContainer = styled.View`
   flex-direction: row;
@@ -42,7 +42,7 @@ export default function HeaderRightButton({
 
   const handleClickOpenInBrowserButton = React.useCallback(() => {
     if (typeof url !== "undefined") {
-      Linking.openURL(url).catch(() => {
+      WebBrowser.openBrowserAsync(url).catch(() => {
         Alert.alert("페이지를 열 수 없습니다.", "", [
           {
             text: "확인",
