@@ -13,6 +13,7 @@ import AutoHeightWebView from "react-native-autoheight-webview";
 import { useNavigation } from "@react-navigation/native";
 import { getNoticeDocumentId } from "util/firebase/firestore";
 import { AdMobBanner } from "expo-ads-admob";
+import * as WebBrowser from "expo-web-browser";
 
 const ArticleContainer = styled.View`
   margin: 16px;
@@ -117,6 +118,14 @@ export default function Article() {
               overScrollMode={"never"}
               scalesPageToFit={true}
               source={{ html: noticeData.contentHtml }}
+              onShouldStartLoadWithRequest={(navState) => {
+                if (navState.url !== "about:blank") {
+                  WebBrowser.openBrowserAsync(navState.url);
+                  return false;
+                } else {
+                  return true;
+                }
+              }}
               viewportContent={"width=device-width, user-scalable=no"}
               customStyle={`
                 img {

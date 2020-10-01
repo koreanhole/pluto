@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
+import { Text, View, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 import Ripple from "react-native-material-ripple";
 import { Divider } from "react-native-paper";
@@ -9,6 +10,8 @@ import { useNavigation } from "@react-navigation/native";
 import theme from "theme";
 import { setArticleId } from "components/Article/redux/actions";
 import randomColor from "randomcolor";
+import { getDescriptiveDateDifference } from "./util";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export type NoticeCardItem = {
   deptCode: string;
@@ -25,18 +28,7 @@ const NoticeCardContainer = styled.View`
   padding: 0 16px;
 `;
 
-export const NoticeCardHeaderContainer = styled.View`
-  padding: 8px 16px;
-  background-color: ${theme.colors.ligthGrey};
-`;
-
-const NoticeCardHeaderText = styled.Text`
-  font-size: 16px;
-  font-weight: bold;
-`;
-
 const NoticeCardItemTitleContainer = styled.View`
-  margin-top: 18px;
   flex-direction: row;
   margin-bottom: 8px;
 `;
@@ -59,15 +51,13 @@ const NoticeCardItemSubtitleText = styled.Text`
   color: ${theme.colors.darkGrey};
 `;
 
-export const NoticeCardHeader = ({
-  displayedDay,
-}: {
-  displayedDay: string;
-}) => {
+export const NoticeCardHeader = ({ date }: { date: string }) => {
   return (
-    <NoticeCardHeaderContainer>
-      <NoticeCardHeaderText>{displayedDay}</NoticeCardHeaderText>
-    </NoticeCardHeaderContainer>
+    <View style={NoticeCardStyle.header}>
+      <Text
+        style={NoticeCardStyle.headerText}
+      >{`#${getDescriptiveDateDifference(date)}`}</Text>
+    </View>
   );
 };
 
@@ -130,6 +120,7 @@ export default function NoticeCard(props: NoticeCardItem) {
   return (
     <Ripple onPress={handleNoticeCardItemClick}>
       <NoticeCardContainer>
+        <NoticeCardHeader date={date} />
         <NoticeCardItemTitle deptName={deptName} title={title} />
         <NoticeCardItemSubtitle
           date={date}
@@ -141,3 +132,15 @@ export default function NoticeCard(props: NoticeCardItem) {
     </Ripple>
   );
 }
+
+const NoticeCardStyle = StyleSheet.create({
+  header: {
+    marginVertical: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  headerText: {
+    color: theme.colors.darkGrey,
+    fontSize: 12,
+  },
+});
