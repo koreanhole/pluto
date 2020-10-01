@@ -12,18 +12,7 @@ import { setArticleId } from "components/Article/redux/actions";
 import randomColor from "randomcolor";
 import { getDescriptiveDateDifference } from "./util";
 import { MaterialIcons } from "@expo/vector-icons";
-
-export type NoticeCardItem = {
-  deptCode: string;
-  deptName: string;
-  authorDept: string;
-  title: string;
-  date: string;
-  author: string;
-  listId: string;
-  createdDateTimestamp: string;
-  favoriteCount?: number;
-};
+import { Notice } from "./redux/types";
 
 const NoticeCardContainer = styled.View`
   padding: 0 16px;
@@ -123,7 +112,7 @@ const NoticeCardItemSubtitle = ({
   );
 };
 
-export default function NoticeCard(props: NoticeCardItem) {
+export default function NoticeCard(props: Notice) {
   const {
     deptCode,
     deptName,

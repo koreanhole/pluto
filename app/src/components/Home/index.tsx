@@ -2,7 +2,8 @@ import * as React from "react";
 import { View, FlatList, RefreshControl } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
-import NoticeCard, { NoticeCardItem } from "./NoticeCard";
+import NoticeCard from "./NoticeCard";
+import { Notice } from "./redux/types";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
@@ -25,7 +26,7 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
-  const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
+  const [flatListData, setFlatListData] = React.useState<Notice[]>();
   const [initialLoading, setInitialLoading] = React.useState(true);
 
   const fetchInitialNotice = () => {
@@ -35,7 +36,7 @@ export default function Home() {
       .limit(50);
     setInitialLoading(true);
     query.get().then((documentSnapshots) => {
-      const fetchedNoticeData: NoticeCardItem[] = documentSnapshots.docs.map(
+      const fetchedNoticeData: Notice[] = documentSnapshots.docs.map(
         (document) => {
           const fetchedData = document.data();
           return {

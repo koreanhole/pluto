@@ -72,6 +72,11 @@ export default function HeaderRightButton({
   }, [fileName, fileLink]);
   return (
     <View style={HeaderRightStyles.container}>
+      <MaterialIcons
+        name="favorite-border"
+        size={theme.size.headerIconSize}
+        style={HeaderRightStyles.icon}
+      />
       {typeof attachment !== "undefined" && attachment.length !== 0 && (
         <MaterialIcons
           name="cloud-download"
