@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-  ActivityIndicator,
-} from "react-native";
+import { View, FlatList, RefreshControl } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard, { NoticeCardItem } from "./NoticeCard";
@@ -19,6 +13,7 @@ import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
 import { setArticleId } from "components/Article/redux/actions";
 import * as Notifications from "expo-notifications";
+import LoadingIndicator from "modules/LoadingIndicator";
 import theme from "theme";
 
 const HomeContainer = styled(View)`
@@ -119,27 +114,9 @@ export default function Home() {
             )}
           />
         ) : (
-          <View style={LoadingStyles.container}>
-            <ActivityIndicator
-              animating={true}
-              size="large"
-              color={theme.colors.primary}
-            />
-          </View>
+          <LoadingIndicator />
         )}
       </HomeContainer>
     </AppLayout>
   );
 }
-
-const LoadingStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  listFooter: {
-    marginTop: 16,
-    marginBottom: 32,
-    alignSelf: "center",
-  },
-});
