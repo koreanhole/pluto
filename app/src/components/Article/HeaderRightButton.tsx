@@ -1,21 +1,13 @@
 import * as React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import styled from "styled-components/native";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { Attachment } from "./redux/types";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import theme from "theme";
-import { Alert } from "react-native";
+import { Alert, View } from "react-native";
 import * as WebBrowser from "expo-web-browser";
-
-const HeaderRightButtonContainer = styled.View`
-  flex-direction: row;
-`;
-
-const StyledHeaderRightButton = styled(MaterialIcons)`
-  margin-right: 10px;
-`;
+import { HeaderRightStyles } from "modules/headerRightButton/base";
 
 export default function HeaderRightButton({
   url,
@@ -79,20 +71,21 @@ export default function HeaderRightButton({
     );
   }, [fileName, fileLink]);
   return (
-    <HeaderRightButtonContainer>
+    <View style={HeaderRightStyles.container}>
       {typeof attachment !== "undefined" && attachment.length !== 0 && (
-        <StyledHeaderRightButton
+        <MaterialIcons
           name="cloud-download"
           size={theme.size.headerIconSize}
           onPress={handleClickDownloadButton}
+          style={HeaderRightStyles.icon}
         />
       )}
-
-      <StyledHeaderRightButton
+      <MaterialIcons
         name="open-in-browser"
         size={theme.size.headerIconSize}
         onPress={handleClickOpenInBrowserButton}
+        style={HeaderRightStyles.icon}
       />
-    </HeaderRightButtonContainer>
+    </View>
   );
 }

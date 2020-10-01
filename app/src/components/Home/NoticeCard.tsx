@@ -31,6 +31,7 @@ const NoticeCardContainer = styled.View`
 const NoticeCardItemTitleContainer = styled.View`
   flex-direction: row;
   margin-bottom: 8px;
+  align-items: center;
 `;
 
 const NoticeCardItemSubtitleContainer = styled.View`
