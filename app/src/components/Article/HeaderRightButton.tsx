@@ -1,22 +1,30 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
-import { Attachment } from "./redux/types";
+import { Attachment, NoticeArticle } from "./redux/types";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import theme from "theme";
 import { Alert, View } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { HeaderRightStyles } from "modules/headerRightButton/base";
+import { saveNotice, deleteSavedNotice } from "./redux/actions";
+import { getSavedArticle } from "./redux/selectors";
+import _ from "underscore";
 
 export default function HeaderRightButton({
   url,
   attachment,
+  notice,
 }: {
   url?: string;
   attachment?: Attachment[];
+  notice?: NoticeArticle;
 }) {
   const { showActionSheetWithOptions } = useActionSheet();
+  const dispatch = useDispatch();
+  const savedNoticeArticle = useSelector(getSavedArticle);
 
   const fileLink =
     typeof attachment !== "undefined"
@@ -70,13 +78,48 @@ export default function HeaderRightButton({
       }
     );
   }, [fileName, fileLink]);
+
+  const handleClickSaveNotice = () => {
+    if (typeof notice !== "undefined") {
+      dispatch(saveNotice(notice));
+    }
+  };
+
+  const handleClickDeleteNotice = () => {
+    if (typeof notice !== "undefined") {
+      dispatch(deleteSavedNotice(notice));
+    }
+  };
+
+  const FavoriteIcon = () => {
+    if (
+      savedNoticeArticle !== null &&
+      typeof notice !== "undefined" &&
+      _.contains(savedNoticeArticle, notice)
+    ) {
+      return (
+        <MaterialIcons
+          name="favorite"
+          size={theme.size.headerIconSize}
+          style={HeaderRightStyles.icon}
+          onPress={handleClickDeleteNotice}
+        />
+      );
+    } else {
+      return (
+        <MaterialIcons
+          name="favorite-border"
+          size={theme.size.headerIconSize}
+          style={HeaderRightStyles.icon}
+          onPress={handleClickSaveNotice}
+        />
+      );
+    }
+  };
+
   return (
     <View style={HeaderRightStyles.container}>
-      <MaterialIcons
-        name="favorite-border"
-        size={theme.size.headerIconSize}
-        style={HeaderRightStyles.icon}
-      />
+      <FavoriteIcon />
       {typeof attachment !== "undefined" && attachment.length !== 0 && (
         <MaterialIcons
           name="cloud-download"

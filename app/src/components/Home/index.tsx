@@ -3,7 +3,7 @@ import { View, FlatList, RefreshControl } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard from "./NoticeCard";
-import { Notice } from "./redux/types";
+import { NoticeArticle } from "components/Article/redux/types";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
@@ -26,7 +26,7 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
-  const [flatListData, setFlatListData] = React.useState<Notice[]>();
+  const [flatListData, setFlatListData] = React.useState<NoticeArticle[]>();
   const [initialLoading, setInitialLoading] = React.useState(true);
 
   const fetchInitialNotice = () => {
@@ -36,7 +36,7 @@ export default function Home() {
       .limit(50);
     setInitialLoading(true);
     query.get().then((documentSnapshots) => {
-      const fetchedNoticeData: Notice[] = documentSnapshots.docs.map(
+      const fetchedNoticeData: NoticeArticle[] = documentSnapshots.docs.map(
         (document) => {
           const fetchedData = document.data();
           return {
@@ -45,8 +45,8 @@ export default function Home() {
             deptName: fetchedData.deptName,
             authorDept: fetchedData.authorDept,
             title: fetchedData.title,
-            date: fetchedData.createdDate,
-            author: fetchedData.authorName,
+            createdDate: fetchedData.createdDate,
+            authorName: fetchedData.authorName,
             listId: fetchedData.listId,
             favoriteCount: fetchedData.favoriteCount,
           };
@@ -108,8 +108,8 @@ export default function Home() {
                 deptName={data.item.deptName}
                 authorDept={data.item.authorDept}
                 title={data.item.title}
-                date={data.item.date}
-                author={data.item.author}
+                createdDate={data.item.createdDate}
+                authorName={data.item.authorName}
                 listId={data.item.listId}
                 createdDateTimestamp={data.item.createdDateTimestamp}
                 favoriteCount={data.item.favoriteCount}

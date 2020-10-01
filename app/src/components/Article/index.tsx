@@ -1,6 +1,6 @@
 import * as React from "react";
 import AppLayout from "modules/AppLayout";
-import { ScrollView, Platform } from "react-native";
+import { ScrollView, Platform, Alert } from "react-native";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import theme from "theme";
@@ -67,8 +67,12 @@ export default function Article() {
           }
         }
       });
-    } catch (error) {
-      console.log(error);
+    } catch {
+      Alert.alert("공지사항을 불러올 수 없습니다.", "", [
+        {
+          text: "확인",
+        },
+      ]);
     }
   };
 
@@ -77,6 +81,7 @@ export default function Article() {
       headerRight: () => (
         <HeaderRightButton
           url={typeof noticeData !== "undefined" ? noticeData.url : ""}
+          notice={noticeData}
           attachment={
             typeof noticeData !== "undefined"
               ? noticeData.attachmentLink
@@ -112,35 +117,36 @@ export default function Article() {
               {noticeData.authorDept && ` / ${noticeData.authorDept}`}
               {` / ${noticeData.deptName}`}
             </ArticleAdditionalInformation>
-
-            <AutoHeightWebView
-              originWhitelist={["*"]}
-              scrollEnabled={false}
-              overScrollMode={"never"}
-              scalesPageToFit={true}
-              source={{ html: noticeData.contentHtml }}
-              startInLoadingState={true}
-              renderLoading={() => {
-                return <LoadingIndicator />;
-              }}
-              onShouldStartLoadWithRequest={(navState) => {
-                if (navState.url !== "about:blank") {
-                  WebBrowser.openBrowserAsync(navState.url);
-                  return false;
-                } else {
-                  return true;
-                }
-              }}
-              viewportContent={"width=device-width, user-scalable=no"}
-              customStyle={`
+            {typeof noticeData.contentHtml !== "undefined" && (
+              <AutoHeightWebView
+                originWhitelist={["*"]}
+                scrollEnabled={false}
+                overScrollMode={"never"}
+                scalesPageToFit={true}
+                source={{ html: noticeData.contentHtml }}
+                startInLoadingState={true}
+                renderLoading={() => {
+                  return <LoadingIndicator />;
+                }}
+                onShouldStartLoadWithRequest={(navState) => {
+                  if (navState.url !== "about:blank") {
+                    WebBrowser.openBrowserAsync(navState.url);
+                    return false;
+                  } else {
+                    return true;
+                  }
+                }}
+                viewportContent={"width=device-width, user-scalable=no"}
+                customStyle={`
                 img {
                   display: block; max-width: 100%; height: auto;
                 }
               `}
-              style={{
-                width: Dimensions.get("window").width - 32,
-              }}
-            />
+                style={{
+                  width: Dimensions.get("window").width - 32,
+                }}
+              />
+            )}
           </ArticleContainer>
         </ScrollView>
       </AppLayout>

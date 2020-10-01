@@ -12,7 +12,7 @@ import { setArticleId } from "components/Article/redux/actions";
 import randomColor from "randomcolor";
 import { getDescriptiveDateDifference } from "./util";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Notice } from "./redux/types";
+import { NoticeArticle } from "components/Article/redux/types";
 
 const NoticeCardContainer = styled.View`
   padding: 0 16px;
@@ -43,17 +43,17 @@ const NoticeCardItemSubtitleText = styled.Text`
 `;
 
 export const NoticeCardHeader = ({
-  date,
+  createdDate,
   favoriteCount,
 }: {
-  date: string;
+  createdDate: string;
   favoriteCount?: number;
 }) => {
   return (
     <View style={NoticeCardStyle.header}>
       <Text
         style={NoticeCardStyle.headerText}
-      >{`#${getDescriptiveDateDifference(date)}`}</Text>
+      >{`#${getDescriptiveDateDifference(createdDate)}`}</Text>
       {typeof favoriteCount !== "undefined" && favoriteCount > 0 && (
         <View style={NoticeCardStyle.favoriteContainer}>
           <MaterialIcons name="favorite-border" color={theme.colors.darkGrey} />
@@ -93,33 +93,33 @@ const NoticeCardItemTitle = ({
 };
 
 const NoticeCardItemSubtitle = ({
-  date,
-  author,
+  createdDate,
+  authorName,
   authorDept,
 }: {
-  date: string;
-  author: string;
+  createdDate: string;
+  authorName: string;
   authorDept: string;
 }) => {
   return (
     <NoticeCardItemSubtitleContainer>
       <NoticeCardItemSubtitleText>
-        {`${author}`}
+        {`${authorName}`}
         {authorDept && ` / ${authorDept}`}
       </NoticeCardItemSubtitleText>
-      <NoticeCardItemSubtitleText>{`${date}`}</NoticeCardItemSubtitleText>
+      <NoticeCardItemSubtitleText>{`${createdDate}`}</NoticeCardItemSubtitleText>
     </NoticeCardItemSubtitleContainer>
   );
 };
 
-export default function NoticeCard(props: Notice) {
+export default function NoticeCard(props: NoticeArticle) {
   const {
     deptCode,
     deptName,
     authorDept,
     title,
-    date,
-    author,
+    createdDate,
+    authorName,
     listId,
     favoriteCount,
   } = props;
@@ -134,11 +134,14 @@ export default function NoticeCard(props: Notice) {
   return (
     <Ripple onPress={handleNoticeCardItemClick}>
       <NoticeCardContainer>
-        <NoticeCardHeader date={date} favoriteCount={favoriteCount} />
+        <NoticeCardHeader
+          createdDate={createdDate}
+          favoriteCount={favoriteCount}
+        />
         <NoticeCardItemTitle deptName={deptName} title={title} />
         <NoticeCardItemSubtitle
-          date={date}
-          author={author}
+          createdDate={createdDate}
+          authorName={authorName}
           authorDept={authorDept}
         />
         <Divider />
