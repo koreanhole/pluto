@@ -12,7 +12,6 @@ import { useNavigation } from "@react-navigation/native";
 import _ from "underscore";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
-import { setArticleId } from "components/Article/redux/actions";
 import * as Notifications from "expo-notifications";
 import LoadingIndicator from "modules/LoadingIndicator";
 import theme from "theme";
@@ -61,7 +60,7 @@ export default function Home() {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "UOS 공지사항 😷",
+      headerTitle: "UOS 공지사항 🧚🏻‍♂️",
       headerRight: () => <HeaderRightButton />,
     });
   }, [navigation]);
@@ -73,15 +72,12 @@ export default function Home() {
     const subscription = Notifications.addNotificationResponseReceivedListener(
       (response) => {
         const responseData = response.notification.request.content.data.body;
-        navigation.navigate("Article");
-        dispatch(
-          setArticleId({
-            // @ts-ignore Object is of type 'unknown'.ts(2571)
-            deptCode: responseData.deptCode,
-            // @ts-ignore Object is of type 'unknown'.ts(2571)
-            listId: responseData.listId,
-          })
-        );
+        navigation.navigate("Article", {
+          // @ts-ignore Object is of type 'unknown'.ts(2571)
+          deptCode: responseData.deptCode,
+          // @ts-ignore Object is of type 'unknown'.ts(2571)
+          listId: responseData.listId,
+        });
       }
     );
     return () => subscription.remove();
