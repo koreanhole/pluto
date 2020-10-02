@@ -4,8 +4,6 @@ import { ScrollView, Platform, Alert, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import theme from "theme";
-import { useSelector } from "react-redux";
-import { getArticleId } from "./redux/selectors";
 import { noticeFirestore } from "util/firebase/firestore";
 import { NoticeArticle } from "./redux/types";
 import { Dimensions } from "react-native";
@@ -15,6 +13,15 @@ import { getNoticeDocumentId } from "util/firebase/firestore";
 import { AdMobBanner } from "expo-ads-admob";
 import * as WebBrowser from "expo-web-browser";
 import LoadingIndicator from "modules/LoadingIndicator";
+
+type ArticleProps = {
+  key: string;
+  name: string;
+  params: {
+    deptCode: string;
+    listId: string;
+  };
+};
 
 const ArticleContainer = styled.View`
   margin: 16px;
@@ -32,17 +39,18 @@ const ArticleAdditionalInformation = styled.Text`
   margin-bottom: 16px;
 `;
 
-export default function Article() {
+export default function Article({ route }: { route: ArticleProps }) {
   const navigation = useNavigation();
-  const articleId = useSelector(getArticleId);
+  // const articleId = useSelector(getArticleId);
 
   const [noticeData, setNoticeData] = React.useState<NoticeArticle>();
 
   const fetchNoticeData = async () => {
+    console.log(route);
     try {
       const noticeDocumentId = getNoticeDocumentId(
-        articleId.deptCode,
-        articleId.listId
+        route.params.deptCode,
+        route.params.listId
       );
       let noticeRef = noticeFirestore.doc(noticeDocumentId);
 
@@ -94,7 +102,8 @@ export default function Article() {
 
   React.useEffect(() => {
     fetchNoticeData();
-  }, [articleId]);
+  }, [route]);
+
   if (typeof noticeData !== "undefined") {
     return (
       <AppLayout>

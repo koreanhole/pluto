@@ -8,7 +8,6 @@ import { Divider } from "react-native-paper";
 import TextAvatar from "react-native-text-avatar";
 import { useNavigation } from "@react-navigation/native";
 import theme from "theme";
-import { setArticleId } from "components/Article/redux/actions";
 import randomColor from "randomcolor";
 import { getDescriptiveDateDifference } from "./util";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -124,11 +123,9 @@ export default function NoticeCard(props: NoticeArticle) {
     favoriteCount,
   } = props;
   const navigation = useNavigation();
-  const dispatch = useDispatch();
 
   const handleNoticeCardItemClick = React.useCallback(() => {
-    navigation.navigate("Article");
-    dispatch(setArticleId({ deptCode: deptCode, listId: listId }));
+    navigation.navigate("Article", { deptCode: deptCode, listId: listId });
   }, []);
 
   return (

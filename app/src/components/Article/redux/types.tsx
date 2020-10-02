@@ -18,8 +18,3 @@ export type NoticeArticle = {
   url?: string;
   favoriteCount?: number;
 };
-
-export type ArticleId = {
-  deptCode: string;
-  listId: string;
-};

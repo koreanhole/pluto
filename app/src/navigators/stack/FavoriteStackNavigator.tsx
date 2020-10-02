@@ -10,6 +10,7 @@ const Stack = createStackNavigator();
 export default function FavoriteStackNavigator() {
   return (
     <Stack.Navigator
+      initialRouteName="Favorite"
       screenOptions={{
         headerStyle: {
           backgroundColor: `${theme.colors.ligthGrey}`,
