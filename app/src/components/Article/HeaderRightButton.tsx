@@ -6,12 +6,14 @@ import { Attachment, NoticeArticle } from "./redux/types";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import theme from "theme";
-import { Alert, View } from "react-native";
+import { Alert, View, Platform } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { HeaderRightStyles } from "modules/headerRightButton/base";
 import { saveNotice, deleteSavedNotice } from "./redux/actions";
 import { getSavedArticle } from "./redux/selectors";
 import _ from "underscore";
+import { showSnackbar } from "modules/Snackbar/redux/actions";
+import * as Haptics from "expo-haptics";
 
 export default function HeaderRightButton({
   url,
@@ -82,12 +84,30 @@ export default function HeaderRightButton({
   const handleClickSaveNotice = () => {
     if (typeof notice !== "undefined") {
       dispatch(saveNotice(notice));
+      dispatch(
+        showSnackbar({
+          visible: true,
+          message: "공지사항을 저장했습니다.",
+        })
+      );
+      if (Platform.OS == "ios") {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }
     }
   };
 
   const handleClickDeleteNotice = () => {
     if (typeof notice !== "undefined") {
       dispatch(deleteSavedNotice(notice));
+      dispatch(
+        showSnackbar({
+          visible: true,
+          message: "저장된 공지사항에서 삭제했습니다.",
+        })
+      );
+      if (Platform.OS == "ios") {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }
     }
   };
 
