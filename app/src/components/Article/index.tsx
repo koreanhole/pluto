@@ -41,12 +41,10 @@ const ArticleAdditionalInformation = styled.Text`
 
 export default function Article({ route }: { route: ArticleProps }) {
   const navigation = useNavigation();
-  // const articleId = useSelector(getArticleId);
 
   const [noticeData, setNoticeData] = React.useState<NoticeArticle>();
 
   const fetchNoticeData = async () => {
-    console.log(route);
     try {
       const noticeDocumentId = getNoticeDocumentId(
         route.params.deptCode,
@@ -144,7 +142,7 @@ export default function Article({ route }: { route: ArticleProps }) {
                     return true;
                   }
                 }}
-                // react-native-webview 10.7
+                // react-native-webview 10.7에서 수정됨
                 onNavigationStateChange={(_navState) => {
                   StatusBar.setBarStyle("dark-content");
                 }}
