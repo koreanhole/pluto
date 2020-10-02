@@ -16,12 +16,18 @@ const reducer = combineReducers({
       if (state == null) {
         return [action.payload];
       } else {
-        return [...state, action.payload];
+        const sortedNotices = _.sortBy(
+          [...state, action.payload],
+          "createdDateTimestamp"
+        );
+        return _.uniq(sortedNotices, true);
       }
     })
     .handleAction(deleteSavedNotice, (state, action) => {
       if (state !== null) {
-        return _.without(state, action.payload);
+        return _.reject(state, (item) => {
+          return action.payload.title === item.title;
+        });
       } else {
         return [];
       }

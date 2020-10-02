@@ -17,7 +17,7 @@ import * as Notifications from "expo-notifications";
 import LoadingIndicator from "modules/LoadingIndicator";
 import theme from "theme";
 
-const HomeContainer = styled(View)`
+export const HomeContainer = styled(View)`
   flex: 1;
 `;
 

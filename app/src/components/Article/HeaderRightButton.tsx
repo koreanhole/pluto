@@ -95,7 +95,7 @@ export default function HeaderRightButton({
     if (
       savedNoticeArticle !== null &&
       typeof notice !== "undefined" &&
-      _.contains(savedNoticeArticle, notice)
+      _.findWhere(savedNoticeArticle, { title: notice.title })
     ) {
       return (
         <MaterialIcons

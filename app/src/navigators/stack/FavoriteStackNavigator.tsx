@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import Favorite from "components/Favorite";
+import Article from "components/Article";
 import theme from "theme";
 import { StyledHeaderIcon } from "./base";
 
@@ -30,6 +31,7 @@ export default function FavoriteStackNavigator() {
       }}
     >
       <Stack.Screen name="Favorite" component={Favorite} />
+      <Stack.Screen name="Article" component={Article} />
     </Stack.Navigator>
   );
 }
