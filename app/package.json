@@ -37,12 +37,13 @@
     "expo-permissions": "~9.3.0",
     "expo-sharing": "~8.4.1",
     "expo-updates": "~0.3.3",
+    "expo-web-browser": "~8.5.0",
     "firebase": "7.9.0",
     "randomcolor": "^0.6.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "0.63.3",
-    "react-native-autoheight-webview": "^1.5.2",
+    "react-native-autoheight-webview": "^1.5.4",
     "react-native-collapsible": "^1.5.3",
     "react-native-gesture-handler": "~1.7.0",
     "react-native-material-ripple": "^0.9.1",
@@ -63,8 +64,7 @@
     "redux-persist-expo-filesystem": "^2.0.0",
     "styled-components": "^5.1.1",
     "typesafe-actions": "^5.1.0",
-    "underscore": "^1.10.2",
-    "expo-web-browser": "~8.5.0"
+    "underscore": "^1.10.2"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

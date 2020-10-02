@@ -122,7 +122,6 @@ export default function Article() {
                 originWhitelist={["*"]}
                 scrollEnabled={false}
                 overScrollMode={"never"}
-                scalesPageToFit={true}
                 source={{ html: noticeData.contentHtml }}
                 startInLoadingState={true}
                 renderLoading={() => {
@@ -136,7 +135,7 @@ export default function Article() {
                     return true;
                   }
                 }}
-                // react-native-webview 10.7에서 해결 될 예정
+                // react-native-webview 10.7
                 onNavigationStateChange={(_navState) => {
                   StatusBar.setBarStyle("dark-content");
                 }}
