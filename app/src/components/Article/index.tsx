@@ -1,6 +1,6 @@
 import * as React from "react";
 import AppLayout from "modules/AppLayout";
-import { ScrollView, Platform, Alert } from "react-native";
+import { ScrollView, Platform, Alert, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import theme from "theme";
@@ -135,6 +135,10 @@ export default function Article() {
                   } else {
                     return true;
                   }
+                }}
+                // react-native-webview 10.7에서 해결 될 예정
+                onNavigationStateChange={(_navState) => {
+                  StatusBar.setBarStyle("dark-content");
                 }}
                 viewportContent={"width=device-width, user-scalable=no"}
                 customStyle={`
