@@ -5,6 +5,3 @@ export const getFavoriteDepartmentList = (state: RootState) =>
 
 export const getExpoPushToken = (state: RootState) =>
   state.department.expoPushToken;
-
-export const getShowSnackBar = (state: RootState) =>
-  state.department.showSnackBar;

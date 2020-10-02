@@ -11,5 +11,3 @@ export const deleteFromFavoriteDepartmentList = createAction(
 export const setExpoPushToken = createAction("SET_EXPO_PUSH_TOKEN")<
   string | undefined
 >();
-
-export const setShowSnackBar = createAction("SHOW_SNACK_BAR")<boolean>();

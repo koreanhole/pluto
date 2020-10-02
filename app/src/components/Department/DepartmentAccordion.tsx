@@ -5,11 +5,12 @@ import Accordion from "react-native-collapsible/Accordion";
 import styled from "styled-components/native";
 import { Divider } from "react-native-paper";
 import Ripple from "react-native-material-ripple";
-import { addToFavoriteDepartmentList, setShowSnackBar } from "./redux/actions";
+import { addToFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { showSnackbar } from "modules/Snackbar/redux/actions";
 
 type AccordionSection = {
   departmentType: string;
@@ -155,7 +156,12 @@ const AccrodionContentItem = ({
 
   const handleClickDepartmentName = React.useCallback(() => {
     dispatch(addToFavoriteDepartmentList(departmentName));
-    dispatch(setShowSnackBar(true));
+    dispatch(
+      showSnackbar({
+        visible: true,
+        message: "새로운 공지사항에 대해 알림을 수신합니다.",
+      })
+    );
     if (Platform.OS == "ios") {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
