@@ -66,14 +66,19 @@ export default function SavedArticles() {
   return (
     <AppLayout>
       <HomeContainer>
-        {savedNoticeArticle !== null ? (
+        {savedNoticeArticle !== null && savedNoticeArticle.length !== 0 ? (
           <FlatList
             data={savedNoticeArticle}
             keyExtractor={(item, index) => item.title + index}
             renderItem={(data) => <FlatListItem data={data.item} />}
           />
         ) : (
-          <Text>저장된 공지사항이 없음</Text>
+          <View style={NoDataStyles.container}>
+            <Text style={NoDataStyles.text}>
+              저장된 공지사항이 없습니다.{"\n"}
+              게시글에서 ♥︎ 표시를 눌러서 저장해주세요.
+            </Text>
+          </View>
         )}
       </HomeContainer>
     </AppLayout>
@@ -84,5 +89,18 @@ const FlatListItemStyles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
+  },
+});
+
+const NoDataStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
   },
 });
