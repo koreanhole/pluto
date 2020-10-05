@@ -77,9 +77,8 @@ class Notice(object):
                 # 작성일
                 createdDateSoup = authorDeptSoup.find_next_sibling()
                 createdDate = createdDateSoup.text
-                # 작성일 timestamp
-                createdDateTimestamp = datetime.datetime.strptime(
-                    createdDate, "%Y-%m-%d")
+                # 작성일 timestamp(fetched datetime)
+                createdDateTimestamp = datetime.datetime.now()
                 # 첨부파일 링크
                 attachmentLink = []
                 for downloadSoup in noticeSoup.find_all("a", class_="dbtn"):
