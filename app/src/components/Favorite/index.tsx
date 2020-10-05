@@ -76,7 +76,7 @@ export default function SavedArticles() {
           <View style={NoDataStyles.container}>
             <Text style={NoDataStyles.text}>
               저장된 공지사항이 없습니다.{"\n"}
-              게시글에서 ♥︎ 표시를 눌러서 저장해주세요.
+              게시글에서 ♥︎를 눌러서 저장해주세요.
             </Text>
           </View>
         )}
