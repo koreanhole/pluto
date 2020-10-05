@@ -5,11 +5,12 @@ import Accordion from "react-native-collapsible/Accordion";
 import styled from "styled-components/native";
 import { Divider } from "react-native-paper";
 import Ripple from "react-native-material-ripple";
-import { addToFavoriteDepartmentList, setShowSnackBar } from "./redux/actions";
+import { addToFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { showSnackbar } from "modules/Snackbar/redux/actions";
 
 type AccordionSection = {
   departmentType: string;
@@ -89,6 +90,9 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
 
 const AccordionHeaderContainer = styled.View`
   padding: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const AccordionText = styled.Text<AccordionTextProps>`
@@ -101,14 +105,25 @@ const AccordionContentItemContainer = styled.View`
   flex-direction: row;
   margin-horizontal: 24px;
   margin-vertical: 8px;
+  align-items: center;
   justify-content: space-between;
 `;
 
-const AccordionHeader = (section: AccordionSection) => {
+const AccordionHeader = (
+  section: AccordionSection,
+  _index: number,
+  isActive: boolean,
+  _sections: AccordionSection[]
+) => {
   return (
     <>
       <AccordionHeaderContainer>
         <AccordionText type="HEADER">{section.departmentType}</AccordionText>
+        {isActive ? (
+          <MaterialIcons name="keyboard-arrow-up" size={24} color="black" />
+        ) : (
+          <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
+        )}
       </AccordionHeaderContainer>
       <Divider style={{ backgroundColor: theme.colors.grey }} />
     </>
@@ -141,7 +156,12 @@ const AccrodionContentItem = ({
 
   const handleClickDepartmentName = React.useCallback(() => {
     dispatch(addToFavoriteDepartmentList(departmentName));
-    dispatch(setShowSnackBar(true));
+    dispatch(
+      showSnackbar({
+        visible: true,
+        message: "새로운 공지사항에 대해 알림을 수신합니다.",
+      })
+    );
     if (Platform.OS == "ios") {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
@@ -152,11 +172,7 @@ const AccrodionContentItem = ({
         <AccordionText type="CONTENT">{departmentName}</AccordionText>
         {favoriteDepartmentList !== null &&
         favoriteDepartmentList.includes(departmentName) ? (
-          <MaterialIcons
-            name="check"
-            color={theme.colors.green}
-            size={theme.size.headerIconSize}
-          />
+          <MaterialIcons name="check" color={theme.colors.green} size={20} />
         ) : null}
       </AccordionContentItemContainer>
     </Ripple>
@@ -164,9 +180,9 @@ const AccrodionContentItem = ({
 };
 
 export default function DepartmentAccordion() {
-  const [activeDepartmentSection, setActiveDepartmentSection] = React.useState([
-    0,
-  ]);
+  const [activeDepartmentSection, setActiveDepartmentSection] = React.useState<
+    number[]
+  >([]);
 
   return (
     <Accordion

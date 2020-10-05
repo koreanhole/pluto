@@ -4,20 +4,17 @@ export type Attachment = {
 };
 
 export type NoticeArticle = {
-  attachmentLink: Attachment[];
+  attachmentLink?: Attachment[];
   authorDept: string;
   authorName: string;
-  contentHtml: string;
-  contentString: string;
+  contentHtml?: string;
+  contentString?: string;
   createdDate: string;
+  createdDateTimestamp?: string;
   listId: string;
   title: string;
   deptCode: string;
   deptName: string;
-  url: string;
-};
-
-export type ArticleId = {
-  deptCode: string;
-  listId: string;
+  url?: string;
+  favoriteCount?: number;
 };

@@ -1,11 +1,9 @@
 import * as React from "react";
 import AppLayout from "modules/AppLayout";
-import { ScrollView, Platform } from "react-native";
+import { ScrollView, Platform, Alert, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import theme from "theme";
-import { useSelector } from "react-redux";
-import { getArticleId } from "./redux/selectors";
 import { noticeFirestore } from "util/firebase/firestore";
 import { NoticeArticle } from "./redux/types";
 import { Dimensions } from "react-native";
@@ -13,6 +11,17 @@ import AutoHeightWebView from "react-native-autoheight-webview";
 import { useNavigation } from "@react-navigation/native";
 import { getNoticeDocumentId } from "util/firebase/firestore";
 import { AdMobBanner } from "expo-ads-admob";
+import * as WebBrowser from "expo-web-browser";
+import LoadingIndicator from "modules/LoadingIndicator";
+
+type ArticleProps = {
+  key: string;
+  name: string;
+  params: {
+    deptCode: string;
+    listId: string;
+  };
+};
 
 const ArticleContainer = styled.View`
   margin: 16px;
@@ -30,17 +39,16 @@ const ArticleAdditionalInformation = styled.Text`
   margin-bottom: 16px;
 `;
 
-export default function Article() {
+export default function Article({ route }: { route: ArticleProps }) {
   const navigation = useNavigation();
-  const articleId = useSelector(getArticleId);
 
   const [noticeData, setNoticeData] = React.useState<NoticeArticle>();
 
   const fetchNoticeData = async () => {
     try {
       const noticeDocumentId = getNoticeDocumentId(
-        articleId.deptCode,
-        articleId.listId
+        route.params.deptCode,
+        route.params.listId
       );
       let noticeRef = noticeFirestore.doc(noticeDocumentId);
 
@@ -65,8 +73,12 @@ export default function Article() {
           }
         }
       });
-    } catch (error) {
-      console.log(error);
+    } catch {
+      Alert.alert("공지사항을 불러올 수 없습니다.", "", [
+        {
+          text: "확인",
+        },
+      ]);
     }
   };
 
@@ -75,6 +87,7 @@ export default function Article() {
       headerRight: () => (
         <HeaderRightButton
           url={typeof noticeData !== "undefined" ? noticeData.url : ""}
+          notice={noticeData}
           attachment={
             typeof noticeData !== "undefined"
               ? noticeData.attachmentLink
@@ -87,7 +100,8 @@ export default function Article() {
 
   React.useEffect(() => {
     fetchNoticeData();
-  }, [articleId]);
+  }, [route]);
+
   if (typeof noticeData !== "undefined") {
     return (
       <AppLayout>
@@ -110,23 +124,39 @@ export default function Article() {
               {noticeData.authorDept && ` / ${noticeData.authorDept}`}
               {` / ${noticeData.deptName}`}
             </ArticleAdditionalInformation>
-
-            <AutoHeightWebView
-              originWhitelist={["*"]}
-              scrollEnabled={false}
-              overScrollMode={"never"}
-              scalesPageToFit={true}
-              source={{ html: noticeData.contentHtml }}
-              viewportContent={"width=device-width, user-scalable=no"}
-              customStyle={`
+            {typeof noticeData.contentHtml !== "undefined" && (
+              <AutoHeightWebView
+                originWhitelist={["*"]}
+                scrollEnabled={false}
+                overScrollMode={"never"}
+                source={{ html: noticeData.contentHtml }}
+                startInLoadingState={true}
+                renderLoading={() => {
+                  return <LoadingIndicator />;
+                }}
+                onShouldStartLoadWithRequest={(navState) => {
+                  if (navState.url !== "about:blank") {
+                    WebBrowser.openBrowserAsync(navState.url);
+                    return false;
+                  } else {
+                    return true;
+                  }
+                }}
+                // react-native-webview 10.7에서 수정됨
+                onNavigationStateChange={(_navState) => {
+                  StatusBar.setBarStyle("dark-content");
+                }}
+                viewportContent={"width=device-width, user-scalable=no"}
+                customStyle={`
                 img {
                   display: block; max-width: 100%; height: auto;
                 }
               `}
-              style={{
-                width: Dimensions.get("window").width - 32,
-              }}
-            />
+                style={{
+                  width: Dimensions.get("window").width - 32,
+                }}
+              />
+            )}
           </ArticleContainer>
         </ScrollView>
       </AppLayout>

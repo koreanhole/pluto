@@ -32,17 +32,26 @@ const DepartmentBadgeItem = ({
   }, [favoriteDepartmentList]);
 
   const handleClickDepartmentBadgeItem = React.useCallback(() => {
-    Alert.alert("즐겨찾기에서 삭제하시겠습니까?", departmentName, [
-      {
-        text: "취소",
-        style: "cancel",
-      },
-      {
-        text: "확인",
-        onPress: handleDeleteFromFavoriteDepartmentList,
-        style: "default",
-      },
-    ]);
+    if (favoriteDepartmentList.length == 1) {
+      Alert.alert("즐겨찾기에서 삭제할 수 없습니다.", departmentName, [
+        {
+          text: "확인",
+          style: "default",
+        },
+      ]);
+    } else {
+      Alert.alert("즐겨찾기에서 삭제하시겠습니까?", departmentName, [
+        {
+          text: "취소",
+          style: "cancel",
+        },
+        {
+          text: "확인",
+          onPress: handleDeleteFromFavoriteDepartmentList,
+          style: "default",
+        },
+      ]);
+    }
   }, []);
 
   return (

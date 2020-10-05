@@ -1,27 +1,22 @@
 import * as React from "react";
-import { View, SectionList, ActivityIndicator, StyleSheet } from "react-native";
+import { View, FlatList, RefreshControl } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
-import NoticeCard, { NoticeCardItem, NoticeCardHeader } from "./NoticeCard";
+import NoticeCard from "./NoticeCard";
+import { NoticeArticle } from "components/Article/redux/types";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
 import { noticeFirestore } from "util/firebase/firestore";
-import { subDays } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
 import _ from "underscore";
-import { getDescriptiveDateDifference } from "./util";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
-import { setArticleId } from "components/Article/redux/actions";
 import * as Notifications from "expo-notifications";
-import { Button } from "react-native-paper";
+import LoadingIndicator from "modules/LoadingIndicator";
+import theme from "theme";
 
-type SectionListData = {
-  data: NoticeCardItem[];
-};
-
-const HomeContainer = styled(View)`
+export const HomeContainer = styled(View)`
   flex: 1;
 `;
 
@@ -30,33 +25,17 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
+  const [flatListData, setFlatListData] = React.useState<NoticeArticle[]>();
+  const [initialLoading, setInitialLoading] = React.useState(true);
 
-  const [isRefreshing, setIsRefreshing] = React.useState(true);
-  const [sectionListData, setSectionListData] = React.useState<
-    SectionListData[]
-  >();
-  // const [flatListData, setFlatListData] = React.useState<NoticeCardItem[]>();
-  const [noticeCreatedDate, setNoticeCreatedDate] = React.useState<Date>(
-    new Date()
-  );
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: "UOS 공지사항 😷",
-      headerRight: () => <HeaderRightButton />,
-    });
-  });
-
-  const fetchNoticeData = React.useCallback(
-    async (baseTime: Date) => {
-      const fiveDaysBefore = subDays(baseTime, 1);
-      let noticeQuery = noticeFirestore
-        .where("deptName", "in", favoriteDepartmentList)
-        .where("createdDateTimestamp", "<", baseTime)
-        .where("createdDateTimestamp", ">", fiveDaysBefore)
-        .orderBy("createdDateTimestamp", "desc");
-      let noticeSnapshot = await noticeQuery.get();
-      let fetchedNoticeData: NoticeCardItem[] = noticeSnapshot.docs.map(
+  const fetchInitialNotice = () => {
+    const query = noticeFirestore
+      .where("deptName", "in", favoriteDepartmentList)
+      .orderBy("createdDateTimestamp", "desc")
+      .limit(50);
+    setInitialLoading(true);
+    query.get().then((documentSnapshots) => {
+      const fetchedNoticeData: NoticeArticle[] = documentSnapshots.docs.map(
         (document) => {
           const fetchedData = document.data();
           return {
@@ -65,40 +44,26 @@ export default function Home() {
             deptName: fetchedData.deptName,
             authorDept: fetchedData.authorDept,
             title: fetchedData.title,
-            date: fetchedData.createdDate,
-            author: fetchedData.authorName,
+            createdDate: fetchedData.createdDate,
+            authorName: fetchedData.authorName,
             listId: fetchedData.listId,
+            favoriteCount: fetchedData.favoriteCount,
           };
         }
       );
-      return fetchedNoticeData;
-    },
-    [favoriteDepartmentList]
-  );
-
-  const fetchInitialNoticeData = () => {
-    fetchNoticeData(new Date())
-      .then((fetchedNoticeData) => {
-        setSectionListData([{ data: fetchedNoticeData }]);
-      })
-      .finally(() => {
-        setNoticeCreatedDate(subDays(new Date(), 1));
-        setIsRefreshing(false);
-      });
+      setFlatListData(fetchedNoticeData);
+      setInitialLoading(false);
+    });
   };
 
-  const fetchMoreNoticeData = () => {
-    fetchNoticeData(noticeCreatedDate)
-      .then((fetchedNoticeData) => {
-        if (typeof sectionListData !== "undefined") {
-          setSectionListData([...sectionListData, { data: fetchedNoticeData }]);
-        }
-      })
-      .finally(() => {
-        setNoticeCreatedDate(subDays(noticeCreatedDate, 1));
-        setIsRefreshing(false);
-      });
-  };
+  React.useEffect(fetchInitialNotice, [favoriteDepartmentList]);
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "UOS 공지사항 🌺",
+      headerRight: () => <HeaderRightButton />,
+    });
+  }, [navigation]);
 
   React.useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
@@ -106,85 +71,51 @@ export default function Home() {
     );
     const subscription = Notifications.addNotificationResponseReceivedListener(
       (response) => {
-        const responseData = response.notification.request.content.data.body;
-        navigation.navigate("Article");
-        dispatch(
-          setArticleId({
-            // @ts-ignore Object is of type 'unknown'.ts(2571)
-            deptCode: responseData.deptCode,
-            // @ts-ignore Object is of type 'unknown'.ts(2571)
-            listId: responseData.listId,
-          })
-        );
+        const responseData = response.notification.request.content.data;
+        navigation.navigate("Article", {
+          // @ts-ignore Object is of type 'unknown'.ts(2571)
+          deptCode: responseData.deptCode,
+          // @ts-ignore Object is of type 'unknown'.ts(2571)
+          listId: responseData.listId,
+        });
       }
     );
     return () => subscription.remove();
   }, [navigation]);
 
-  React.useEffect(fetchInitialNoticeData, [favoriteDepartmentList]);
-
   return (
     <AppLayout>
       <HomeContainer>
-        {typeof sectionListData !== "undefined" ? (
-          <SectionList
-            sections={sectionListData}
+        {typeof flatListData !== "undefined" ? (
+          <FlatList
+            data={flatListData}
             keyExtractor={(item, index) => item.title + index}
-            onEndReached={fetchMoreNoticeData}
-            onEndReachedThreshold={0.1}
-            extraData={noticeCreatedDate}
-            refreshing={isRefreshing}
-            onRefresh={fetchInitialNoticeData}
-            scrollIndicatorInsets={{ right: 1 }}
-            renderSectionHeader={({ section: { data } }) => {
-              if (data.length !== 0) {
-                return (
-                  <NoticeCardHeader
-                    displayedDay={getDescriptiveDateDifference(data[0].date)}
-                  />
-                );
-              } else {
-                return null;
-              }
-            }}
+            refreshControl={
+              <RefreshControl
+                refreshing={initialLoading}
+                onRefresh={fetchInitialNotice}
+                tintColor={theme.colors.primary}
+                title="아래로 내려서 공지사항 새로고침"
+              />
+            }
             renderItem={(data) => (
               <NoticeCard
                 deptCode={data.item.deptCode}
                 deptName={data.item.deptName}
                 authorDept={data.item.authorDept}
                 title={data.item.title}
-                date={data.item.date}
-                author={data.item.author}
+                createdDate={data.item.createdDate}
+                authorName={data.item.authorName}
                 listId={data.item.listId}
                 createdDateTimestamp={data.item.createdDateTimestamp}
+                favoriteCount={data.item.favoriteCount}
               />
             )}
-            ListFooterComponent={
-              <View style={LoadingStyles.listFooter}>
-                <Button loading={true} onPress={fetchMoreNoticeData}>
-                  더 불러오기
-                </Button>
-              </View>
-            }
           />
         ) : (
-          <View style={LoadingStyles.container}>
-            <ActivityIndicator animating={true} size="large" />
-          </View>
+          <LoadingIndicator />
         )}
       </HomeContainer>
     </AppLayout>
   );
 }
-
-const LoadingStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  listFooter: {
-    marginTop: 8,
-    marginBottom: 32,
-    alignSelf: "center",
-  },
-});

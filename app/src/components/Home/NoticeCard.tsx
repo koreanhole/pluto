@@ -1,44 +1,25 @@
 import React from "react";
 import styled from "styled-components/native";
-import { useDispatch } from "react-redux";
+import { Text, View, StyleSheet } from "react-native";
 import Ripple from "react-native-material-ripple";
 import { Divider } from "react-native-paper";
 // @ts-ignore
 import TextAvatar from "react-native-text-avatar";
 import { useNavigation } from "@react-navigation/native";
 import theme from "theme";
-import { setArticleId } from "components/Article/redux/actions";
 import randomColor from "randomcolor";
-
-export type NoticeCardItem = {
-  deptCode: string;
-  deptName: string;
-  authorDept: string;
-  title: string;
-  date: string;
-  author: string;
-  listId: string;
-  createdDateTimestamp: string;
-};
+import { getDescriptiveDateDifference } from "./util";
+import { MaterialIcons } from "@expo/vector-icons";
+import { NoticeArticle } from "components/Article/redux/types";
 
 const NoticeCardContainer = styled.View`
   padding: 0 16px;
 `;
 
-export const NoticeCardHeaderContainer = styled.View`
-  padding: 8px 16px;
-  background-color: ${theme.colors.ligthGrey};
-`;
-
-const NoticeCardHeaderText = styled.Text`
-  font-size: 16px;
-  font-weight: bold;
-`;
-
 const NoticeCardItemTitleContainer = styled.View`
-  margin-top: 18px;
   flex-direction: row;
   margin-bottom: 8px;
+  align-items: center;
 `;
 
 const NoticeCardItemSubtitleContainer = styled.View`
@@ -60,14 +41,26 @@ const NoticeCardItemSubtitleText = styled.Text`
 `;
 
 export const NoticeCardHeader = ({
-  displayedDay,
+  createdDate,
+  favoriteCount,
 }: {
-  displayedDay: string;
+  createdDate: string;
+  favoriteCount?: number;
 }) => {
   return (
-    <NoticeCardHeaderContainer>
-      <NoticeCardHeaderText>{displayedDay}</NoticeCardHeaderText>
-    </NoticeCardHeaderContainer>
+    <View style={NoticeCardStyle.header}>
+      <Text
+        style={NoticeCardStyle.headerText}
+      >{`#${getDescriptiveDateDifference(createdDate)}`}</Text>
+      {typeof favoriteCount !== "undefined" && favoriteCount > 0 && (
+        <View style={NoticeCardStyle.favoriteContainer}>
+          <MaterialIcons name="favorite-border" color={theme.colors.darkGrey} />
+          <Text style={NoticeCardStyle.favoriteCounterText}>
+            {favoriteCount}
+          </Text>
+        </View>
+      )}
+    </View>
   );
 };
 
@@ -98,42 +91,53 @@ const NoticeCardItemTitle = ({
 };
 
 const NoticeCardItemSubtitle = ({
-  date,
-  author,
+  createdDate,
+  authorName,
   authorDept,
 }: {
-  date: string;
-  author: string;
+  createdDate: string;
+  authorName: string;
   authorDept: string;
 }) => {
   return (
     <NoticeCardItemSubtitleContainer>
       <NoticeCardItemSubtitleText>
-        {`${author}`}
+        {`${authorName}`}
         {authorDept && ` / ${authorDept}`}
       </NoticeCardItemSubtitleText>
-      <NoticeCardItemSubtitleText>{`${date}`}</NoticeCardItemSubtitleText>
+      <NoticeCardItemSubtitleText>{`${createdDate}`}</NoticeCardItemSubtitleText>
     </NoticeCardItemSubtitleContainer>
   );
 };
 
-export default function NoticeCard(props: NoticeCardItem) {
-  const { deptCode, deptName, authorDept, title, date, author, listId } = props;
+export default function NoticeCard(props: NoticeArticle) {
+  const {
+    deptCode,
+    deptName,
+    authorDept,
+    title,
+    createdDate,
+    authorName,
+    listId,
+    favoriteCount,
+  } = props;
   const navigation = useNavigation();
-  const dispatch = useDispatch();
 
   const handleNoticeCardItemClick = React.useCallback(() => {
-    navigation.navigate("Article");
-    dispatch(setArticleId({ deptCode: deptCode, listId: listId }));
+    navigation.navigate("Article", { deptCode: deptCode, listId: listId });
   }, []);
 
   return (
     <Ripple onPress={handleNoticeCardItemClick}>
       <NoticeCardContainer>
+        <NoticeCardHeader
+          createdDate={createdDate}
+          favoriteCount={favoriteCount}
+        />
         <NoticeCardItemTitle deptName={deptName} title={title} />
         <NoticeCardItemSubtitle
-          date={date}
-          author={author}
+          createdDate={createdDate}
+          authorName={authorName}
           authorDept={authorDept}
         />
         <Divider />
@@ -141,3 +145,25 @@ export default function NoticeCard(props: NoticeCardItem) {
     </Ripple>
   );
 }
+
+const NoticeCardStyle = StyleSheet.create({
+  header: {
+    marginVertical: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  headerText: {
+    color: theme.colors.darkGrey,
+    fontSize: 12,
+  },
+  favoriteContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  favoriteCounterText: {
+    marginLeft: 2,
+    color: theme.colors.darkGrey,
+    fontSize: 12,
+  },
+});

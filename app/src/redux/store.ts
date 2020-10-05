@@ -8,7 +8,7 @@ import { persistStore, persistReducer } from "redux-persist";
 const persistConfig = {
   key: "root",
   storage: ExpoFileSystemStorage,
-  whitelist: ["department"],
+  whitelist: ["department", "article"],
 };
 
 export default function createReduxStore(preloadedState?: RootState) {
