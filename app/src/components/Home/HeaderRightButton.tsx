@@ -1,6 +1,7 @@
 import * as React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { HeaderRightStyles } from "modules/headerRightButton/base";
 import theme from "theme";
 
 export default function HeaderRightButton() {
@@ -15,7 +16,7 @@ export default function HeaderRightButton() {
       size={theme.size.headerIconSize}
       onPress={handleClickHeaderRightButton}
       color={theme.colors.black}
-      style={{ marginRight: 10 }}
+      style={HeaderRightStyles.icon}
     />
   );
 }

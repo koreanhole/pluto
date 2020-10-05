@@ -1,29 +1,32 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
-import styled from "styled-components/native";
 import { useActionSheet } from "@expo/react-native-action-sheet";
-import { Attachment } from "./redux/types";
+import { Attachment, NoticeArticle } from "./redux/types";
 import * as FileSystem from "expo-file-system";
-import * as Linking from "expo-linking";
 import * as Sharing from "expo-sharing";
 import theme from "theme";
-
-const HeaderRightButtonContainer = styled.View`
-  flex-direction: row;
-`;
-
-const StyledHeaderRightButton = styled(MaterialIcons)`
-  margin-right: 10px;
-`;
+import { Alert, View, Platform } from "react-native";
+import * as WebBrowser from "expo-web-browser";
+import { HeaderRightStyles } from "modules/headerRightButton/base";
+import { saveNotice, deleteSavedNotice } from "./redux/actions";
+import { getSavedArticle } from "./redux/selectors";
+import _ from "underscore";
+import { showSnackbar } from "modules/Snackbar/redux/actions";
+import * as Haptics from "expo-haptics";
 
 export default function HeaderRightButton({
   url,
   attachment,
+  notice,
 }: {
   url?: string;
   attachment?: Attachment[];
+  notice?: NoticeArticle;
 }) {
   const { showActionSheetWithOptions } = useActionSheet();
+  const dispatch = useDispatch();
+  const savedNoticeArticle = useSelector(getSavedArticle);
 
   const fileLink =
     typeof attachment !== "undefined"
@@ -41,9 +44,13 @@ export default function HeaderRightButton({
 
   const handleClickOpenInBrowserButton = React.useCallback(() => {
     if (typeof url !== "undefined") {
-      Linking.openURL(url).catch((err) =>
-        console.error("Couldn't load page", err)
-      );
+      WebBrowser.openBrowserAsync(url).catch(() => {
+        Alert.alert("페이지를 열 수 없습니다.", "", [
+          {
+            text: "확인",
+          },
+        ]);
+      });
     }
   }, [url]);
 
@@ -73,21 +80,80 @@ export default function HeaderRightButton({
       }
     );
   }, [fileName, fileLink]);
+
+  const handleClickSaveNotice = () => {
+    if (typeof notice !== "undefined") {
+      dispatch(saveNotice(notice));
+      dispatch(
+        showSnackbar({
+          visible: true,
+          message: "공지사항을 저장했습니다.",
+        })
+      );
+      if (Platform.OS == "ios") {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }
+    }
+  };
+
+  const handleClickDeleteNotice = () => {
+    if (typeof notice !== "undefined") {
+      dispatch(deleteSavedNotice(notice));
+      dispatch(
+        showSnackbar({
+          visible: true,
+          message: "저장된 공지사항에서 삭제했습니다.",
+        })
+      );
+      if (Platform.OS == "ios") {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }
+    }
+  };
+
+  const FavoriteIcon = () => {
+    if (
+      savedNoticeArticle !== null &&
+      typeof notice !== "undefined" &&
+      _.findWhere(savedNoticeArticle, { title: notice.title })
+    ) {
+      return (
+        <MaterialIcons
+          name="favorite"
+          size={theme.size.headerIconSize}
+          style={HeaderRightStyles.icon}
+          onPress={handleClickDeleteNotice}
+        />
+      );
+    } else {
+      return (
+        <MaterialIcons
+          name="favorite-border"
+          size={theme.size.headerIconSize}
+          style={HeaderRightStyles.icon}
+          onPress={handleClickSaveNotice}
+        />
+      );
+    }
+  };
+
   return (
-    <HeaderRightButtonContainer>
+    <View style={HeaderRightStyles.container}>
+      <FavoriteIcon />
       {typeof attachment !== "undefined" && attachment.length !== 0 && (
-        <StyledHeaderRightButton
+        <MaterialIcons
           name="cloud-download"
           size={theme.size.headerIconSize}
           onPress={handleClickDownloadButton}
+          style={HeaderRightStyles.icon}
         />
       )}
-
-      <StyledHeaderRightButton
+      <MaterialIcons
         name="open-in-browser"
         size={theme.size.headerIconSize}
         onPress={handleClickOpenInBrowserButton}
+        style={HeaderRightStyles.icon}
       />
-    </HeaderRightButtonContainer>
+    </View>
   );
 }

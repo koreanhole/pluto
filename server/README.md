@@ -1,9 +1,14 @@
 # pluto-server
 
-## 실행방법
+## AWS접속
 
-1. azure notebook에 폴더 전체 업로드
-2. fetchedLastVisitedListId.json -> Users/cloud.koreanhole/server/fetchedLastVisitedListId.json
-3. ./ServiceAccountKey.json -> Users/cloud.koreanhole/server/ServiceAccountKey.json
-4. python Users/cloud.koreanhole/server/pushNotificationClient.py
-5. python Users/cloud.koreanhole/server/firestoreClient.py
+1. cd /Users/koreanhole/Documents/appKeys
+2. ssh -i awsKey.pem ubuntu@{AWS 퍼블릭 IPv4 DNS}
+
+## Jupyter Notebook 백그라운드 실행
+
+1. sudo jupyter-notebook --allow-root
+2. [Ctrl] + Z 입력하여 실행 종료하기
+3. bg
+4. disown -h
+5. 웹 브라우저에서 {AWS 퍼블릭 IPv4 DNS}:8888로 Jupyter Notebook 접속

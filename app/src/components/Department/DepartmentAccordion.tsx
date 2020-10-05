@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { View, Platform } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 import styled from "styled-components/native";
-import { Divider } from "react-native-elements";
+import { Divider } from "react-native-paper";
 import Ripple from "react-native-material-ripple";
 import { addToFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { showSnackbar } from "modules/Snackbar/redux/actions";
 
 type AccordionSection = {
   departmentType: string;
@@ -35,6 +36,7 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
   {
     departmentType: "공과대학",
     departmentList: [
+      "공과대학",
       "전자전기컴퓨터공학부",
       "컴퓨터과학부",
       "화학공학과",
@@ -44,8 +46,13 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
     ],
   },
   {
+    departmentType: "경영대학",
+    departmentList: ["경영학부"],
+  },
+  {
     departmentType: "정경대학",
     departmentList: [
+      "정경대학",
       "행정학과",
       "국제관계학과",
       "경제학부",
@@ -56,6 +63,7 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
   {
     departmentType: "인문대학",
     departmentList: [
+      "인문대학",
       "영어영문학과",
       "국어국문학과",
       "국사학과",
@@ -66,6 +74,7 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
   {
     departmentType: "자연과학대학",
     departmentList: [
+      "자연과학대학",
       "수학과",
       "통계학과",
       "물리학과",
@@ -73,10 +82,17 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
       "환경원예학과",
     ],
   },
+  {
+    departmentType: "그 밖의 부서",
+    departmentList: ["생활관", "국제교육원"],
+  },
 ];
 
 const AccordionHeaderContainer = styled.View`
   padding: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const AccordionText = styled.Text<AccordionTextProps>`
@@ -89,14 +105,25 @@ const AccordionContentItemContainer = styled.View`
   flex-direction: row;
   margin-horizontal: 24px;
   margin-vertical: 8px;
+  align-items: center;
   justify-content: space-between;
 `;
 
-const AccordionHeader = (section: AccordionSection) => {
+const AccordionHeader = (
+  section: AccordionSection,
+  _index: number,
+  isActive: boolean,
+  _sections: AccordionSection[]
+) => {
   return (
     <>
       <AccordionHeaderContainer>
         <AccordionText type="HEADER">{section.departmentType}</AccordionText>
+        {isActive ? (
+          <MaterialIcons name="keyboard-arrow-up" size={24} color="black" />
+        ) : (
+          <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
+        )}
       </AccordionHeaderContainer>
       <Divider style={{ backgroundColor: theme.colors.grey }} />
     </>
@@ -129,6 +156,12 @@ const AccrodionContentItem = ({
 
   const handleClickDepartmentName = React.useCallback(() => {
     dispatch(addToFavoriteDepartmentList(departmentName));
+    dispatch(
+      showSnackbar({
+        visible: true,
+        message: "새로운 공지사항에 대해 알림을 수신합니다.",
+      })
+    );
     if (Platform.OS == "ios") {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
@@ -139,11 +172,7 @@ const AccrodionContentItem = ({
         <AccordionText type="CONTENT">{departmentName}</AccordionText>
         {favoriteDepartmentList !== null &&
         favoriteDepartmentList.includes(departmentName) ? (
-          <MaterialIcons
-            name="check"
-            color={theme.colors.green}
-            size={theme.size.headerIconSize}
-          />
+          <MaterialIcons name="check" color={theme.colors.green} size={20} />
         ) : null}
       </AccordionContentItemContainer>
     </Ripple>
@@ -151,9 +180,9 @@ const AccrodionContentItem = ({
 };
 
 export default function DepartmentAccordion() {
-  const [activeDepartmentSection, setActiveDepartmentSection] = React.useState([
-    0,
-  ]);
+  const [activeDepartmentSection, setActiveDepartmentSection] = React.useState<
+    number[]
+  >([]);
 
   return (
     <Accordion

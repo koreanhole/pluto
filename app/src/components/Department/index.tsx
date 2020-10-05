@@ -10,12 +10,13 @@ import { userDataFirestore } from "util/firebase/firestore";
 
 export default function Department() {
   const navigation = useNavigation();
+
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
   const expoPushToken = useSelector(getExpoPushToken);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "즐겨찾기",
+      headerTitle: "즐겨찾기 / 알림",
     });
   });
 

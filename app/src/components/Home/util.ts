@@ -1,4 +1,4 @@
-import { parse, differenceInDays, format } from "date-fns";
+import { parse, differenceInDays, format, getDay } from "date-fns";
 
 export function getDescriptiveDateDifference(date: string) {
   const parsedDateTime = parse(date, "yyyy-MM-dd", new Date());
@@ -17,4 +17,26 @@ export function getDescriptiveDateDifference(date: string) {
 
 export function getFormattedDateString(date: Date) {
   return format(date, "yyyy-MM-dd");
+}
+
+export function getLocalizedDay(date: string) {
+  const parsedDateTime = parse(date, "yyyy-MM-dd", new Date());
+  const dayInNumber = getDay(parsedDateTime);
+
+  switch (dayInNumber) {
+    case 0:
+      return "일";
+    case 1:
+      return "월";
+    case 2:
+      return "화";
+    case 3:
+      return "수";
+    case 4:
+      return "목";
+    case 5:
+      return "금";
+    case 6:
+      return "토";
+  }
 }

@@ -2,8 +2,7 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components/native";
 import { Text, Alert, View, StyleSheet, Platform } from "react-native";
-import { Button } from "react-native-elements";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Chip } from "react-native-paper";
 import { deleteFromFavoriteDepartmentList } from "./redux/actions";
 import { getFavoriteDepartmentList } from "./redux/selectors";
 import theme from "theme";
@@ -33,46 +32,51 @@ const DepartmentBadgeItem = ({
   }, [favoriteDepartmentList]);
 
   const handleClickDepartmentBadgeItem = React.useCallback(() => {
-    Alert.alert("즐겨찾기에서 삭제하시겠습니까?", departmentName, [
-      {
-        text: "취소",
-        style: "cancel",
-      },
-      {
-        text: "확인",
-        onPress: handleDeleteFromFavoriteDepartmentList,
-        style: "default",
-      },
-    ]);
+    if (favoriteDepartmentList.length == 1) {
+      Alert.alert("즐겨찾기에서 삭제할 수 없습니다.", departmentName, [
+        {
+          text: "확인",
+          style: "default",
+        },
+      ]);
+    } else {
+      Alert.alert("즐겨찾기에서 삭제하시겠습니까?", departmentName, [
+        {
+          text: "취소",
+          style: "cancel",
+        },
+        {
+          text: "확인",
+          onPress: handleDeleteFromFavoriteDepartmentList,
+          style: "default",
+        },
+      ]);
+    }
   }, []);
 
   return (
-    <Button
-      raised={true}
-      title={departmentName}
-      onPress={handleClickDepartmentBadgeItem}
-      icon={
-        <View style={BadgeButtonStyles.badgeContainer}>
-          <MaterialCommunityIcons
-            name="bell"
-            size={15}
-            color={theme.colors.white}
-          />
-          <MaterialIcons name="clear" color={theme.colors.white} size={15} />
-        </View>
-      }
-      iconRight={true}
-      containerStyle={{
-        alignSelf: "flex-start",
-        marginRight: 8,
-        marginBottom: 8,
-      }}
-      buttonStyle={{
-        borderRadius: 100,
-        backgroundColor: randomColor({ seed: departmentName }),
-      }}
-      titleStyle={{ fontSize: 15, fontWeight: "bold" }}
-    />
+    <View style={BadgeButtonStyles.badgeContainer}>
+      <Chip
+        onPress={handleClickDepartmentBadgeItem}
+        onClose={handleClickDepartmentBadgeItem}
+        selectedColor={theme.colors.white}
+        icon="bell"
+        textStyle={{
+          color: theme.colors.white,
+          fontSize: 15,
+          fontWeight: "bold",
+        }}
+        style={{
+          backgroundColor: randomColor({
+            seed: departmentName,
+            luminosity: "bright",
+            alpha: 1,
+          }),
+        }}
+      >
+        <Text>{departmentName}</Text>
+      </Chip>
+    </View>
   );
 };
 
@@ -99,6 +103,8 @@ export default function DepartmentBadge() {
 
 const BadgeButtonStyles = StyleSheet.create({
   badgeContainer: {
-    flexDirection: "row",
+    marginRight: 8,
+    marginBottom: 8,
+    color: theme.colors.white,
   },
 });
