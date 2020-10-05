@@ -71,7 +71,7 @@ export default function Home() {
     );
     const subscription = Notifications.addNotificationResponseReceivedListener(
       (response) => {
-        const responseData = response.notification.request.content.data.body;
+        const responseData = response.notification.request.content.data;
         navigation.navigate("Article", {
           // @ts-ignore Object is of type 'unknown'.ts(2571)
           deptCode: responseData.deptCode,
