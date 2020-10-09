@@ -31,7 +31,7 @@ export default function Home() {
   const fetchInitialNotice = () => {
     const query = noticeFirestore
       .where("deptName", "in", favoriteDepartmentList)
-      .orderBy("createdDateTimestamp", "desc")
+      .orderBy("createdDate", "desc")
       .limit(50);
     setInitialLoading(true);
     query.get().then((documentSnapshots) => {
