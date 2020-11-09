@@ -13,5 +13,3 @@ Monolithic Repository for Pluto aka UOS공지사항
 ## server
 
 * Python3를 사용한 서울시립대학교 공지사항 스크래핑 및 Firestore업로드<br/>
-
-* AWS EC2에 Deploy
