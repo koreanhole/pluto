@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, FlatList, RefreshControl } from "react-native";
+import { View, FlatList, RefreshControl, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard from "./NoticeCard";
@@ -34,26 +34,39 @@ export default function Home() {
       .orderBy("createdDate", "desc")
       .limit(50);
     setInitialLoading(true);
-    query.get().then((documentSnapshots) => {
-      const fetchedNoticeData: NoticeArticle[] = documentSnapshots.docs.map(
-        (document) => {
-          const fetchedData = document.data();
-          return {
-            createdDateTimestamp: fetchedData.createdDateTimestamp,
-            deptCode: fetchedData.deptCode,
-            deptName: fetchedData.deptName,
-            authorDept: fetchedData.authorDept,
-            title: fetchedData.title,
-            createdDate: fetchedData.createdDate,
-            authorName: fetchedData.authorName,
-            listId: fetchedData.listId,
-            favoriteCount: fetchedData.favoriteCount,
-          };
-        }
-      );
-      setFlatListData(fetchedNoticeData);
-      setInitialLoading(false);
-    });
+    query
+      .get()
+      .then((documentSnapshots) => {
+        const fetchedNoticeData: NoticeArticle[] = documentSnapshots.docs.map(
+          (document) => {
+            const fetchedData = document.data();
+            return {
+              createdDateTimestamp: fetchedData.createdDateTimestamp,
+              deptCode: fetchedData.deptCode,
+              deptName: fetchedData.deptName,
+              authorDept: fetchedData.authorDept,
+              title: fetchedData.title,
+              createdDate: fetchedData.createdDate,
+              authorName: fetchedData.authorName,
+              listId: fetchedData.listId,
+              favoriteCount: fetchedData.favoriteCount,
+            };
+          }
+        );
+        setFlatListData(fetchedNoticeData);
+        setInitialLoading(false);
+      })
+      .catch((error) => {
+        Alert.alert(
+          "공지사항을 불러올 수 없습니다.",
+          "잠시 후 다시 시도해주세요ㅠㅠ",
+          [
+            {
+              text: "확인",
+            },
+          ]
+        );
+      });
   };
 
   React.useEffect(fetchInitialNotice, [favoriteDepartmentList]);
