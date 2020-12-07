@@ -135,7 +135,7 @@ export default function HeaderRightButton({
     <View style={HeaderRightStyles.container}>
       {typeof attachment !== "undefined" && attachment.length !== 0 && (
         <MaterialIcons
-          name="get-app"
+          name="cloud-download"
           size={theme.size.headerIconSize}
           onPress={handleClickDownloadButton}
           style={HeaderRightStyles.icon}

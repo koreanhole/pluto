@@ -12,19 +12,19 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { showSnackbar } from "modules/Snackbar/redux/actions";
 
-type AccordionSection = {
-  departmentType: string;
-  departmentList: string[];
+type DepartmentSection = {
+  title: string;
+  data: string[];
 };
 
 type AccordionTextProps = {
   type: "HEADER" | "CONTENT";
 };
 
-const ACCORDIONSECTIONS: AccordionSection[] = [
+export const DEPARTMENT_SECTIONS: DepartmentSection[] = [
   {
-    departmentType: "전체공지",
-    departmentList: [
+    title: "전체공지",
+    data: [
       "일반공지",
       "학사공지",
       "직원채용",
@@ -34,8 +34,8 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
     ],
   },
   {
-    departmentType: "공과대학",
-    departmentList: [
+    title: "공과대학",
+    data: [
       "공과대학",
       "전자전기컴퓨터공학부",
       "컴퓨터과학부",
@@ -46,12 +46,12 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
     ],
   },
   {
-    departmentType: "경영대학",
-    departmentList: ["경영학부"],
+    title: "경영대학",
+    data: ["경영학부"],
   },
   {
-    departmentType: "정경대학",
-    departmentList: [
+    title: "정경대학",
+    data: [
       "정경대학",
       "행정학과",
       "국제관계학과",
@@ -61,8 +61,8 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
     ],
   },
   {
-    departmentType: "인문대학",
-    departmentList: [
+    title: "인문대학",
+    data: [
       "인문대학",
       "영어영문학과",
       "국어국문학과",
@@ -72,8 +72,8 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
     ],
   },
   {
-    departmentType: "자연과학대학",
-    departmentList: [
+    title: "자연과학대학",
+    data: [
       "자연과학대학",
       "수학과",
       "통계학과",
@@ -83,8 +83,8 @@ const ACCORDIONSECTIONS: AccordionSection[] = [
     ],
   },
   {
-    departmentType: "그 밖의 부서",
-    departmentList: ["생활관", "국제교육원"],
+    title: "그 밖의 부서",
+    data: ["생활관", "국제교육원"],
   },
 ];
 
@@ -110,15 +110,15 @@ const AccordionContentItemContainer = styled.View`
 `;
 
 const AccordionHeader = (
-  section: AccordionSection,
+  section: DepartmentSection,
   _index: number,
   isActive: boolean,
-  _sections: AccordionSection[]
+  _sections: DepartmentSection[]
 ) => {
   return (
     <>
       <AccordionHeaderContainer>
-        <AccordionText type="HEADER">{section.departmentType}</AccordionText>
+        <AccordionText type="HEADER">{section.title}</AccordionText>
         {isActive ? (
           <MaterialIcons name="keyboard-arrow-up" size={24} color="black" />
         ) : (
@@ -130,10 +130,10 @@ const AccordionHeader = (
   );
 };
 
-const AccordionContent = (section: AccordionSection) => {
+const AccordionContent = (section: DepartmentSection) => {
   return (
     <View>
-      {section.departmentList.map((departmentName) => {
+      {section.data.map((departmentName) => {
         return (
           <AccrodionContentItem
             departmentName={departmentName}
@@ -186,7 +186,7 @@ export default function DepartmentAccordion() {
 
   return (
     <Accordion
-      sections={ACCORDIONSECTIONS}
+      sections={DEPARTMENT_SECTIONS}
       activeSections={activeDepartmentSection}
       renderHeader={AccordionHeader}
       renderContent={AccordionContent}

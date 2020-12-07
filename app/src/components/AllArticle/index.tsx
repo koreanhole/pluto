@@ -1,10 +1,75 @@
 import * as React from "react";
-import { View, Text } from "react-native";
+import { SectionList, Text, StyleSheet, View } from "react-native";
+import AppLayout from "modules/AppLayout";
+import { HomeContainer } from "components/Home/index";
+import { useNavigation } from "@react-navigation/native";
+import { DEPARTMENT_SECTIONS } from "components/Department/DepartmentAccordion";
+import theme from "theme";
+import { MaterialIcons } from "@expo/vector-icons";
 
-export default function AllArticle() {
+const DepartmentSectionHeader = ({ title }: { title: string }) => {
   return (
-    <View>
-      <Text>123</Text>
+    <View style={AllArticleStyles.sectionHeaderContainer}>
+      <Text style={AllArticleStyles.sectionHeaderTextStyle}>{title}</Text>
     </View>
   );
+};
+
+const DepartmentItem = ({ item }: { item: string }) => {
+  return (
+    <View style={AllArticleStyles.sectionItemContainerStyle}>
+      <Text style={AllArticleStyles.sectionItemTextStyles}>{item}</Text>
+      <MaterialIcons
+        name="keyboard-arrow-right"
+        size={24}
+        color={theme.colors.darkGrey}
+      />
+    </View>
+  );
+};
+
+export default function AllArticle() {
+  const navigation = useNavigation();
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "전체 공지사항",
+    });
+  });
+
+  return (
+    <AppLayout>
+      <HomeContainer>
+        <SectionList
+          sections={DEPARTMENT_SECTIONS}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item }) => <DepartmentItem item={item} />}
+          renderSectionHeader={({ section: { title } }) => (
+            <DepartmentSectionHeader title={title} />
+          )}
+        />
+      </HomeContainer>
+    </AppLayout>
+  );
 }
+
+const AllArticleStyles = StyleSheet.create({
+  sectionHeaderContainer: {
+    paddingLeft: 16,
+    paddingVertical: 8,
+    backgroundColor: theme.colors.ligthGrey,
+  },
+  sectionHeaderTextStyle: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  sectionItemContainerStyle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+  },
+  sectionItemTextStyles: {
+    fontSize: 16,
+  },
+});
