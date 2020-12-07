@@ -1,11 +1,8 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { Attachment, NoticeArticle } from "./redux/types";
-import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
 import theme from "theme";
 import { Alert, View, Platform } from "react-native";
 import * as WebBrowser from "expo-web-browser";
@@ -136,17 +133,17 @@ export default function HeaderRightButton({
 
   return (
     <View style={HeaderRightStyles.container}>
-      <FavoriteIcon />
       {typeof attachment !== "undefined" && attachment.length !== 0 && (
         <MaterialIcons
-          name="cloud-download"
+          name="get-app"
           size={theme.size.headerIconSize}
           onPress={handleClickDownloadButton}
           style={HeaderRightStyles.icon}
         />
       )}
-      <FontAwesome5
-        name="safari"
+      <FavoriteIcon />
+      <MaterialIcons
+        name="explore"
         size={theme.size.headerIconSize}
         onPress={handleClickOpenInBrowserButton}
         style={HeaderRightStyles.icon}
