@@ -70,9 +70,16 @@ export default function BottomTabNavigator() {
         name="Department"
         component={DepartmentStackNavigator}
         options={{
-          tabBarLabel: "설정",
-          tabBarIcon: ({ color, size }) => {
-            return <MaterialIcons name="settings" size={size} color={color} />;
+          tabBarLabel: "알림설정",
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName = focused ? "bell" : "bell-outline";
+            return (
+              <MaterialCommunityIcons
+                name={iconName}
+                size={size}
+                color={color}
+              />
+            );
           },
         }}
       />

@@ -106,14 +106,14 @@ export default function Article({ route }: { route: ArticleProps }) {
     return (
       <AppLayout>
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-          {/* <AdMobBanner
+          <AdMobBanner
             bannerSize="smartBannerPortrait"
             adUnitID={
               Platform.OS == "ios"
                 ? "ca-app-pub-2034052364864446/2682349606"
                 : "ca-app-pub-2034052364864446/5161544413"
             }
-          /> */}
+          />
           <ArticleContainer>
             <ArticleTitle>{noticeData.title}</ArticleTitle>
             <ArticleAdditionalInformation>
