@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { Attachment, NoticeArticle } from "./redux/types";
 import * as FileSystem from "expo-file-system";
@@ -148,8 +149,8 @@ export default function HeaderRightButton({
           style={HeaderRightStyles.icon}
         />
       )}
-      <MaterialIcons
-        name="open-in-browser"
+      <FontAwesome5
+        name="safari"
         size={theme.size.headerIconSize}
         onPress={handleClickOpenInBrowserButton}
         style={HeaderRightStyles.icon}

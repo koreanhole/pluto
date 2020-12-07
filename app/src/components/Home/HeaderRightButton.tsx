@@ -12,7 +12,7 @@ export default function HeaderRightButton() {
   }, [navigation]);
   return (
     <MaterialIcons
-      name="format-list-bulleted"
+      name="settings"
       size={theme.size.headerIconSize}
       onPress={handleClickHeaderRightButton}
       color={theme.colors.black}
