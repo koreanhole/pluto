@@ -3,6 +3,7 @@ import * as React from "react";
 import HomeStackNavigator from "./stack/HomeStackNavigator";
 import FavoriteStackNavigator from "./stack/FavoriteStackNavigator";
 import AllArticleStackNavigator from "./stack/AllArticleStackNavigator";
+import DepartmentStackNavigator from "./stack/DepartmentStackNavigator";
 import theme from "theme";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -60,8 +61,18 @@ export default function BottomTabNavigator() {
         options={{
           tabBarLabel: "저장",
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "favorite" : "favorite-border";
+            let iconName = focused ? "bookmark" : "bookmark-border";
             return <MaterialIcons name={iconName} size={size} color={color} />;
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Department"
+        component={DepartmentStackNavigator}
+        options={{
+          tabBarLabel: "설정",
+          tabBarIcon: ({ color, size }) => {
+            return <MaterialIcons name="settings" size={size} color={color} />;
           },
         }}
       />

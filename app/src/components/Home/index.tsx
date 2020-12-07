@@ -5,7 +5,6 @@ import AppLayout from "modules/AppLayout";
 import NoticeCard from "./NoticeCard";
 import { NoticeArticle } from "components/Article/redux/types";
 import styled from "styled-components/native";
-import HeaderRightButton from "./HeaderRightButton";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
 import { noticeFirestore } from "util/firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
@@ -56,7 +55,7 @@ export default function Home() {
         setFlatListData(fetchedNoticeData);
         setInitialLoading(false);
       })
-      .catch((error) => {
+      .catch(() => {
         Alert.alert(
           "공지사항을 불러올 수 없습니다.",
           "잠시 후 다시 시도해주세요ㅠㅠ",
@@ -74,7 +73,6 @@ export default function Home() {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "UOS 공지사항 🌺",
-      headerRight: () => <HeaderRightButton />,
     });
   }, [navigation]);
 

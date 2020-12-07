@@ -16,7 +16,7 @@ export default function Department() {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "즐겨찾기 / 알림",
+      headerTitle: "알림설정",
     });
   });
 
