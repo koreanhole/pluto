@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
 import HomeStackNavigator from "./stack/HomeStackNavigator";
 import FavoriteStackNavigator from "./stack/FavoriteStackNavigator";
+import AllArticleStackNavigator from "./stack/AllArticleStackNavigator";
 import theme from "theme";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -26,6 +27,23 @@ export default function BottomTabNavigator() {
           tabBarLabel: "홈",
           tabBarIcon: ({ focused, color, size }) => {
             let iconName = focused ? "home" : "home-outline";
+            return (
+              <MaterialCommunityIcons
+                name={iconName}
+                size={size}
+                color={color}
+              />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="AllArticle"
+        component={AllArticleStackNavigator}
+        options={{
+          tabBarLabel: "전체 공지사항",
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName = focused ? "book-open" : "book-open-outline";
             return (
               <MaterialCommunityIcons
                 name={iconName}
