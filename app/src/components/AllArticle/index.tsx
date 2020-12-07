@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { DEPARTMENT_SECTIONS } from "components/Department/DepartmentAccordion";
 import theme from "theme";
 import { MaterialIcons } from "@expo/vector-icons";
+import Ripple from "react-native-material-ripple";
 
 const DepartmentSectionHeader = ({ title }: { title: string }) => {
   return (
@@ -16,15 +17,21 @@ const DepartmentSectionHeader = ({ title }: { title: string }) => {
 };
 
 const DepartmentItem = ({ item }: { item: string }) => {
+  const navigation = useNavigation();
+  const handleClickDepartmentItem = React.useCallback(() => {
+    navigation.navigate("ArticleList", { deptName: item });
+  }, [item]);
   return (
-    <View style={AllArticleStyles.sectionItemContainerStyle}>
-      <Text style={AllArticleStyles.sectionItemTextStyles}>{item}</Text>
-      <MaterialIcons
-        name="keyboard-arrow-right"
-        size={24}
-        color={theme.colors.darkGrey}
-      />
-    </View>
+    <Ripple onPress={handleClickDepartmentItem}>
+      <View style={AllArticleStyles.sectionItemContainerStyle}>
+        <Text style={AllArticleStyles.sectionItemTextStyles}>{item}</Text>
+        <MaterialIcons
+          name="keyboard-arrow-right"
+          size={24}
+          color={theme.colors.darkGrey}
+        />
+      </View>
+    </Ripple>
   );
 };
 

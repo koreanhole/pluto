@@ -1,6 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import AllArticle from "components/AllArticle";
+import Article from "components/Article";
+import ArticleList from "components/AllArticle/ArticleList";
 import theme from "theme";
 import { StyledHeaderIcon } from "./base";
 
@@ -31,6 +33,8 @@ export default function AllArticleStackNavigator() {
       }}
     >
       <Stack.Screen name="AllArticle" component={AllArticle} />
+      <Stack.Screen name="ArticleList" component={ArticleList} />
+      <Stack.Screen name="Article" component={Article} />
     </Stack.Navigator>
   );
 }
