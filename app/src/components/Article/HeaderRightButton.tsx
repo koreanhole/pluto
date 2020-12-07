@@ -64,19 +64,15 @@ export default function HeaderRightButton({
       },
       async (buttonIndex) => {
         if (buttonIndex !== 0) {
-          try {
-            const pad = fileName[buttonIndex].split(".").pop();
-            // FIXME: 첨부파일의 이름을 한글로 하면 경로를 인식하지 못함
-            const uri = FileSystem.downloadAsync(
-              fileLink[buttonIndex - 1],
-              FileSystem.cacheDirectory + "attachment." + pad
-            ).then(({ uri }) => {
-              return uri;
-            });
-            Sharing.shareAsync(await uri);
-          } catch (error) {
-            console.log(error);
-          }
+          await WebBrowser.openBrowserAsync(fileLink[buttonIndex - 1]).catch(
+            () => {
+              Alert.alert("첨부 파일을 열 수 없습니다.", "", [
+                {
+                  text: "확인",
+                },
+              ]);
+            }
+          );
         }
       }
     );
