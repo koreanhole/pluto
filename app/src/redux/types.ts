@@ -6,4 +6,4 @@ export type RootAction = ActionType<typeof rootAction>;
 
 export type RootState = StateType<typeof rootReducer>;
 
-export type FetchState = "READY" | "FETCHING" | "SUCCESS" | "FAILURE";
+export type FetchState = "READY" | "SUCCESS" | "FAILURE";

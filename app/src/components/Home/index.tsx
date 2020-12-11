@@ -25,7 +25,7 @@ export default function Home() {
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
-  const flatListData = useSelector(getInitialNotice);
+  const noticeData = useSelector(getInitialNotice);
   const noticeFetchState = useSelector(getNoticeFetchState);
 
   React.useLayoutEffect(() => {
@@ -63,13 +63,13 @@ export default function Home() {
   return (
     <AppLayout>
       <HomeContainer>
-        {typeof flatListData !== "undefined" ? (
+        {noticeFetchState == "SUCCESS" ? (
           <FlatList
-            data={flatListData}
+            data={noticeData}
             keyExtractor={(item, index) => item.title + index}
             refreshControl={
               <RefreshControl
-                refreshing={noticeFetchState == "FETCHING"}
+                refreshing={false}
                 onRefresh={() =>
                   dispatch(
                     fetchInitialNoticeAsync.request({

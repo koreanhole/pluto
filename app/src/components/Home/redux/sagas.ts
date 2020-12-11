@@ -18,7 +18,7 @@ const fetchInitialNotice = function* (
     );
     yield put(fetchInitialNoticeAsync.success(noticeData));
   } catch {
-    yield put(fetchInitialNoticeAsync.failure("failure"));
+    yield put(fetchInitialNoticeAsync.failure("NOTICE_CANNOT_FETCH"));
     Alert.alert("공지사항을 불러올 수 없습니다.", "잠시 후 다시 시도해주세요", [
       {
         text: "확인",
