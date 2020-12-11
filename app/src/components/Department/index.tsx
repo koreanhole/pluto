@@ -6,7 +6,7 @@ import DepartmentAccordion from "./DepartmentAccordion";
 import DepartmentBadge from "./DepartmentBadge";
 import { useNavigation } from "@react-navigation/native";
 import { getFavoriteDepartmentList, getExpoPushToken } from "./redux/selectors";
-import { userDataFirestore } from "util/firebase/firestore";
+import { userDataFirestore } from "apis/firestore";
 
 export default function Department() {
   const navigation = useNavigation();

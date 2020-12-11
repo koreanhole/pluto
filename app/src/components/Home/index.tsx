@@ -6,7 +6,7 @@ import NoticeCard from "./NoticeCard";
 import { NoticeArticle } from "components/Article/redux/types";
 import styled from "styled-components/native";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
-import { noticeFirestore } from "util/firebase/firestore";
+import { noticeFirestore } from "apis/firestore";
 import { useNavigation } from "@react-navigation/native";
 import _ from "underscore";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
@@ -73,15 +73,15 @@ export default function Home() {
   //     });
   // };
 
-  React.useEffect(() => {
-    dispatch(fetchInitialNoticeAsync.request(favoriteDepartmentList));
-  }, [favoriteDepartmentList]);
-
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "UOS 공지사항 🌺",
     });
   }, [navigation]);
+
+  React.useEffect(() => {
+    dispatch(fetchInitialNoticeAsync.request(favoriteDepartmentList));
+  }, [favoriteDepartmentList]);
 
   React.useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>

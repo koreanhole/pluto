@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard from "components/Home/NoticeCard";
 import { NoticeArticle } from "components/Article/redux/types";
-import { noticeFirestore } from "util/firebase/firestore";
+import { noticeFirestore } from "apis/firestore";
 import { useNavigation } from "@react-navigation/native";
 import _ from "underscore";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
