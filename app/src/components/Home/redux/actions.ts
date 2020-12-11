@@ -10,4 +10,4 @@ export const fetchInitialNoticeAsync = createAsyncAction(
   FETCH_INITIAL_NOTICE_REQUEST,
   FETCH_INITIAL_NOTICE_SUCCESS,
   FETCH_INITIAL_NOITICE_FAILURE
-)<string[], NoticeArticle[] | null, string>();
+)<FetchInitialNoticePayload, NoticeArticle[] | null, string>();

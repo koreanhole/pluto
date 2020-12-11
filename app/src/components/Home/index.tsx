@@ -1,12 +1,10 @@
 import * as React from "react";
-import { View, FlatList, RefreshControl, Alert } from "react-native";
+import { View, FlatList, RefreshControl } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard from "./NoticeCard";
-import { NoticeArticle } from "components/Article/redux/types";
 import styled from "styled-components/native";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
-import { noticeFirestore } from "apis/firestore";
 import { useNavigation } from "@react-navigation/native";
 import _ from "underscore";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
@@ -29,49 +27,6 @@ export default function Home() {
 
   const flatListData = useSelector(getInitialNotice);
   const noticeFetchState = useSelector(getNoticeFetchState);
-  // const [flatListData, setFlatListData] = React.useState<NoticeArticle[]>();
-  // const [initialLoading, setInitialLoading] = React.useState(true);
-
-  // const fetchInitialNotice = () => {
-  //   const query = noticeFirestore
-  //     .where("deptName", "in", favoriteDepartmentList)
-  //     .orderBy("createdDate", "desc")
-  //     .limit(50);
-  //   setInitialLoading(true);
-  //   query
-  //     .get()
-  //     .then((documentSnapshots) => {
-  //       const fetchedNoticeData: NoticeArticle[] = documentSnapshots.docs.map(
-  //         (document) => {
-  //           const fetchedData = document.data();
-  //           return {
-  //             createdDateTimestamp: fetchedData.createdDateTimestamp,
-  //             deptCode: fetchedData.deptCode,
-  //             deptName: fetchedData.deptName,
-  //             authorDept: fetchedData.authorDept,
-  //             title: fetchedData.title,
-  //             createdDate: fetchedData.createdDate,
-  //             authorName: fetchedData.authorName,
-  //             listId: fetchedData.listId,
-  //             favoriteCount: fetchedData.favoriteCount,
-  //           };
-  //         }
-  //       );
-  //       setFlatListData(fetchedNoticeData);
-  //       setInitialLoading(false);
-  //     })
-  //     .catch(() => {
-  //       Alert.alert(
-  //         "공지사항을 불러올 수 없습니다.",
-  //         "잠시 후 다시 시도해주세요ㅠㅠ",
-  //         [
-  //           {
-  //             text: "확인",
-  //           },
-  //         ]
-  //       );
-  //     });
-  // };
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -80,7 +35,11 @@ export default function Home() {
   }, [navigation]);
 
   React.useEffect(() => {
-    dispatch(fetchInitialNoticeAsync.request(favoriteDepartmentList));
+    dispatch(
+      fetchInitialNoticeAsync.request({
+        departmentList: favoriteDepartmentList,
+      })
+    );
   }, [favoriteDepartmentList]);
 
   React.useEffect(() => {
@@ -113,7 +72,9 @@ export default function Home() {
                 refreshing={noticeFetchState == "FETCHING"}
                 onRefresh={() =>
                   dispatch(
-                    fetchInitialNoticeAsync.request(favoriteDepartmentList)
+                    fetchInitialNoticeAsync.request({
+                      departmentList: favoriteDepartmentList,
+                    })
                   )
                 }
                 tintColor={theme.colors.primary}
