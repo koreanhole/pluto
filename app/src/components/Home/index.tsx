@@ -12,8 +12,11 @@ import { setExpoPushToken } from "components/Department/redux/actions";
 import * as Notifications from "expo-notifications";
 import LoadingIndicator from "modules/LoadingIndicator";
 import theme from "theme";
-import { fetchInitialNoticeAsync } from "./redux/actions";
-import { getHomeInitialNotice, getNoticeFetchState } from "./redux/selectors";
+import { fetchInitialNoticeAsync } from "components/Article/redux/actions";
+import {
+  getHomeInitialNotice,
+  getNoticeFetchState,
+} from "components/Article/redux/selectors";
 
 export const HomeContainer = styled(View)`
   flex: 1;

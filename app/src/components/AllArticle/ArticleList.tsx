@@ -10,11 +10,11 @@ import { setExpoPushToken } from "components/Department/redux/actions";
 import * as Notifications from "expo-notifications";
 import LoadingIndicator from "modules/LoadingIndicator";
 import { HomeContainer } from "components/Home/index";
-import { fetchInitialNoticeAsync } from "components/Home/redux/actions";
+import { fetchInitialNoticeAsync } from "components/Article/redux/actions";
 import {
   getAllArticleInitialNotice,
   getNoticeFetchState,
-} from "components/Home/redux/selectors";
+} from "components/Article/redux/selectors";
 
 type ArticleListProps = {
   key: string;
