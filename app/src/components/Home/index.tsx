@@ -13,7 +13,7 @@ import * as Notifications from "expo-notifications";
 import LoadingIndicator from "modules/LoadingIndicator";
 import theme from "theme";
 import { fetchInitialNoticeAsync } from "./redux/actions";
-import { getInitialNotice, getNoticeFetchState } from "./redux/selectors";
+import { getHomeInitialNotice, getNoticeFetchState } from "./redux/selectors";
 
 export const HomeContainer = styled(View)`
   flex: 1;
@@ -25,7 +25,7 @@ export default function Home() {
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
-  const noticeData = useSelector(getInitialNotice);
+  const noticeData = useSelector(getHomeInitialNotice);
   const noticeFetchState = useSelector(getNoticeFetchState);
 
   React.useLayoutEffect(() => {
@@ -38,6 +38,7 @@ export default function Home() {
     dispatch(
       fetchInitialNoticeAsync.request({
         departmentList: favoriteDepartmentList,
+        pageType: "HOME",
       })
     );
   }, [favoriteDepartmentList]);
@@ -74,6 +75,7 @@ export default function Home() {
                   dispatch(
                     fetchInitialNoticeAsync.request({
                       departmentList: favoriteDepartmentList,
+                      pageType: "HOME",
                     })
                   )
                 }

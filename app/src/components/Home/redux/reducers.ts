@@ -9,10 +9,23 @@ const reducer = combineReducers({
     .handleAction(fetchInitialNoticeAsync.request, () => "READY")
     .handleAction(fetchInitialNoticeAsync.success, () => "SUCCESS")
     .handleAction(fetchInitialNoticeAsync.failure, () => "FAILURE"),
-  initialNotice: createReducer<NoticeArticle[] | null>(null).handleAction(
+  homeInitialNotice: createReducer<NoticeArticle[] | null>(null).handleAction(
     fetchInitialNoticeAsync.success,
-    (_state, action) => action.payload
+    (state, action) => {
+      if (action.payload !== null && action.payload.pageType == "HOME") {
+        return action.payload.noticeArticles;
+      }
+      return state;
+    }
   ),
+  allArticleInitialNotice: createReducer<NoticeArticle[] | null>(
+    null
+  ).handleAction(fetchInitialNoticeAsync.success, (state, action) => {
+    if (action.payload !== null && action.payload.pageType == "ALL_ARTICLE") {
+      return action.payload.noticeArticles;
+    }
+    return state;
+  }),
 });
 
 export default reducer;

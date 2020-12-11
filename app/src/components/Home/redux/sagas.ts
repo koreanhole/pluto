@@ -10,13 +10,18 @@ import { loadInitialNotice } from "apis/firestore";
 const fetchInitialNotice = function* (
   action: ReturnType<typeof fetchInitialNoticeAsync.request>
 ) {
-  const { departmentList } = action.payload;
+  const { departmentList, pageType } = action.payload;
   try {
     const noticeData: NoticeArticle[] | null = yield call(
       loadInitialNotice,
       departmentList
     );
-    yield put(fetchInitialNoticeAsync.success(noticeData));
+    yield put(
+      fetchInitialNoticeAsync.success({
+        pageType: pageType,
+        noticeArticles: noticeData,
+      })
+    );
   } catch {
     yield put(fetchInitialNoticeAsync.failure("NOTICE_CANNOT_FETCH"));
     Alert.alert("공지사항을 불러올 수 없습니다.", "잠시 후 다시 시도해주세요", [

@@ -12,7 +12,7 @@ import LoadingIndicator from "modules/LoadingIndicator";
 import { HomeContainer } from "components/Home/index";
 import { fetchInitialNoticeAsync } from "components/Home/redux/actions";
 import {
-  getInitialNotice,
+  getAllArticleInitialNotice,
   getNoticeFetchState,
 } from "components/Home/redux/selectors";
 
@@ -27,13 +27,18 @@ type ArticleListProps = {
 export default function ArticleList({ route }: { route: ArticleListProps }) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const noticeData = useSelector(getInitialNotice);
+  const noticeData = useSelector(getAllArticleInitialNotice);
   const noticeFetchState = useSelector(getNoticeFetchState);
 
   const deptName = route.params.deptName;
 
   React.useEffect(() => {
-    dispatch(fetchInitialNoticeAsync.request({ departmentList: [deptName] }));
+    dispatch(
+      fetchInitialNoticeAsync.request({
+        departmentList: [deptName],
+        pageType: "ALL_ARTICLE",
+      })
+    );
   }, []);
 
   React.useLayoutEffect(() => {
