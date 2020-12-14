@@ -4,7 +4,7 @@ import { combineReducers } from "redux";
 import {
   saveNotice,
   deleteSavedNotice,
-  fetchInitialNoticeAsync,
+  fetchInitialNoticeListAsync,
 } from "./actions";
 import { NoticeArticle } from "./types";
 import _ from "underscore";
@@ -31,22 +31,21 @@ const reducer = combineReducers({
         return [];
       }
     }),
-  intialNoticeFetchState: createReducer("READY" as FetchState)
-    .handleAction(fetchInitialNoticeAsync.request, () => "READY")
-    .handleAction(fetchInitialNoticeAsync.success, () => "SUCCESS")
-    .handleAction(fetchInitialNoticeAsync.failure, () => "FAILURE"),
-  homeInitialNotice: createReducer<NoticeArticle[] | null>(null).handleAction(
-    fetchInitialNoticeAsync.success,
-    (state, action) => {
-      if (action.payload !== null && action.payload.pageType == "HOME") {
-        return action.payload.noticeArticles;
-      }
-      return state;
-    }
-  ),
-  allArticleInitialNotice: createReducer<NoticeArticle[] | null>(
+  intialNoticeListFetchState: createReducer("READY" as FetchState)
+    .handleAction(fetchInitialNoticeListAsync.request, () => "READY")
+    .handleAction(fetchInitialNoticeListAsync.success, () => "SUCCESS")
+    .handleAction(fetchInitialNoticeListAsync.failure, () => "FAILURE"),
+  homeInitialNoticeList: createReducer<NoticeArticle[] | null>(
     null
-  ).handleAction(fetchInitialNoticeAsync.success, (state, action) => {
+  ).handleAction(fetchInitialNoticeListAsync.success, (state, action) => {
+    if (action.payload !== null && action.payload.pageType == "HOME") {
+      return action.payload.noticeArticles;
+    }
+    return state;
+  }),
+  allArticleInitialNoticeList: createReducer<NoticeArticle[] | null>(
+    null
+  ).handleAction(fetchInitialNoticeListAsync.success, (state, action) => {
     if (action.payload !== null && action.payload.pageType == "ALL_ARTICLE") {
       return action.payload.noticeArticles;
     }

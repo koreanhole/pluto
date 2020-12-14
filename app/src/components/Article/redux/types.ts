@@ -21,12 +21,12 @@ export type NoticeArticle = {
   favoriteCount?: number;
 };
 
-export type FetchInitialNoticePayload = {
+export type FetchInitialNoticeListPayload = {
   departmentList: string[];
   pageType: PageType;
 };
 
-export type FetchInitialNoticeSuccessPayload = {
+export type FetchInitialNoticeListSuccessPayload = {
   noticeArticles: NoticeArticle[] | null;
   pageType: PageType;
 };

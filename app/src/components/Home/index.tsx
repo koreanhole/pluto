@@ -12,7 +12,7 @@ import { setExpoPushToken } from "components/Department/redux/actions";
 import * as Notifications from "expo-notifications";
 import LoadingIndicator from "modules/LoadingIndicator";
 import theme from "theme";
-import { fetchInitialNoticeAsync } from "components/Article/redux/actions";
+import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
 import {
   getHomeInitialNotice,
   getNoticeFetchState,
@@ -39,7 +39,7 @@ export default function Home() {
 
   React.useEffect(() => {
     dispatch(
-      fetchInitialNoticeAsync.request({
+      fetchInitialNoticeListAsync.request({
         departmentList: favoriteDepartmentList,
         pageType: "HOME",
       })
@@ -76,7 +76,7 @@ export default function Home() {
                 refreshing={false}
                 onRefresh={() =>
                   dispatch(
-                    fetchInitialNoticeAsync.request({
+                    fetchInitialNoticeListAsync.request({
                       departmentList: favoriteDepartmentList,
                       pageType: "HOME",
                     })

@@ -10,7 +10,7 @@ import { setExpoPushToken } from "components/Department/redux/actions";
 import * as Notifications from "expo-notifications";
 import LoadingIndicator from "modules/LoadingIndicator";
 import { HomeContainer } from "components/Home/index";
-import { fetchInitialNoticeAsync } from "components/Article/redux/actions";
+import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
 import {
   getAllArticleInitialNotice,
   getNoticeFetchState,
@@ -34,7 +34,7 @@ export default function ArticleList({ route }: { route: ArticleListProps }) {
 
   React.useEffect(() => {
     dispatch(
-      fetchInitialNoticeAsync.request({
+      fetchInitialNoticeListAsync.request({
         departmentList: [deptName],
         pageType: "ALL_ARTICLE",
       })
