@@ -5,7 +5,7 @@ import {
 } from "./actions";
 import { Alert } from "react-native";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { loadInitialNotice } from "apis/firestore";
+import { loadInitialNoticeList } from "apis/firestore";
 
 const fetchInitialNotice = function* (
   action: ReturnType<typeof fetchInitialNoticeListAsync.request>
@@ -13,7 +13,7 @@ const fetchInitialNotice = function* (
   const { departmentList, pageType } = action.payload;
   try {
     const noticeData: NoticeArticle[] | null = yield call(
-      loadInitialNotice,
+      loadInitialNoticeList,
       departmentList
     );
     yield put(

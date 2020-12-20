@@ -7,12 +7,12 @@ export const getNoticeDocumentId = (deptCode: string, listId: string) => {
   return `${deptCode}&${listId}`;
 };
 
-export const loadInitialNotice = async (departmentList: string[]) => {
+export const loadInitialNoticeList = async (departmentList: string[]) => {
   const query = noticeFirestore
     .where("deptName", "in", departmentList)
     .orderBy("createdDate", "desc")
     .limit(50);
-  const fetchedData = await query
+  const initialNoticeList = await query
     .get()
     .then((documentSnapshots) => {
       const fetchedNoticeData: NoticeArticle[] = documentSnapshots.docs.map(
@@ -36,5 +36,43 @@ export const loadInitialNotice = async (departmentList: string[]) => {
     .catch(() => {
       return null;
     });
-  return fetchedData;
+  return initialNoticeList;
+};
+
+export const loadNoticeData = async ({
+  deptCode,
+  listId,
+}: {
+  deptCode: string;
+  listId: string;
+}) => {
+  const noticeDocumentId = getNoticeDocumentId(deptCode, listId);
+  let noticeRef = noticeFirestore.doc(noticeDocumentId);
+
+  const noticeData = await noticeRef
+    .get()
+    .then((document) => {
+      const fetchedData = document.data();
+      if (document.exists && typeof fetchedData !== "undefined") {
+        const fetchedNoticeData: NoticeArticle = {
+          attachmentLink: fetchedData.attachmentLink,
+          authorDept: fetchedData.authorDept,
+          authorName: fetchedData.authorName,
+          contentHtml: fetchedData.contentHtml,
+          createdDate: fetchedData.createdDate,
+          title: fetchedData.title,
+          contentString: fetchedData.contentString,
+          listId: fetchedData.listId,
+          deptName: fetchedData.deptName,
+          deptCode: fetchedData.deptCode,
+          url: fetchedData.url,
+        };
+        return fetchedNoticeData;
+      }
+      return null;
+    })
+    .catch(() => {
+      return null;
+    });
+  return noticeData;
 };

@@ -5,6 +5,7 @@ import {
   saveNotice,
   deleteSavedNotice,
   fetchInitialNoticeListAsync,
+  fetchNoticeDataAsync,
 } from "./actions";
 import { NoticeArticle } from "./types";
 import _ from "underscore";
@@ -51,6 +52,24 @@ const reducer = combineReducers({
     }
     return state;
   }),
+
+  noticeDataFetchState: createReducer("READY" as FetchState)
+    .handleAction(fetchNoticeDataAsync.request, () => "READY")
+    .handleAction(fetchNoticeDataAsync.success, () => "SUCCESS")
+    .handleAction(fetchNoticeDataAsync.failure, () => "FAILURE"),
+
+  noticeData: createReducer<NoticeArticle | null>(null).handleAction(
+    fetchNoticeDataAsync.success,
+    (state, action) => {
+      if (
+        typeof action.payload !== "undefined" &&
+        action.payload?.noticeArticle !== null
+      ) {
+        return action.payload?.noticeArticle;
+      }
+      return state;
+    }
+  ),
 });
 
 export default reducer;

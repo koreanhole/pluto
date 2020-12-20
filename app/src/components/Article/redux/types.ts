@@ -30,3 +30,12 @@ export type FetchInitialNoticeListSuccessPayload = {
   noticeArticles: NoticeArticle[] | null;
   pageType: PageType;
 };
+
+export type FetchNoticePayload = {
+  deptCode: string;
+  listId: string;
+};
+
+export type FetchNoticeSuccessPayload = {
+  noticeArticle: NoticeArticle;
+};

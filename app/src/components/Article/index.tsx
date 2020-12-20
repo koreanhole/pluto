@@ -44,44 +44,6 @@ export default function Article({ route }: { route: ArticleProps }) {
 
   const [noticeData, setNoticeData] = React.useState<NoticeArticle>();
 
-  const fetchNoticeData = async () => {
-    try {
-      const noticeDocumentId = getNoticeDocumentId(
-        route.params.deptCode,
-        route.params.listId
-      );
-      let noticeRef = noticeFirestore.doc(noticeDocumentId);
-
-      noticeRef.get().then((document) => {
-        if (document.exists) {
-          const fetchedData = document.data();
-          if (typeof fetchedData !== "undefined") {
-            const fetchedNoticeData: NoticeArticle = {
-              attachmentLink: fetchedData.attachmentLink,
-              authorDept: fetchedData.authorDept,
-              authorName: fetchedData.authorName,
-              contentHtml: fetchedData.contentHtml,
-              createdDate: fetchedData.createdDate,
-              title: fetchedData.title,
-              contentString: fetchedData.contentString,
-              listId: fetchedData.listId,
-              deptName: fetchedData.deptName,
-              deptCode: fetchedData.deptCode,
-              url: fetchedData.url,
-            };
-            setNoticeData(fetchedNoticeData);
-          }
-        }
-      });
-    } catch {
-      Alert.alert("공지사항을 불러올 수 없습니다.", "", [
-        {
-          text: "확인",
-        },
-      ]);
-    }
-  };
-
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
