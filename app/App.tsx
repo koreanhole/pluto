@@ -4,10 +4,9 @@ import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
 import { Provider as StoreProvider } from "react-redux";
 import RootNavigator from "navigators/RootNavigator";
 import createReduxStore from "redux/store";
-import { PersistGate } from "redux-persist/integration/react";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 
-const { store, persistor } = createReduxStore();
+const store = createReduxStore();
 
 export default function App() {
   //https://github.com/facebook/react-native/issues/12981
@@ -23,13 +22,11 @@ export default function App() {
 
   return (
     <StoreProvider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <ActionSheetProvider>
-          <PaperProvider theme={theme}>
-            <RootNavigator />
-          </PaperProvider>
-        </ActionSheetProvider>
-      </PersistGate>
+      <ActionSheetProvider>
+        <PaperProvider theme={theme}>
+          <RootNavigator />
+        </PaperProvider>
+      </ActionSheetProvider>
     </StoreProvider>
   );
 }

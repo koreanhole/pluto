@@ -11,7 +11,7 @@ import { NoticeArticle } from "components/Article/redux/types";
 
 const FlatListItem = ({ data }: { data: NoticeArticle }) => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const handleFlatListItemClick = React.useCallback(() => {
     navigation.navigate("Article", {
