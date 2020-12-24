@@ -1,10 +1,8 @@
 import * as React from "react";
-import { FlatList, Alert } from "react-native";
-import { useDispatch } from "react-redux";
+import { FlatList } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard from "components/Home/NoticeCard";
-import { NoticeArticle } from "components/Article/redux/types";
-import { noticeFirestore } from "util/firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import _ from "underscore";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
@@ -12,6 +10,11 @@ import { setExpoPushToken } from "components/Department/redux/actions";
 import * as Notifications from "expo-notifications";
 import LoadingIndicator from "modules/LoadingIndicator";
 import { HomeContainer } from "components/Home/index";
+import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
+import {
+  getAllArticleInitialNotice,
+  getNoticeFetchState,
+} from "components/Article/redux/selectors";
 
 type ArticleListProps = {
   key: string;
@@ -24,49 +27,19 @@ type ArticleListProps = {
 export default function ArticleList({ route }: { route: ArticleListProps }) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const noticeData = useSelector(getAllArticleInitialNotice);
+  const noticeFetchState = useSelector(getNoticeFetchState);
 
-  const [flatListData, setFlatListData] = React.useState<NoticeArticle[]>();
+  const deptName = route.params.deptName;
 
-  const fetchInitialNotice = () => {
-    const query = noticeFirestore
-      .where("deptName", "==", route.params.deptName)
-      .orderBy("createdDate", "desc")
-      .limit(50);
-    query
-      .get()
-      .then((documentSnapshots) => {
-        const fetchedNoticeData: NoticeArticle[] = documentSnapshots.docs.map(
-          (document) => {
-            const fetchedData = document.data();
-            return {
-              createdDateTimestamp: fetchedData.createdDateTimestamp,
-              deptCode: fetchedData.deptCode,
-              deptName: fetchedData.deptName,
-              authorDept: fetchedData.authorDept,
-              title: fetchedData.title,
-              createdDate: fetchedData.createdDate,
-              authorName: fetchedData.authorName,
-              listId: fetchedData.listId,
-              favoriteCount: fetchedData.favoriteCount,
-            };
-          }
-        );
-        setFlatListData(fetchedNoticeData);
+  React.useEffect(() => {
+    dispatch(
+      fetchInitialNoticeListAsync.request({
+        departmentList: [deptName],
+        pageType: "ALL_ARTICLE",
       })
-      .catch(() => {
-        Alert.alert(
-          "공지사항을 불러올 수 없습니다.",
-          "잠시 후 다시 시도해주세요ㅠㅠ",
-          [
-            {
-              text: "확인",
-            },
-          ]
-        );
-      });
-  };
-
-  React.useEffect(fetchInitialNotice, []);
+    );
+  }, []);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -95,9 +68,9 @@ export default function ArticleList({ route }: { route: ArticleListProps }) {
   return (
     <AppLayout>
       <HomeContainer>
-        {typeof flatListData !== "undefined" ? (
+        {noticeFetchState == "SUCCESS" ? (
           <FlatList
-            data={flatListData}
+            data={noticeData}
             keyExtractor={(item, index) => item.title + index}
             renderItem={(data) => (
               <NoticeCard

@@ -20,7 +20,7 @@ export default function HeaderRightButton({
 }: {
   url?: string;
   attachment?: Attachment[];
-  notice?: NoticeArticle;
+  notice: NoticeArticle | null;
 }) {
   const { showActionSheetWithOptions } = useActionSheet();
   const dispatch = useDispatch();
@@ -76,7 +76,7 @@ export default function HeaderRightButton({
   }, [fileName, fileLink]);
 
   const handleClickSaveNotice = () => {
-    if (typeof notice !== "undefined") {
+    if (notice !== null) {
       dispatch(saveNotice(notice));
       dispatch(
         showSnackbar({
@@ -91,7 +91,7 @@ export default function HeaderRightButton({
   };
 
   const handleClickDeleteNotice = () => {
-    if (typeof notice !== "undefined") {
+    if (notice !== null) {
       dispatch(deleteSavedNotice(notice));
       dispatch(
         showSnackbar({
@@ -108,7 +108,7 @@ export default function HeaderRightButton({
   const FavoriteIcon = () => {
     if (
       savedNoticeArticle !== null &&
-      typeof notice !== "undefined" &&
+      notice !== null &&
       _.findWhere(savedNoticeArticle, { title: notice.title })
     ) {
       return (

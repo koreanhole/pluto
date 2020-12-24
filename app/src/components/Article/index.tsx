@@ -1,18 +1,18 @@
 import * as React from "react";
 import AppLayout from "modules/AppLayout";
-import { ScrollView, Platform, Alert, StatusBar } from "react-native";
+import { ScrollView, Platform, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import HeaderRightButton from "./HeaderRightButton";
 import theme from "theme";
-import { noticeFirestore } from "util/firebase/firestore";
-import { NoticeArticle } from "./redux/types";
 import { Dimensions } from "react-native";
 import AutoHeightWebView from "react-native-autoheight-webview";
 import { useNavigation } from "@react-navigation/native";
-import { getNoticeDocumentId } from "util/firebase/firestore";
 import { AdMobBanner } from "expo-ads-admob";
 import * as WebBrowser from "expo-web-browser";
 import LoadingIndicator from "modules/LoadingIndicator";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchNoticeDataAsync } from "./redux/actions";
+import { getNoticeData } from "./redux/selectors";
 
 type ArticleProps = {
   key: string;
@@ -40,58 +40,20 @@ const ArticleAdditionalInformation = styled.Text`
 `;
 
 export default function Article({ route }: { route: ArticleProps }) {
+  const { deptCode, listId } = route.params;
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const [noticeData, setNoticeData] = React.useState<NoticeArticle>();
-
-  const fetchNoticeData = async () => {
-    try {
-      const noticeDocumentId = getNoticeDocumentId(
-        route.params.deptCode,
-        route.params.listId
-      );
-      let noticeRef = noticeFirestore.doc(noticeDocumentId);
-
-      noticeRef.get().then((document) => {
-        if (document.exists) {
-          const fetchedData = document.data();
-          if (typeof fetchedData !== "undefined") {
-            const fetchedNoticeData: NoticeArticle = {
-              attachmentLink: fetchedData.attachmentLink,
-              authorDept: fetchedData.authorDept,
-              authorName: fetchedData.authorName,
-              contentHtml: fetchedData.contentHtml,
-              createdDate: fetchedData.createdDate,
-              title: fetchedData.title,
-              contentString: fetchedData.contentString,
-              listId: fetchedData.listId,
-              deptName: fetchedData.deptName,
-              deptCode: fetchedData.deptCode,
-              url: fetchedData.url,
-            };
-            setNoticeData(fetchedNoticeData);
-          }
-        }
-      });
-    } catch {
-      Alert.alert("공지사항을 불러올 수 없습니다.", "", [
-        {
-          text: "확인",
-        },
-      ]);
-    }
-  };
+  const noticeData = useSelector(getNoticeData);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <HeaderRightButton
-          url={typeof noticeData !== "undefined" ? noticeData.url : ""}
+          url={noticeData !== null ? noticeData.url : ""}
           notice={noticeData}
           attachment={
-            typeof noticeData !== "undefined"
-              ? noticeData.attachmentLink
-              : undefined
+            noticeData !== null ? noticeData.attachmentLink : undefined
           }
         />
       ),
@@ -99,10 +61,15 @@ export default function Article({ route }: { route: ArticleProps }) {
   });
 
   React.useEffect(() => {
-    fetchNoticeData();
+    dispatch(
+      fetchNoticeDataAsync.request({
+        deptCode: deptCode,
+        listId: listId,
+      })
+    );
   }, [route]);
 
-  if (typeof noticeData !== "undefined") {
+  if (noticeData !== null) {
     return (
       <AppLayout>
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>

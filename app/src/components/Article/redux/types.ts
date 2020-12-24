@@ -1,3 +1,5 @@
+type PageType = "HOME" | "ALL_ARTICLE";
+
 export type Attachment = {
   file_link: string;
   file_name: string;
@@ -17,4 +19,19 @@ export type NoticeArticle = {
   deptName: string;
   url?: string;
   favoriteCount?: number;
+};
+
+export type FetchInitialNoticeListRequestPayload = {
+  departmentList: string[];
+  pageType: PageType;
+};
+
+export type FetchInitialNoticeListSuccessPayload = {
+  noticeArticles: NoticeArticle[] | null;
+  pageType: PageType;
+};
+
+export type FetchNoticeRequestPayload = {
+  deptCode: string;
+  listId: string;
 };
