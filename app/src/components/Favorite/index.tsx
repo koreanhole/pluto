@@ -7,7 +7,6 @@ import { FlatList, StyleSheet, Text, View, Alert } from "react-native";
 import { HomeContainer } from "components/Home/index";
 import { Card, Divider, IconButton } from "react-native-paper";
 import Ripple from "react-native-material-ripple";
-import { deleteSavedNotice } from "components/Article/redux/actions";
 import { NoticeArticle } from "components/Article/redux/types";
 
 const FlatListItem = ({ data }: { data: NoticeArticle }) => {
@@ -25,7 +24,7 @@ const FlatListItem = ({ data }: { data: NoticeArticle }) => {
     Alert.alert("저장된 공지사항에서 삭제하시겠습니까?", data.title, [
       {
         text: "확인",
-        onPress: () => dispatch(deleteSavedNotice(data)),
+        // onPress: () => dispatch(deleteSavedNotice(data)),
         style: "default",
       },
       {

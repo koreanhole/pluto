@@ -7,11 +7,11 @@ import theme from "theme";
 import { Alert, View, Platform } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { HeaderRightStyles } from "modules/headerRightButton/base";
-import { saveNotice, deleteSavedNotice } from "./redux/actions";
 import { getSavedArticle } from "./redux/selectors";
 import _ from "underscore";
 import { showSnackbar } from "modules/Snackbar/redux/actions";
 import * as Haptics from "expo-haptics";
+import { storeLocalStorageAsync } from "modules/localStorage/redux/actions";
 
 export default function HeaderRightButton({
   url,
@@ -77,7 +77,12 @@ export default function HeaderRightButton({
 
   const handleClickSaveNotice = () => {
     if (notice !== null) {
-      dispatch(saveNotice(notice));
+      dispatch(
+        storeLocalStorageAsync.request({
+          dataType: "ARTICLE",
+          data: notice,
+        })
+      );
       dispatch(
         showSnackbar({
           visible: true,
@@ -92,7 +97,6 @@ export default function HeaderRightButton({
 
   const handleClickDeleteNotice = () => {
     if (notice !== null) {
-      dispatch(deleteSavedNotice(notice));
       dispatch(
         showSnackbar({
           visible: true,
