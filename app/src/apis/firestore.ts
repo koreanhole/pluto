@@ -1,5 +1,6 @@
 import { NoticeArticle } from "components/Article/redux/types";
 import { firebase } from "util/firebase/config";
+import { UploadUserDepartmentListRequestPayload } from "components/Department/redux/types";
 
 export const noticeFirestore = firebase.firestore().collection("notice");
 export const userDataFirestore = firebase.firestore().collection("userData");
@@ -76,3 +77,13 @@ export const loadNoticeData = async ({
     });
   return noticeData;
 };
+
+export async function updateUserFavoriteDepartmentList(
+  userData: UploadUserDepartmentListRequestPayload
+) {
+  const { expoPushToken, favoriteDepartmentList } = userData;
+  await userDataFirestore.doc(expoPushToken).set({
+    favoriteDepartmentList: favoriteDepartmentList,
+    expoPushToken: expoPushToken,
+  });
+}

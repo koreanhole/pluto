@@ -1,15 +1,16 @@
 import * as React from "react";
 import { ScrollView } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import DepartmentAccordion from "./DepartmentAccordion";
 import DepartmentBadge from "./DepartmentBadge";
 import { useNavigation } from "@react-navigation/native";
+import { updateUserDataAsync } from "./redux/actions";
 import { getFavoriteDepartmentList, getExpoPushToken } from "./redux/selectors";
-import { userDataFirestore } from "apis/firestore";
 
 export default function Department() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
   const expoPushToken = useSelector(getExpoPushToken);
@@ -22,10 +23,12 @@ export default function Department() {
 
   React.useEffect(() => {
     if (typeof expoPushToken !== "undefined" && expoPushToken !== null) {
-      userDataFirestore.doc(expoPushToken).set({
-        favoriteDepartmentList: favoriteDepartmentList,
-        expoPushToken: expoPushToken,
-      });
+      dispatch(
+        updateUserDataAsync.request({
+          favoriteDepartmentList: favoriteDepartmentList,
+          expoPushToken: expoPushToken,
+        })
+      );
     }
   }, [favoriteDepartmentList]);
 
