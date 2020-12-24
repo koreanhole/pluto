@@ -10,7 +10,7 @@ export const getNoticeDocumentId = (deptCode: string, listId: string) => {
 export const loadInitialNoticeList = async (departmentList: string[]) => {
   const query = noticeFirestore
     .where("deptName", "in", departmentList)
-    .orderBy("createdDate", "desc")
+    .orderBy("createdDateTimestamp", "desc")
     .limit(50);
   const initialNoticeList = await query
     .get()
