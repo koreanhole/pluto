@@ -8,7 +8,6 @@ import { HomeContainer } from "components/Home/index";
 import { Card, Divider, IconButton } from "react-native-paper";
 import Ripple from "react-native-material-ripple";
 import { deleteSavedNotice } from "components/Article/redux/actions";
-
 import { NoticeArticle } from "components/Article/redux/types";
 
 const FlatListItem = ({ data }: { data: NoticeArticle }) => {
