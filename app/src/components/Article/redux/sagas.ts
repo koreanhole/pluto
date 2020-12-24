@@ -9,7 +9,7 @@ import {
 } from "./actions";
 import { Alert } from "react-native";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { loadInitialNoticeList, loadNoticeData } from "apis/firestore";
+import { loadInitialNoticeList, loadNoticeData } from "repository/firestore";
 
 const fetchInitialNoticeList = function* (
   action: ReturnType<typeof fetchInitialNoticeListAsync.request>

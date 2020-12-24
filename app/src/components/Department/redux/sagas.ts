@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { updateUserFavoriteDepartmentList } from "apis/firestore";
+import { updateUserFavoriteDepartmentList } from "repository/firestore";
 import {
   updateUserDataAsync,
   UPLOAD_USER_DATA_REQUEST,
