@@ -17,12 +17,6 @@ export const FETCH_NOTICE_DATA_REQUEST = "FETCH_NOTICE_DATA_REQUEST";
 export const FETCH_NOTICE_DATA_SUCCESS = "FETCH_NOTICE_DATA_SUCCESS";
 export const FETCH_NOITICE_DATA_FAILURE = "FETCH_NOITICE_DATA_FAILURE";
 
-export const saveNotice = createAction("SAVE_NOTICE")<NoticeArticle>();
-
-export const deleteSavedNotice = createAction(
-  "DELETE_SAVED_NOTICE"
-)<NoticeArticle>();
-
 export const fetchInitialNoticeListAsync = createAsyncAction(
   FETCH_INITIAL_NOTICE_LIST_REQUEST,
   FETCH_INITIAL_NOTICE_LIST_SUCCESS,
