@@ -1,9 +1,9 @@
 import { createAction, createAsyncAction } from "typesafe-actions";
 import {
   NoticeArticle,
-  FetchInitialNoticeListPayload,
+  FetchInitialNoticeListRequestPayload,
   FetchInitialNoticeListSuccessPayload,
-  FetchNoticePayload,
+  FetchNoticeRequestPayload,
 } from "./types";
 
 export const FETCH_INITIAL_NOTICE_LIST_REQUEST =
@@ -28,7 +28,7 @@ export const fetchInitialNoticeListAsync = createAsyncAction(
   FETCH_INITIAL_NOTICE_LIST_SUCCESS,
   FETCH_INITIAL_NOITICE_LIST_FAILURE
 )<
-  FetchInitialNoticeListPayload,
+  FetchInitialNoticeListRequestPayload,
   FetchInitialNoticeListSuccessPayload | null,
   string
 >();
@@ -37,4 +37,4 @@ export const fetchNoticeDataAsync = createAsyncAction(
   FETCH_NOTICE_DATA_REQUEST,
   FETCH_NOTICE_DATA_SUCCESS,
   FETCH_NOITICE_DATA_FAILURE
-)<FetchNoticePayload, NoticeArticle | null, string>();
+)<FetchNoticeRequestPayload, NoticeArticle | null, string>();

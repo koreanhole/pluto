@@ -21,7 +21,7 @@ export type NoticeArticle = {
   favoriteCount?: number;
 };
 
-export type FetchInitialNoticeListPayload = {
+export type FetchInitialNoticeListRequestPayload = {
   departmentList: string[];
   pageType: PageType;
 };
@@ -31,7 +31,7 @@ export type FetchInitialNoticeListSuccessPayload = {
   pageType: PageType;
 };
 
-export type FetchNoticePayload = {
+export type FetchNoticeRequestPayload = {
   deptCode: string;
   listId: string;
 };
