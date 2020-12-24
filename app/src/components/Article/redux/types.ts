@@ -35,7 +35,3 @@ export type FetchNoticePayload = {
   deptCode: string;
   listId: string;
 };
-
-export type FetchNoticeSuccessPayload = {
-  noticeArticle: NoticeArticle;
-};

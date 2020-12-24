@@ -4,7 +4,6 @@ import {
   FetchInitialNoticeListPayload,
   FetchInitialNoticeListSuccessPayload,
   FetchNoticePayload,
-  FetchNoticeSuccessPayload,
 } from "./types";
 
 export const FETCH_INITIAL_NOTICE_LIST_REQUEST =
@@ -38,4 +37,4 @@ export const fetchNoticeDataAsync = createAsyncAction(
   FETCH_NOTICE_DATA_REQUEST,
   FETCH_NOTICE_DATA_SUCCESS,
   FETCH_NOITICE_DATA_FAILURE
-)<FetchNoticePayload, FetchNoticeSuccessPayload | null, string>();
+)<FetchNoticePayload, NoticeArticle | null, string>();

@@ -32,6 +32,7 @@ const reducer = combineReducers({
         return [];
       }
     }),
+
   intialNoticeListFetchState: createReducer("READY" as FetchState)
     .handleAction(fetchInitialNoticeListAsync.request, () => "READY")
     .handleAction(fetchInitialNoticeListAsync.success, () => "SUCCESS")
@@ -57,17 +58,10 @@ const reducer = combineReducers({
     .handleAction(fetchNoticeDataAsync.request, () => "READY")
     .handleAction(fetchNoticeDataAsync.success, () => "SUCCESS")
     .handleAction(fetchNoticeDataAsync.failure, () => "FAILURE"),
-
   noticeData: createReducer<NoticeArticle | null>(null).handleAction(
     fetchNoticeDataAsync.success,
-    (state, action) => {
-      if (
-        typeof action.payload !== "undefined" &&
-        action.payload?.noticeArticle !== null
-      ) {
-        return action.payload?.noticeArticle;
-      }
-      return state;
+    (_state, action) => {
+      return action.payload;
     }
   ),
 });
