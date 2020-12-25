@@ -5,9 +5,6 @@ import AppLayout from "modules/AppLayout";
 import NoticeCard from "components/Home/NoticeCard";
 import { useNavigation } from "@react-navigation/native";
 import _ from "underscore";
-import { registerForPushNotificationsAsync } from "util/pushNotification";
-import { setExpoPushToken } from "components/Department/redux/actions";
-import * as Notifications from "expo-notifications";
 import LoadingIndicator from "modules/LoadingIndicator";
 import { HomeContainer } from "components/Home/index";
 import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
@@ -45,24 +42,6 @@ export default function ArticleList({ route }: { route: ArticleListProps }) {
     navigation.setOptions({
       headerTitle: route.params.deptName,
     });
-  }, [navigation]);
-
-  React.useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      dispatch(setExpoPushToken(token))
-    );
-    const subscription = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        const responseData = response.notification.request.content.data;
-        navigation.navigate("Article", {
-          // @ts-ignore Object is of type 'unknown'.ts(2571)
-          deptCode: responseData.deptCode,
-          // @ts-ignore Object is of type 'unknown'.ts(2571)
-          listId: responseData.listId,
-        });
-      }
-    );
-    return () => subscription.remove();
   }, [navigation]);
 
   return (
