@@ -5,7 +5,7 @@ import FavoriteStackNavigator from "./stack/FavoriteStackNavigator";
 import AllArticleStackNavigator from "./stack/AllArticleStackNavigator";
 import SettingsStackNavigator from "./stack/SettingsStackNavigator";
 import theme from "theme";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 

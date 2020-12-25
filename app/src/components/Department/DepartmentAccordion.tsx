@@ -34,6 +34,10 @@ export const DEPARTMENT_SECTIONS: DepartmentSection[] = [
     ],
   },
   {
+    title: "기타부서",
+    data: ["생활관", "국제교육원"],
+  },
+  {
     title: "공과대학",
     data: [
       "공과대학",
@@ -81,10 +85,6 @@ export const DEPARTMENT_SECTIONS: DepartmentSection[] = [
       "생명과학과",
       "환경원예학과",
     ],
-  },
-  {
-    title: "그 밖의 부서",
-    data: ["생활관", "국제교육원"],
   },
 ];
 

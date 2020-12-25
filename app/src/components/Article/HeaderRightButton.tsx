@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { Attachment, NoticeArticle } from "./redux/types";
 import theme from "theme";
-import { Alert, View, Platform } from "react-native";
+import { Alert, View, Platform, Share } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { HeaderRightStyles } from "modules/headerRightButton/base";
 import { saveNotice, deleteSavedNotice } from "./redux/actions";
@@ -12,6 +12,7 @@ import { getSavedArticle } from "./redux/selectors";
 import _ from "underscore";
 import { showSnackbar } from "modules/Snackbar/redux/actions";
 import * as Haptics from "expo-haptics";
+import { getShareMessage } from "util/share";
 
 export default function HeaderRightButton({
   url,
@@ -105,6 +106,18 @@ export default function HeaderRightButton({
     }
   };
 
+  const handleClickShareNotice = React.useCallback(() => {
+    if (typeof url !== "undefined") {
+      Share.share({ message: getShareMessage(url) }).catch(() => {
+        Alert.alert("공지사항을 공유할 수 없습니다.", "", [
+          {
+            text: "확인",
+          },
+        ]);
+      });
+    }
+  }, [url]);
+
   const FavoriteIcon = () => {
     if (
       savedNoticeArticle !== null &&
@@ -133,6 +146,12 @@ export default function HeaderRightButton({
 
   return (
     <View style={HeaderRightStyles.container}>
+      <MaterialCommunityIcons
+        name="share"
+        size={theme.size.headerIconSize}
+        onPress={handleClickShareNotice}
+        style={HeaderRightStyles.icon}
+      />
       {typeof attachment !== "undefined" && attachment.length !== 0 && (
         <MaterialIcons
           name="cloud-download"

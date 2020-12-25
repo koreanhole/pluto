@@ -34,7 +34,7 @@ export default function Home() {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "UOS 공지사항 🌺",
+      headerTitle: "UOS 공지사항 😷",
       headerRight: () => <HeaderRightButton />,
     });
   }, [navigation]);
