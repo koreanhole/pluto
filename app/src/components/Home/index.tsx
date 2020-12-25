@@ -17,6 +17,7 @@ import {
   getHomeInitialNotice,
   getNoticeFetchState,
 } from "components/Article/redux/selectors";
+import HeaderRightButton from "./HeaderRightButton";
 
 export const HomeContainer = styled(View)`
   flex: 1;
@@ -34,6 +35,7 @@ export default function Home() {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "UOS 공지사항 🌺",
+      headerRight: () => <HeaderRightButton />,
     });
   }, [navigation]);
 

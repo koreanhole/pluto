@@ -15,10 +15,7 @@ export default function SavedArticles() {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "저장된 공지사항",
-      headerRight: () =>
-        savedNoticeArticle !== null && (
-          <HeaderRightButton savedNoticeArticle={savedNoticeArticle} />
-        ),
+      headerRight: () => savedNoticeArticle !== null && <HeaderRightButton />,
     });
   });
 

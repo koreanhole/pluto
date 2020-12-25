@@ -3,6 +3,6 @@ import styled from "styled-components/native";
 import theme from "theme";
 
 export const StyledHeaderIcon = styled(MaterialIcons)`
-  margin-left: 10px;
+  margin-left: 16px;
   color: ${theme.colors.black};
 `;
