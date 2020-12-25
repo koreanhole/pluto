@@ -10,7 +10,7 @@ import createSagaMiddleware from "redux-saga";
 const persistConfig = {
   key: "root",
   storage: ExpoFileSystemStorage,
-  whitelist: ["department", "article"],
+  whitelist: ["departmentPersist", "articlePersist"],
 };
 
 const sagaMiddleware = createSagaMiddleware();

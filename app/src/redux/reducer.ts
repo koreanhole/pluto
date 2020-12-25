@@ -1,10 +1,12 @@
 import { combineReducers } from "redux";
-import departmentReducer from "components/Department/redux/reducer";
+import departmentPersistReducer from "components/Department/redux/persistReducers";
 import articleReducer from "components/Article/redux/reducers";
+import articlePersistReducer from "components/Article/redux/persistReducers";
 import snackbarReducer from "modules/Snackbar/redux/reducers";
 
 export default combineReducers({
-  department: departmentReducer,
+  departmentPersist: departmentPersistReducer,
   article: articleReducer,
+  articlePersist: articlePersistReducer,
   snackBar: snackbarReducer,
 });
