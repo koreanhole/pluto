@@ -1,6 +1,7 @@
 import { RootState } from "redux/types";
 
-export const getSavedArticle = (state: RootState) => state.article.savedNotice;
+export const getSavedArticle = (state: RootState) =>
+  state.articlePersist.savedNotice;
 
 export const getNoticeFetchState = (state: RootState) =>
   state.article.intialNoticeListFetchState;

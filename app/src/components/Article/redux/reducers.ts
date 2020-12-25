@@ -1,38 +1,10 @@
 import { createReducer } from "typesafe-actions";
 import { FetchState } from "redux/types";
 import { combineReducers } from "redux";
-import {
-  saveNotice,
-  deleteSavedNotice,
-  fetchInitialNoticeListAsync,
-  fetchNoticeDataAsync,
-} from "./actions";
+import { fetchInitialNoticeListAsync, fetchNoticeDataAsync } from "./actions";
 import { NoticeArticle } from "./types";
-import _ from "underscore";
 
 const reducer = combineReducers({
-  savedNotice: createReducer<NoticeArticle[] | null>(null)
-    .handleAction(saveNotice, (state, action) => {
-      if (state == null) {
-        return [action.payload];
-      } else {
-        const sortedNotices = _.sortBy(
-          [...state, action.payload],
-          "createdDateTimestamp"
-        );
-        return _.uniq(sortedNotices, true);
-      }
-    })
-    .handleAction(deleteSavedNotice, (state, action) => {
-      if (state !== null) {
-        return _.reject(state, (item) => {
-          return action.payload.title === item.title;
-        });
-      } else {
-        return [];
-      }
-    }),
-
   intialNoticeListFetchState: createReducer("READY" as FetchState)
     .handleAction(fetchInitialNoticeListAsync.request, () => "READY")
     .handleAction(fetchInitialNoticeListAsync.success, () => "SUCCESS")
