@@ -3,7 +3,7 @@ import AppLayout from "modules/AppLayout";
 import { useSelector, useDispatch } from "react-redux";
 import { getSavedArticle } from "components/Article/redux/selectors";
 import { useNavigation } from "@react-navigation/native";
-import { FlatList, StyleSheet, Text, View, Alert } from "react-native";
+import { FlatList, StyleSheet, View, Alert } from "react-native";
 import { HomeContainer } from "components/Home/index";
 import { Card, Divider, IconButton } from "react-native-paper";
 import Ripple from "react-native-material-ripple";
@@ -64,24 +64,23 @@ export default function SavedArticles() {
   });
 
   return (
-    <AppLayout>
-      <HomeContainer>
-        {savedNoticeArticle !== null && savedNoticeArticle.length !== 0 ? (
-          <FlatList
-            data={savedNoticeArticle}
-            keyExtractor={(item, index) => item.title + index}
-            renderItem={(data) => <FlatListItem data={data.item} />}
-          />
-        ) : (
-          <View style={NoDataStyles.container}>
-            <Text style={NoDataStyles.text}>
-              저장된 공지사항이 없습니다.{"\n"}
-              게시글에서 ♥︎를 눌러서 저장해주세요.
-            </Text>
-          </View>
-        )}
-      </HomeContainer>
-    </AppLayout>
+    <>
+      {savedNoticeArticle !== null && savedNoticeArticle.length !== 0 ? (
+        <AppLayout>
+          <HomeContainer>
+            <FlatList
+              data={savedNoticeArticle}
+              keyExtractor={(item, index) => item.title + index}
+              renderItem={(data) => <FlatListItem data={data.item} />}
+            />
+          </HomeContainer>
+        </AppLayout>
+      ) : (
+        <AppLayout
+          noDataText={`저장된 공지사항이 없습니다.\n게시글에서 ♥︎를 눌러서 저장해주세요.`}
+        />
+      )}
+    </>
   );
 }
 
@@ -89,18 +88,5 @@ const FlatListItemStyles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-  },
-});
-
-const NoDataStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  text: {
-    fontWeight: "bold",
-    fontSize: 16,
-    textAlign: "center",
   },
 });

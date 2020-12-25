@@ -1,19 +1,15 @@
 import * as React from "react";
-import { View, StatusBar } from "react-native";
-import styled from "styled-components/native";
+import { View, Text, StatusBar, StyleSheet } from "react-native";
 import theme from "theme";
 import Snackbar from "modules/Snackbar";
 
 type AppLayoutProps = {
   children?: React.ReactNode;
+  noDataText?: string;
 };
 
-const MainSection = styled(View)`
-  flex: 2;
-`;
-
 export default function AppLayout(props: AppLayoutProps) {
-  const { children } = props;
+  const { children, noDataText } = props;
 
   return (
     <React.Fragment>
@@ -22,9 +18,33 @@ export default function AppLayout(props: AppLayoutProps) {
           backgroundColor={theme.colors.ligthGrey}
           barStyle="dark-content"
         />
-        <MainSection>{children}</MainSection>
+        <View style={AppLayoutStyles.mainSection}>
+          {typeof noDataText === "undefined" ? (
+            children
+          ) : (
+            <View style={AppLayoutStyles.noDataContainer}>
+              <Text style={AppLayoutStyles.noDataText}>{noDataText}</Text>
+            </View>
+          )}
+        </View>
         <Snackbar />
       </View>
     </React.Fragment>
   );
 }
+
+const AppLayoutStyles = StyleSheet.create({
+  mainSection: {
+    flex: 2,
+  },
+  noDataContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noDataText: {
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
+  },
+});

@@ -129,6 +129,10 @@ export default function Article({ route }: { route: ArticleProps }) {
       </AppLayout>
     );
   } else {
-    return <AppLayout />;
+    return (
+      <AppLayout
+        noDataText={`공지사항을 불러올 수 없습니다.\n아래로 끌어당겨 새로고침 해주세요`}
+      />
+    );
   }
 }
