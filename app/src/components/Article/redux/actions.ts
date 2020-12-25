@@ -4,6 +4,7 @@ import {
   FetchInitialNoticeListRequestPayload,
   FetchInitialNoticeListSuccessPayload,
   FetchNoticeRequestPayload,
+  SavedArticleSorting,
 } from "./types";
 
 export const FETCH_INITIAL_NOTICE_LIST_REQUEST =
@@ -22,6 +23,10 @@ export const saveNotice = createAction("SAVE_NOTICE")<NoticeArticle>();
 export const deleteSavedNotice = createAction(
   "DELETE_SAVED_NOTICE"
 )<NoticeArticle>();
+
+export const sortSavedNotice = createAction(
+  "SORT_SAVED_NOTICE"
+)<SavedArticleSorting>();
 
 export const fetchInitialNoticeListAsync = createAsyncAction(
   FETCH_INITIAL_NOTICE_LIST_REQUEST,

@@ -1,6 +1,6 @@
 import { createReducer } from "typesafe-actions";
 import { combineReducers } from "redux";
-import { saveNotice, deleteSavedNotice } from "./actions";
+import { saveNotice, deleteSavedNotice, sortSavedNotice } from "./actions";
 import { NoticeArticle } from "./types";
 import _ from "underscore";
 
@@ -12,8 +12,8 @@ const reducer = combineReducers({
       } else {
         const sortedNotices = _.sortBy(
           [...state, action.payload],
-          "createdDateTimestamp"
-        );
+          "createdDate"
+        ).reverse();
         return _.uniq(sortedNotices, true);
       }
     })
@@ -25,6 +25,15 @@ const reducer = combineReducers({
       } else {
         return [];
       }
+    })
+    .handleAction(sortSavedNotice, (state, action) => {
+      if (action.payload == "ASCENDING" && state !== null) {
+        return _.sortBy(state, "createdDate");
+      }
+      if (action.payload == "DESCENDING" && state !== null) {
+        return _.sortBy(state, "createdDate").reverse();
+      }
+      return null;
     }),
 });
 

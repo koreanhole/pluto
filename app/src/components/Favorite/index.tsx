@@ -8,7 +8,7 @@ import { HomeContainer } from "components/Home/index";
 import { Card, Divider, IconButton } from "react-native-paper";
 import Ripple from "react-native-material-ripple";
 import { deleteSavedNotice } from "components/Article/redux/actions";
-
+import HeaderRightButton from "./HeaderRightButton";
 import { NoticeArticle } from "components/Article/redux/types";
 
 const FlatListItem = ({ data }: { data: NoticeArticle }) => {
@@ -60,6 +60,10 @@ export default function SavedArticles() {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "저장된 공지사항",
+      headerRight: () =>
+        savedNoticeArticle !== null && (
+          <HeaderRightButton savedNoticeArticle={savedNoticeArticle} />
+        ),
     });
   });
 

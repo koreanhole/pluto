@@ -35,3 +35,5 @@ export type FetchNoticeRequestPayload = {
   deptCode: string;
   listId: string;
 };
+
+export type SavedArticleSorting = "ASCENDING" | "DESCENDING";
