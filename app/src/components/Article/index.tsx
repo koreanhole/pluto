@@ -12,7 +12,7 @@ import * as WebBrowser from "expo-web-browser";
 import LoadingIndicator from "modules/LoadingIndicator";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNoticeDataAsync } from "./redux/actions";
-import { getNoticeData } from "./redux/selectors";
+import { getNoticeData, getNoticeDataFetchState } from "./redux/selectors";
 
 type ArticleProps = {
   key: string;
@@ -45,6 +45,7 @@ export default function Article({ route }: { route: ArticleProps }) {
   const dispatch = useDispatch();
 
   const noticeData = useSelector(getNoticeData);
+  const noticeDataFetchState = useSelector(getNoticeDataFetchState);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -69,7 +70,7 @@ export default function Article({ route }: { route: ArticleProps }) {
     );
   }, [route]);
 
-  if (noticeData !== null) {
+  if (noticeData !== null && noticeDataFetchState === "SUCCESS") {
     return (
       <AppLayout>
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
@@ -130,9 +131,9 @@ export default function Article({ route }: { route: ArticleProps }) {
     );
   } else {
     return (
-      <AppLayout
-        noDataText={`공지사항을 불러올 수 없습니다.\n네트워크 상태를 확인해주세요`}
-      />
+      <AppLayout>
+        <LoadingIndicator />
+      </AppLayout>
     );
   }
 }

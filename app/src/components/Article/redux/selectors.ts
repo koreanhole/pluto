@@ -13,3 +13,6 @@ export const getAllArticleInitialNotice = (state: RootState) =>
   state.article.allArticleInitialNoticeList;
 
 export const getNoticeData = (state: RootState) => state.article.noticeData;
+
+export const getNoticeDataFetchState = (state: RootState) =>
+  state.article.noticeDataFetchState;
