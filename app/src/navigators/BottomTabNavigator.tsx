@@ -3,7 +3,7 @@ import * as React from "react";
 import HomeStackNavigator from "./stack/HomeStackNavigator";
 import FavoriteStackNavigator from "./stack/FavoriteStackNavigator";
 import AllArticleStackNavigator from "./stack/AllArticleStackNavigator";
-import DepartmentStackNavigator from "./stack/DepartmentStackNavigator";
+import SettingsStackNavigator from "./stack/SettingsStackNavigator";
 import theme from "theme";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -18,7 +18,7 @@ export default function BottomTabNavigator() {
         style: {
           backgroundColor: theme.colors.ligthGrey,
         },
-        showLabel: false,
+        showLabel: true,
       }}
     >
       <Tab.Screen
@@ -42,7 +42,7 @@ export default function BottomTabNavigator() {
         name="AllArticle"
         component={AllArticleStackNavigator}
         options={{
-          tabBarLabel: "전체 공지사항",
+          tabBarLabel: "전체 부서",
           tabBarIcon: ({ focused, color, size }) => {
             let iconName = focused ? "book-open" : "book-open-outline";
             return (
@@ -61,18 +61,24 @@ export default function BottomTabNavigator() {
         options={{
           tabBarLabel: "저장",
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "bookmark" : "bookmark-border";
-            return <MaterialIcons name={iconName} size={size} color={color} />;
+            let iconName = focused ? "heart" : "heart-outline";
+            return (
+              <MaterialCommunityIcons
+                name={iconName}
+                size={size}
+                color={color}
+              />
+            );
           },
         }}
       />
       <Tab.Screen
-        name="Department"
-        component={DepartmentStackNavigator}
+        name="Settings"
+        component={SettingsStackNavigator}
         options={{
-          tabBarLabel: "알림설정",
+          tabBarLabel: "설정",
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "bell" : "bell-outline";
+            let iconName = focused ? "settings" : "settings-outline";
             return (
               <MaterialCommunityIcons
                 name={iconName}
