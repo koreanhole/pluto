@@ -27,7 +27,8 @@ export default function BottomTabNavigator() {
         options={{
           tabBarLabel: "홈",
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "home" : "home-outline";
+            // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
+            let iconName: any = focused ? "home" : "home-outline";
             return (
               <MaterialCommunityIcons
                 name={iconName}
@@ -44,7 +45,8 @@ export default function BottomTabNavigator() {
         options={{
           tabBarLabel: "전체 부서",
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "book-open" : "book-open-outline";
+            // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
+            let iconName: any = focused ? "book-open" : "book-open-outline";
             return (
               <MaterialCommunityIcons
                 name={iconName}
@@ -61,7 +63,8 @@ export default function BottomTabNavigator() {
         options={{
           tabBarLabel: "저장",
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "heart" : "heart-outline";
+            // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
+            let iconName: any = focused ? "heart" : "heart-outline";
             return (
               <MaterialCommunityIcons
                 name={iconName}

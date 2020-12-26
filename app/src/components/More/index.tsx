@@ -14,12 +14,13 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import theme from "theme";
 import Ripple from "react-native-material-ripple";
-import { Divider } from "react-native-paper";
+import Divider from "modules/Divider";
 import * as WebBrowser from "expo-web-browser";
 import * as StoreReview from "expo-store-review";
 
 type SettingItem = {
-  iconName: string;
+  // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
+  iconName: any;
   title: string;
   subTitle?: string;
   handleClick: () => void;
@@ -100,7 +101,7 @@ export default function More() {
       isExternalLink: false,
     },
     {
-      iconName: "github-circle",
+      iconName: "github",
       title: "UOS공지사항 코드저장소",
       handleClick: handleClickViewCode,
       isExternalLink: false,
