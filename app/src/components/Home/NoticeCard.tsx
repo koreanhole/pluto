@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { Text, View, StyleSheet } from "react-native";
 import Ripple from "react-native-material-ripple";
-import { Divider } from "react-native-paper";
+import Divider from "modules/Divider";
 // @ts-ignore
 import TextAvatar from "react-native-text-avatar";
 import { useNavigation } from "@react-navigation/native";
