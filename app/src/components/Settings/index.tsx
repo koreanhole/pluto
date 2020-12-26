@@ -8,6 +8,8 @@ import {
   ScrollView,
   Linking,
   Alert,
+  Image,
+  Dimensions,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import theme from "theme";
@@ -93,7 +95,7 @@ export default function Settings() {
     },
     {
       iconName: "github-circle",
-      title: "UOS공지사항 Github",
+      title: "UOS공지사항 코드저장소",
       handleClick: handleClickViewCode,
       isExternalLink: false,
     },
@@ -107,6 +109,15 @@ export default function Settings() {
   return (
     <AppLayout>
       <ScrollView>
+        <Image
+          source={require("../../../assets/app_introduce.png")}
+          style={{
+            alignSelf: "center",
+            width: Dimensions.get("window").width,
+            marginVertical: 32,
+          }}
+          resizeMode="cover"
+        />
         {SETTING_ITEMS.map((item) => {
           return (
             <Ripple onPress={item.handleClick} key={item.title}>
