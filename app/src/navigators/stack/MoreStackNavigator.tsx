@@ -1,15 +1,15 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
-import Settings from "components/Settings";
+import More from "components/More";
 import theme from "theme";
 import { StyledHeaderIcon } from "./base";
 
 const Stack = createStackNavigator();
 
-export default function SettingsStackNavigator() {
+export default function MoreStackNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="Settings"
+      initialRouteName="More"
       screenOptions={{
         headerStyle: {
           backgroundColor: `${theme.colors.ligthGrey}`,
@@ -30,7 +30,7 @@ export default function SettingsStackNavigator() {
         headerBackTitleVisible: false,
       }}
     >
-      <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen name="More" component={More} />
     </Stack.Navigator>
   );
 }

@@ -26,8 +26,14 @@ type SettingItem = {
   isExternalLink: boolean;
 };
 
-export default function Settings() {
+export default function More() {
   const navigation = useNavigation();
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "더보기",
+    });
+  });
 
   const handleClickNotificationSetting = React.useCallback(async () => {
     await Linking.openSettings();
@@ -101,11 +107,6 @@ export default function Settings() {
     },
   ];
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: "설정",
-    });
-  });
   return (
     <AppLayout>
       <ScrollView>

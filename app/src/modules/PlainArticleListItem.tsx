@@ -27,9 +27,9 @@ export default function PlainArticleListItem({
   const handleClickDelete = () => {
     Alert.alert("저장된 공지사항에서 삭제하시겠습니까?", data.title, [
       {
-        text: "확인",
+        text: "삭제",
         onPress: () => dispatch(deleteSavedNotice(data)),
-        style: "default",
+        style: "destructive",
       },
       {
         text: "취소",

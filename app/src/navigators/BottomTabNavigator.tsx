@@ -3,9 +3,9 @@ import * as React from "react";
 import HomeStackNavigator from "./stack/HomeStackNavigator";
 import FavoriteStackNavigator from "./stack/FavoriteStackNavigator";
 import AllArticleStackNavigator from "./stack/AllArticleStackNavigator";
-import SettingsStackNavigator from "./stack/SettingsStackNavigator";
+import MoreStackNavigator from "./stack/MoreStackNavigator";
 import theme from "theme";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
@@ -73,18 +73,13 @@ export default function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Settings"
-        component={SettingsStackNavigator}
+        name="More"
+        component={MoreStackNavigator}
         options={{
-          tabBarLabel: "설정",
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "settings" : "settings-outline";
+          tabBarLabel: "더보기",
+          tabBarIcon: ({ color, size }) => {
             return (
-              <MaterialCommunityIcons
-                name={iconName}
-                size={size}
-                color={color}
-              />
+              <MaterialIcons name="more-horiz" size={size} color={color} />
             );
           },
         }}
