@@ -40,7 +40,7 @@ export default function AllArticle() {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "전체 공지사항",
+      headerTitle: "전체 부서",
     });
   });
 
