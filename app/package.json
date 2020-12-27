@@ -6,7 +6,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "lint": "eslint './src/**/*.{ts,tsx,js,jsx}'",
+    "lint:fix": "eslint --fix './src/**/*.{ts,tsx,js,jsx}'"
   },
   "jest": {
     "preset": "jest-expo"
@@ -70,8 +72,13 @@
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
     "@types/styled-components": "^5.1.1",
+    "@typescript-eslint/eslint-plugin": "^4.11.0",
+    "@typescript-eslint/parser": "^4.11.0",
     "babel-jest": "~25.2.6",
     "babel-plugin-styled-components": "^1.10.7",
+    "eslint": "^7.16.0",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "jest": "~25.2.6",
     "react-test-renderer": "~16.11.0",
     "typescript": "~4.0.0"
