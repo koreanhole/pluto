@@ -30,14 +30,14 @@ export default function HeaderRightButton({
   const fileLink =
     typeof attachment !== "undefined"
       ? attachment.map((item) => {
-        return item.file_link;
-      })
+          return item.file_link;
+        })
       : [];
   const fileName =
     typeof attachment !== "undefined"
       ? attachment.map((item) => {
-        return item.file_name;
-      })
+          return item.file_name;
+        })
       : [];
   fileName.splice(0, 0, "취소");
 
@@ -70,7 +70,7 @@ export default function HeaderRightButton({
             ]);
           });
         }
-      }
+      },
     );
   }, [fileName, fileLink]);
 
@@ -81,7 +81,7 @@ export default function HeaderRightButton({
         showSnackbar({
           visible: true,
           message: "공지사항을 저장했습니다.",
-        })
+        }),
       );
       if (Platform.OS == "ios") {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -96,7 +96,7 @@ export default function HeaderRightButton({
         showSnackbar({
           visible: true,
           message: "저장된 공지사항에서 삭제했습니다.",
-        })
+        }),
       );
       if (Platform.OS == "ios") {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -117,11 +117,7 @@ export default function HeaderRightButton({
   }, [url]);
 
   const FavoriteIcon = () => {
-    if (
-      savedNoticeArticle !== null &&
-      notice !== null &&
-      _.findWhere(savedNoticeArticle, { title: notice.title })
-    ) {
+    if (savedNoticeArticle !== null && notice !== null && _.findWhere(savedNoticeArticle, { title: notice.title })) {
       return (
         <MaterialIcons
           name="favorite"

@@ -8,7 +8,8 @@
     "eject": "expo eject",
     "test": "jest --watchAll",
     "lint": "eslint './src/**/*.{ts,tsx,js,jsx}'",
-    "lint:fix": "eslint --fix './src/**/*.{ts,tsx,js,jsx}'"
+    "lint:fix": "eslint --fix './src/**/*.{ts,tsx,js,jsx}'",
+    "format": "prettier --check ./src"
   },
   "jest": {
     "preset": "jest-expo"
@@ -77,9 +78,11 @@
     "babel-jest": "~25.2.6",
     "babel-plugin-styled-components": "^1.10.7",
     "eslint": "^7.16.0",
+    "eslint-plugin-prettier": "^3.3.0",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest": "~25.2.6",
+    "prettier": "^2.2.1",
     "react-test-renderer": "~16.11.0",
     "typescript": "~4.0.0"
   },
