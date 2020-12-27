@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
 import HomeStackNavigator from "./stack/HomeStackNavigator";
-import FavoriteStackNavigator from "./stack/FavoriteStackNavigator";
+import SavedArticlesStackNavigator from "./stack/SavedArticlesStackNavigator";
 import AllArticleStackNavigator from "./stack/AllArticleStackNavigator";
 import MoreStackNavigator from "./stack/MoreStackNavigator";
 import theme from "theme";
@@ -45,8 +45,8 @@ export default function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Favorite"
-        component={FavoriteStackNavigator}
+        name="SavedArticlesStackNavigator"
+        component={SavedArticlesStackNavigator}
         options={{
           tabBarLabel: "저장",
           tabBarIcon: ({ focused, color, size }) => {
