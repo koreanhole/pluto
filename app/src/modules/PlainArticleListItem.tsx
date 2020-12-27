@@ -8,13 +8,7 @@ import Ripple from "react-native-material-ripple";
 import { deleteSavedNotice } from "components/Article/redux/actions";
 import { NoticeArticle } from "components/Article/redux/types";
 
-export default function PlainArticleListItem({
-  data,
-  deleteEnabled,
-}: {
-  data: NoticeArticle;
-  deleteEnabled: boolean;
-}) {
+export default function PlainArticleListItem({ data, deleteEnabled }: { data: NoticeArticle; deleteEnabled: boolean }) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -49,9 +43,7 @@ export default function PlainArticleListItem({
             subtitle={`${data.authorName} / ${data.deptName} / ${data.createdDate}`}
           />
         </Ripple>
-        {deleteEnabled && (
-          <IconButton icon="delete-outline" onPress={handleClickDelete} />
-        )}
+        {deleteEnabled && <IconButton icon="delete-outline" onPress={handleClickDelete} />}
       </View>
       <Divider />
     </>

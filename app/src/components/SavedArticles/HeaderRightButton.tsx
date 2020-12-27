@@ -6,7 +6,6 @@ import theme from "theme";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { useDispatch } from "react-redux";
 import { sortSavedNotice } from "components/Article/redux/actions";
-import _ from "underscore";
 
 export default function HeaderRightButton() {
   const dispatch = useDispatch();
@@ -26,7 +25,7 @@ export default function HeaderRightButton() {
         if (buttonIndex == 2) {
           dispatch(sortSavedNotice("DESCENDING"));
         }
-      }
+      },
     );
   }, []);
   return (

@@ -4,7 +4,8 @@ import Home from "components/Home";
 import Article from "components/Article";
 import Department from "components/Department";
 import theme from "theme";
-import { StyledHeaderIcon } from "./base";
+import { HeaderIconStyles } from "./base";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
@@ -24,14 +25,10 @@ export default function HomeStackNavigator() {
         },
         headerTitleAlign: "left",
         headerBackImage: () => (
-          <StyledHeaderIcon
-            name="arrow-back"
-            size={theme.size.headerIconSize}
-          />
+          <MaterialIcons style={HeaderIconStyles.materialIcons} name="arrow-back" size={theme.size.headerIconSize} />
         ),
         headerBackTitleVisible: false,
-      }}
-    >
+      }}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Article" component={Article} />
       <Stack.Screen name="Department" component={Department} />

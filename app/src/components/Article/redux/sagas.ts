@@ -11,40 +11,27 @@ import { Alert } from "react-native";
 import { call, put, takeEvery } from "redux-saga/effects";
 import { loadInitialNoticeList, loadNoticeData } from "repository/firestore";
 
-const fetchInitialNoticeList = function* (
-  action: ReturnType<typeof fetchInitialNoticeListAsync.request>
-) {
+const fetchInitialNoticeList = function* (action: ReturnType<typeof fetchInitialNoticeListAsync.request>) {
   const { departmentList, pageType } = action.payload;
   try {
-    const noticeData: NoticeArticle[] | null = yield call(
-      loadInitialNoticeList,
-      departmentList
-    );
+    const noticeData: NoticeArticle[] | null = yield call(loadInitialNoticeList, departmentList);
     yield put(
       fetchInitialNoticeListAsync.success({
         pageType: pageType,
         noticeArticles: noticeData,
-      })
+      }),
     );
   } catch {
-    yield put(
-      fetchInitialNoticeListAsync.failure(FETCH_INITIAL_NOITICE_LIST_FAILURE)
-    );
-    Alert.alert(
-      "공지사항 목록을 불러올 수 없습니다.",
-      "잠시 후 다시 시도해주세요",
-      [
-        {
-          text: "확인",
-        },
-      ]
-    );
+    yield put(fetchInitialNoticeListAsync.failure(FETCH_INITIAL_NOITICE_LIST_FAILURE));
+    Alert.alert("공지사항 목록을 불러올 수 없습니다.", "잠시 후 다시 시도해주세요", [
+      {
+        text: "확인",
+      },
+    ]);
   }
 };
 
-const fetchInitialNotice = function* (
-  action: ReturnType<typeof fetchNoticeDataAsync.request>
-) {
+const fetchInitialNotice = function* (action: ReturnType<typeof fetchNoticeDataAsync.request>) {
   const { deptCode, listId } = action.payload;
   try {
     const noticeData: NoticeArticle | null = yield call(loadNoticeData, {

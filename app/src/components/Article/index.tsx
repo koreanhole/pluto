@@ -1,7 +1,6 @@
 import * as React from "react";
 import AppLayout from "modules/AppLayout";
-import { ScrollView, Platform, StatusBar } from "react-native";
-import styled from "styled-components/native";
+import { ScrollView, Platform, StatusBar, StyleSheet, View, Text } from "react-native";
 import HeaderRightButton from "./HeaderRightButton";
 import theme from "theme";
 import { Dimensions } from "react-native";
@@ -23,22 +22,6 @@ type ArticleProps = {
   };
 };
 
-const ArticleContainer = styled.View`
-  margin: 16px;
-`;
-
-const ArticleTitle = styled.Text`
-  color: ${theme.colors.black};
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 16px;
-`;
-
-const ArticleAdditionalInformation = styled.Text`
-  color: ${theme.colors.darkGrey};
-  margin-bottom: 16px;
-`;
-
 export default function Article({ route }: { route: ArticleProps }) {
   const { deptCode, listId } = route.params;
   const navigation = useNavigation();
@@ -53,9 +36,7 @@ export default function Article({ route }: { route: ArticleProps }) {
         <HeaderRightButton
           url={noticeData !== null ? noticeData.url : ""}
           notice={noticeData}
-          attachment={
-            noticeData !== null ? noticeData.attachmentLink : undefined
-          }
+          attachment={noticeData !== null ? noticeData.attachmentLink : undefined}
         />
       ),
     });
@@ -66,7 +47,7 @@ export default function Article({ route }: { route: ArticleProps }) {
       fetchNoticeDataAsync.request({
         deptCode: deptCode,
         listId: listId,
-      })
+      }),
     );
   }, [route]);
 
@@ -77,21 +58,17 @@ export default function Article({ route }: { route: ArticleProps }) {
           <AdMobBanner
             bannerSize="smartBannerPortrait"
             adUnitID={
-              Platform.OS == "ios"
-                ? "ca-app-pub-2034052364864446/2682349606"
-                : "ca-app-pub-2034052364864446/5161544413"
+              Platform.OS == "ios" ? "ca-app-pub-2034052364864446/2682349606" : "ca-app-pub-2034052364864446/5161544413"
             }
           />
-          <ArticleContainer>
-            <ArticleTitle>{noticeData.title}</ArticleTitle>
-            <ArticleAdditionalInformation>
-              {noticeData.createdDate}
-            </ArticleAdditionalInformation>
-            <ArticleAdditionalInformation>
+          <View style={ArticleStyles.container}>
+            <Text style={ArticleStyles.title}>{noticeData.title}</Text>
+            <Text style={ArticleStyles.additionalInformation}>{noticeData.createdDate}</Text>
+            <Text style={ArticleStyles.additionalInformation}>
               {`${noticeData.authorName}`}
               {noticeData.authorDept && ` / ${noticeData.authorDept}`}
               {` / ${noticeData.deptName}`}
-            </ArticleAdditionalInformation>
+            </Text>
             {typeof noticeData.contentHtml !== "undefined" && (
               <AutoHeightWebView
                 originWhitelist={["*"]}
@@ -111,7 +88,7 @@ export default function Article({ route }: { route: ArticleProps }) {
                   }
                 }}
                 // react-native-webview 10.7에서 수정됨
-                onNavigationStateChange={(_navState) => {
+                onNavigationStateChange={() => {
                   StatusBar.setBarStyle("dark-content");
                 }}
                 viewportContent={"width=device-width, user-scalable=no"}
@@ -125,7 +102,7 @@ export default function Article({ route }: { route: ArticleProps }) {
                 }}
               />
             )}
-          </ArticleContainer>
+          </View>
         </ScrollView>
       </AppLayout>
     );
@@ -137,3 +114,17 @@ export default function Article({ route }: { route: ArticleProps }) {
     );
   }
 }
+
+const ArticleStyles = StyleSheet.create({
+  container: { margin: 16 },
+  title: {
+    color: theme.colors.black,
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
+  additionalInformation: {
+    color: theme.colors.darkGrey,
+    marginBottom: 16,
+  },
+});

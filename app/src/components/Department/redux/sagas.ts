@@ -7,9 +7,7 @@ import {
   UPLOAD_USER_DATA_FAILURE,
 } from "./actions";
 
-const updateUserData = function* (
-  action: ReturnType<typeof updateUserDataAsync.request>
-) {
+const updateUserData = function* (action: ReturnType<typeof updateUserDataAsync.request>) {
   const { favoriteDepartmentList, expoPushToken } = action.payload;
   try {
     yield call(updateUserFavoriteDepartmentList, {

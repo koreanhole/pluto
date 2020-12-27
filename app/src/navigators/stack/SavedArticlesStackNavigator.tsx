@@ -1,16 +1,17 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
-import Favorite from "components/Favorite";
+import SavedArticles from "components/SavedArticles";
 import Article from "components/Article";
 import theme from "theme";
-import { StyledHeaderIcon } from "./base";
+import { HeaderIconStyles } from "./base";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
-export default function FavoriteStackNavigator() {
+export default function SavedArticlesStackNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="Favorite"
+      initialRouteName="SavedArticles"
       screenOptions={{
         headerStyle: {
           backgroundColor: `${theme.colors.ligthGrey}`,
@@ -23,15 +24,11 @@ export default function FavoriteStackNavigator() {
         },
         headerTitleAlign: "left",
         headerBackImage: () => (
-          <StyledHeaderIcon
-            name="arrow-back"
-            size={theme.size.headerIconSize}
-          />
+          <MaterialIcons style={HeaderIconStyles.materialIcons} name="arrow-back" size={theme.size.headerIconSize} />
         ),
         headerBackTitleVisible: false,
-      }}
-    >
-      <Stack.Screen name="Favorite" component={Favorite} />
+      }}>
+      <Stack.Screen name="SavedArticles" component={SavedArticles} />
       <Stack.Screen name="Article" component={Article} />
     </Stack.Navigator>
   );

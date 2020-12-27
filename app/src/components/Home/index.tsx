@@ -1,27 +1,18 @@
 import * as React from "react";
-import { View, FlatList, RefreshControl } from "react-native";
+import { View, FlatList, RefreshControl, StyleSheet } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard from "./NoticeCard";
-import styled from "styled-components/native";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
 import { useNavigation } from "@react-navigation/native";
-import _ from "underscore";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
 import * as Notifications from "expo-notifications";
 import LoadingIndicator from "modules/LoadingIndicator";
 import theme from "theme";
 import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
-import {
-  getHomeInitialNotice,
-  getNoticeFetchState,
-} from "components/Article/redux/selectors";
+import { getHomeInitialNotice, getNoticeFetchState } from "components/Article/redux/selectors";
 import HeaderRightButton from "./HeaderRightButton";
-
-export const HomeContainer = styled(View)`
-  flex: 1;
-`;
 
 export default function Home() {
   const navigation = useNavigation();
@@ -44,35 +35,31 @@ export default function Home() {
       fetchInitialNoticeListAsync.request({
         departmentList: favoriteDepartmentList,
         pageType: "HOME",
-      })
+      }),
     );
   }, [favoriteDepartmentList]);
 
   React.useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      dispatch(setExpoPushToken(token))
-    );
-    const subscription = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        const responseData = response.notification.request.content.data;
-        navigation.navigate("Article", {
-          // @ts-ignore Object is of type 'unknown'.ts(2571)
-          deptCode: responseData.deptCode,
-          // @ts-ignore Object is of type 'unknown'.ts(2571)
-          listId: responseData.listId,
-        });
-      }
-    );
+    registerForPushNotificationsAsync().then((token) => dispatch(setExpoPushToken(token)));
+    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+      const responseData = response.notification.request.content.data;
+      navigation.navigate("Article", {
+        // @ts-ignore Object is of type 'unknown'.ts(2571)
+        deptCode: responseData.deptCode,
+        // @ts-ignore Object is of type 'unknown'.ts(2571)
+        listId: responseData.listId,
+      });
+    });
     return () => subscription.remove();
   }, [navigation]);
 
   return (
     <AppLayout>
-      <HomeContainer>
+      <View style={HomeStyles.container}>
         {noticeFetchState == "SUCCESS" ? (
           <FlatList
             data={noticeData}
-            keyExtractor={(item, index) => item.title + index}
+            keyExtractor={(item) => `${item.deptCode}${item.listId}`}
             refreshControl={
               <RefreshControl
                 refreshing={false}
@@ -81,7 +68,7 @@ export default function Home() {
                     fetchInitialNoticeListAsync.request({
                       departmentList: favoriteDepartmentList,
                       pageType: "HOME",
-                    })
+                    }),
                   )
                 }
                 tintColor={theme.colors.primary}
@@ -105,7 +92,12 @@ export default function Home() {
         ) : (
           <LoadingIndicator />
         )}
-      </HomeContainer>
+      </View>
     </AppLayout>
   );
 }
+const HomeStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

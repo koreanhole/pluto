@@ -14,10 +14,7 @@ export default function AppLayout(props: AppLayoutProps) {
   return (
     <React.Fragment>
       <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-        <StatusBar
-          backgroundColor={theme.colors.ligthGrey}
-          barStyle="dark-content"
-        />
+        <StatusBar backgroundColor={theme.colors.ligthGrey} barStyle="dark-content" />
         <View style={AppLayoutStyles.mainSection}>
           {typeof noDataText === "undefined" ? (
             children

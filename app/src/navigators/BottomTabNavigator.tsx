@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
 import HomeStackNavigator from "./stack/HomeStackNavigator";
-import FavoriteStackNavigator from "./stack/FavoriteStackNavigator";
+import SavedArticlesStackNavigator from "./stack/SavedArticlesStackNavigator";
 import AllArticleStackNavigator from "./stack/AllArticleStackNavigator";
 import MoreStackNavigator from "./stack/MoreStackNavigator";
 import theme from "theme";
@@ -19,8 +19,7 @@ export default function BottomTabNavigator() {
           backgroundColor: theme.colors.ligthGrey,
         },
         showLabel: true,
-      }}
-    >
+      }}>
       <Tab.Screen
         name="Home"
         component={HomeStackNavigator}
@@ -28,14 +27,8 @@ export default function BottomTabNavigator() {
           tabBarLabel: "홈",
           tabBarIcon: ({ focused, color, size }) => {
             // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
-            let iconName: any = focused ? "home" : "home-outline";
-            return (
-              <MaterialCommunityIcons
-                name={iconName}
-                size={size}
-                color={color}
-              />
-            );
+            const iconName: any = focused ? "home" : "home-outline";
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           },
         }}
       />
@@ -46,32 +39,20 @@ export default function BottomTabNavigator() {
           tabBarLabel: "전체 부서",
           tabBarIcon: ({ focused, color, size }) => {
             // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
-            let iconName: any = focused ? "book-open" : "book-open-outline";
-            return (
-              <MaterialCommunityIcons
-                name={iconName}
-                size={size}
-                color={color}
-              />
-            );
+            const iconName: any = focused ? "book-open" : "book-open-outline";
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           },
         }}
       />
       <Tab.Screen
-        name="Favorite"
-        component={FavoriteStackNavigator}
+        name="SavedArticlesStackNavigator"
+        component={SavedArticlesStackNavigator}
         options={{
           tabBarLabel: "저장",
           tabBarIcon: ({ focused, color, size }) => {
             // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
-            let iconName: any = focused ? "heart" : "heart-outline";
-            return (
-              <MaterialCommunityIcons
-                name={iconName}
-                size={size}
-                color={color}
-              />
-            );
+            const iconName: any = focused ? "heart" : "heart-outline";
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           },
         }}
       />
@@ -81,9 +62,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarLabel: "더보기",
           tabBarIcon: ({ color, size }) => {
-            return (
-              <MaterialIcons name="more-horiz" size={size} color={color} />
-            );
+            return <MaterialIcons name="more-horiz" size={size} color={color} />;
           },
         }}
       />

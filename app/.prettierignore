@@ -1,0 +1,10 @@
+.git/
+.gitignore
+.prettierignore
+.eslintignore
+
+/build/
+/packages/
+
+*.jpg
+*.png

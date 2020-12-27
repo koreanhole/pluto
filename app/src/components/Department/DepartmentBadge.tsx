@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components/native";
 import { Text, Alert, View, StyleSheet, Platform } from "react-native";
 import { Chip } from "react-native-paper";
 import { deleteFromFavoriteDepartmentList } from "./redux/actions";
@@ -9,18 +8,7 @@ import theme from "theme";
 import randomColor from "randomcolor";
 import * as Haptics from "expo-haptics";
 
-const DepartmentBadgeContainer = styled.View`
-  margin-top: 8px;
-  margin-left: 8px;
-  flex-direction: row;
-  flex-wrap: wrap;
-`;
-
-const DepartmentBadgeItem = ({
-  departmentName,
-}: {
-  departmentName: string;
-}) => {
+const DepartmentBadgeItem = ({ departmentName }: { departmentName: string }) => {
   const dispatch = useDispatch();
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
@@ -55,11 +43,13 @@ const DepartmentBadgeItem = ({
   }, []);
 
   return (
-    <View style={BadgeButtonStyles.badgeContainer}>
+    <View style={BadgeStyles.buttonContainer}>
       <Chip
         onPress={handleClickDepartmentBadgeItem}
         onClose={handleClickDepartmentBadgeItem}
         selectedColor={theme.colors.white}
+        accessibilityComponentType="button"
+        accessibilityTraits="button"
         icon="bell"
         textStyle={{
           color: theme.colors.white,
@@ -72,8 +62,7 @@ const DepartmentBadgeItem = ({
             luminosity: "bright",
             alpha: 1,
           }),
-        }}
-      >
+        }}>
         <Text>{departmentName}</Text>
       </Chip>
     </View>
@@ -84,25 +73,26 @@ export default function DepartmentBadge() {
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
   return (
-    <DepartmentBadgeContainer>
+    <View style={BadgeStyles.container}>
       {favoriteDepartmentList !== null ? (
         favoriteDepartmentList.map((departmentName) => {
-          return (
-            <DepartmentBadgeItem
-              key={departmentName}
-              departmentName={departmentName}
-            />
-          );
+          return <DepartmentBadgeItem key={departmentName} departmentName={departmentName} />;
         })
       ) : (
         <Text>아래 목록에서 선택해주세요</Text>
       )}
-    </DepartmentBadgeContainer>
+    </View>
   );
 }
 
-const BadgeButtonStyles = StyleSheet.create({
-  badgeContainer: {
+const BadgeStyles = StyleSheet.create({
+  container: {
+    marginTop: 8,
+    marginLeft: 8,
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  buttonContainer: {
     marginRight: 8,
     marginBottom: 8,
     color: theme.colors.white,

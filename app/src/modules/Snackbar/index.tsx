@@ -13,11 +13,7 @@ export default function Snackbar() {
   return (
     <>
       {snackBarState && (
-        <RnpSnackbar
-          visible={snackBarState.visible}
-          onDismiss={handleDismissSnackbar}
-          duration={1000}
-        >
+        <RnpSnackbar visible={snackBarState.visible} onDismiss={handleDismissSnackbar} duration={1000}>
           {snackBarState.message}
         </RnpSnackbar>
       )}

@@ -5,11 +5,7 @@ import theme from "theme";
 export default function LoadingIndicator() {
   return (
     <View style={LoadingStyles.container}>
-      <ActivityIndicator
-        animating={true}
-        size="large"
-        color={theme.colors.primary}
-      />
+      <ActivityIndicator animating={true} size="large" color={theme.colors.primary} />
     </View>
   );
 }

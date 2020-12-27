@@ -17,13 +17,9 @@ const sagaMiddleware = createSagaMiddleware();
 
 export default function createReduxStore(preloadedState?: RootState) {
   const persistedReducer = persistReducer(persistConfig, rootReducer);
-  const store = createStore(
-    persistedReducer,
-    preloadedState,
-    composeWithDevTools(applyMiddleware(sagaMiddleware))
-  );
+  const store = createStore(persistedReducer, preloadedState, composeWithDevTools(applyMiddleware(sagaMiddleware)));
   sagaMiddleware.run(rootSaga);
   // @ts-expect-error "Type 'AnyAction' is not assignable to type 'PayloadAction<"SET_FAVORITE_DEPARTMENT", string[]>'.ts(2345)"
-  let persistor = persistStore(store);
+  const persistor = persistStore(store);
   return { store, persistor };
 }

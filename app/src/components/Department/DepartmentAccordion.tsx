@@ -1,8 +1,7 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { View, Platform } from "react-native";
+import { View, Platform, StyleSheet, Text, TextStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
-import styled from "styled-components/native";
 import Divider from "modules/Divider";
 import Ripple from "react-native-material-ripple";
 import { addToFavoriteDepartmentList } from "./redux/actions";
@@ -17,21 +16,10 @@ type DepartmentSection = {
   data: string[];
 };
 
-type AccordionTextProps = {
-  type: "HEADER" | "CONTENT";
-};
-
 export const DEPARTMENT_SECTIONS: DepartmentSection[] = [
   {
     title: "전체공지",
-    data: [
-      "일반공지",
-      "학사공지",
-      "직원채용",
-      "창업공지",
-      "입찰공고",
-      "시설공사",
-    ],
+    data: ["일반공지", "학사공지", "직원채용", "창업공지", "입찰공고", "시설공사"],
   },
   {
     title: "기타부서",
@@ -55,77 +43,31 @@ export const DEPARTMENT_SECTIONS: DepartmentSection[] = [
   },
   {
     title: "정경대학",
-    data: [
-      "정경대학",
-      "행정학과",
-      "국제관계학과",
-      "경제학부",
-      "사회복지학과",
-      "세무학과",
-    ],
+    data: ["정경대학", "행정학과", "국제관계학과", "경제학부", "사회복지학과", "세무학과"],
   },
   {
     title: "인문대학",
-    data: [
-      "인문대학",
-      "영어영문학과",
-      "국어국문학과",
-      "국사학과",
-      "철학과",
-      "중국어문화학과",
-    ],
+    data: ["인문대학", "영어영문학과", "국어국문학과", "국사학과", "철학과", "중국어문화학과"],
   },
   {
     title: "자연과학대학",
-    data: [
-      "자연과학대학",
-      "수학과",
-      "통계학과",
-      "물리학과",
-      "생명과학과",
-      "환경원예학과",
-    ],
+    data: ["자연과학대학", "수학과", "통계학과", "물리학과", "생명과학과", "환경원예학과"],
   },
 ];
 
-const AccordionHeaderContainer = styled.View`
-  padding: 10px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const AccordionText = styled.Text<AccordionTextProps>`
-  padding: 10px 0;
-  font-size: 15px;
-  ${(props) => (props.type == "HEADER" ? "font-weight: bold" : "")};
-`;
-
-const AccordionContentItemContainer = styled.View`
-  flex-direction: row;
-  margin-horizontal: 24px;
-  margin-vertical: 8px;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const AccordionHeader = (
-  section: DepartmentSection,
-  _index: number,
-  isActive: boolean,
-  _sections: DepartmentSection[]
-) => {
+const AccordionHeader = (section: DepartmentSection, _index: number, isActive: boolean) => {
+  const headerTextStyles = StyleSheet.flatten([AccordionStyles.text, { fontWeight: "bold" } as TextStyle]);
   return (
     <>
-      <AccordionHeaderContainer>
-        <AccordionText type="HEADER">{section.title}</AccordionText>
+      <View style={AccordionStyles.headerContainer}>
+        <Text style={headerTextStyles}>{section.title}</Text>
         {isActive ? (
           <MaterialIcons name="keyboard-arrow-up" size={24} color="black" />
         ) : (
           <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
         )}
-      </AccordionHeaderContainer>
-      <Divider style={{ backgroundColor: theme.colors.grey }} />
+      </View>
+      <Divider />
     </>
   );
 };
@@ -134,22 +76,13 @@ const AccordionContent = (section: DepartmentSection) => {
   return (
     <View>
       {section.data.map((departmentName) => {
-        return (
-          <AccrodionContentItem
-            departmentName={departmentName}
-            key={departmentName}
-          />
-        );
+        return <AccrodionContentItem departmentName={departmentName} key={departmentName} />;
       })}
     </View>
   );
 };
 
-const AccrodionContentItem = ({
-  departmentName,
-}: {
-  departmentName: string;
-}) => {
+const AccrodionContentItem = ({ departmentName }: { departmentName: string }) => {
   const dispatch = useDispatch();
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
@@ -160,7 +93,7 @@ const AccrodionContentItem = ({
       showSnackbar({
         visible: true,
         message: "새로운 공지사항에 대해 알림을 수신합니다.",
-      })
+      }),
     );
     if (Platform.OS == "ios") {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -168,21 +101,18 @@ const AccrodionContentItem = ({
   }, [favoriteDepartmentList]);
   return (
     <Ripple onPress={handleClickDepartmentName}>
-      <AccordionContentItemContainer>
-        <AccordionText type="CONTENT">{departmentName}</AccordionText>
-        {favoriteDepartmentList !== null &&
-        favoriteDepartmentList.includes(departmentName) ? (
+      <View style={AccordionStyles.contentItemContainer}>
+        <Text style={AccordionStyles.text}>{departmentName}</Text>
+        {favoriteDepartmentList !== null && favoriteDepartmentList.includes(departmentName) ? (
           <MaterialIcons name="check" color={theme.colors.green} size={20} />
         ) : null}
-      </AccordionContentItemContainer>
+      </View>
     </Ripple>
   );
 };
 
 export default function DepartmentAccordion() {
-  const [activeDepartmentSection, setActiveDepartmentSection] = React.useState<
-    number[]
-  >([]);
+  const [activeDepartmentSection, setActiveDepartmentSection] = React.useState<number[]>([]);
 
   return (
     <Accordion
@@ -196,3 +126,24 @@ export default function DepartmentAccordion() {
     />
   );
 }
+
+const AccordionStyles = StyleSheet.create({
+  headerContainer: {
+    padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  text: {
+    paddingVertical: 10,
+    paddingHorizontal: 0,
+    fontSize: 15,
+  },
+  contentItemContainer: {
+    flexDirection: "row",
+    marginHorizontal: 24,
+    marginVertical: 8,
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+});
