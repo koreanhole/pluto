@@ -1,4 +1,4 @@
-name: Test PR
+name: run lint
 
 on:
   push:
