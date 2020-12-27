@@ -11,7 +11,6 @@ import * as StoreReview from "expo-store-review";
 
 type SettingItem = {
   // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
-  //@ts-ignore: Unexpected any. Specify a different type
   iconName: any;
   title: string;
   subTitle?: string;
@@ -27,6 +26,16 @@ export default function More() {
       headerTitle: "더보기",
     });
   });
+
+  const handleClickOpenBachelorSchedule = React.useCallback(() => {
+    WebBrowser.openBrowserAsync("https://www.uos.ac.kr/korCalendarYear/list.do?list_id=CA1").catch(() => {
+      Alert.alert("페이지를 열 수 없습니다.", "", [
+        {
+          text: "확인",
+        },
+      ]);
+    });
+  }, []);
 
   const handleClickNotificationSetting = React.useCallback(async () => {
     await Linking.openSettings();
@@ -70,6 +79,12 @@ export default function More() {
 
   const SETTING_ITEMS: SettingItem[] = [
     {
+      iconName: "calendar-month-outline",
+      title: "학사일정",
+      handleClick: handleClickOpenBachelorSchedule,
+      isExternalLink: true,
+    },
+    {
       iconName: "bell-outline",
       title: "알림설정",
       handleClick: handleClickNotificationSetting,
@@ -80,7 +95,7 @@ export default function More() {
       title: "문의하기",
       subTitle: "기능추가, 버그 제보",
       handleClick: handleClickContact,
-      isExternalLink: false,
+      isExternalLink: true,
     },
     {
       iconName: "emoticon-happy-outline",
@@ -90,9 +105,9 @@ export default function More() {
     },
     {
       iconName: "github",
-      title: "UOS공지사항 코드저장소",
+      title: "UOS공지사항 깃허브",
       handleClick: handleClickViewCode,
-      isExternalLink: false,
+      isExternalLink: true,
     },
   ];
 
@@ -111,9 +126,9 @@ export default function More() {
         {SETTING_ITEMS.map((item) => {
           return (
             <Ripple onPress={item.handleClick} key={item.title}>
-              <View style={SettingItemStyles.container}>
+              <View style={SettingItemStyles.itemContainer}>
                 <MaterialCommunityIcons name={item.iconName} size={24} color={theme.colors.primary} />
-                <View style={SettingItemStyles.itemContainer}>
+                <View style={SettingItemStyles.subItemContainer}>
                   <View style={SettingItemStyles.titleTextContainer}>
                     <Text style={SettingItemStyles.titleText}>{item.title}</Text>
                     {typeof item.subTitle !== "undefined" && (
@@ -142,13 +157,13 @@ export default function More() {
 }
 
 const SettingItemStyles = StyleSheet.create({
-  container: {
+  itemContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 16,
     paddingVertical: 12,
   },
-  itemContainer: {
+  subItemContainer: {
     flex: 2,
     flexDirection: "row",
     alignItems: "center",
