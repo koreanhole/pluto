@@ -23,15 +23,9 @@ export default function AllArticleStackNavigator() {
           fontSize: 20,
         },
         headerTitleAlign: "left",
-        headerBackImage: () => (
-          <StyledHeaderIcon
-            name="arrow-back"
-            size={theme.size.headerIconSize}
-          />
-        ),
+        headerBackImage: () => <StyledHeaderIcon name="arrow-back" size={theme.size.headerIconSize} />,
         headerBackTitleVisible: false,
-      }}
-    >
+      }}>
       <Stack.Screen name="AllArticle" component={AllArticle} />
       <Stack.Screen name="ArticleList" component={ArticleList} />
       <Stack.Screen name="Article" component={Article} />

@@ -16,22 +16,20 @@ export const loadInitialNoticeList = async (departmentList: string[]) => {
   const initialNoticeList = await query
     .get()
     .then((documentSnapshots) => {
-      const fetchedNoticeData: NoticeArticle[] = documentSnapshots.docs.map(
-        (document) => {
-          const fetchedData = document.data();
-          return {
-            createdDateTimestamp: fetchedData.createdDateTimestamp,
-            deptCode: fetchedData.deptCode,
-            deptName: fetchedData.deptName,
-            authorDept: fetchedData.authorDept,
-            title: fetchedData.title,
-            createdDate: fetchedData.createdDate,
-            authorName: fetchedData.authorName,
-            listId: fetchedData.listId,
-            favoriteCount: fetchedData.favoriteCount,
-          };
-        }
-      );
+      const fetchedNoticeData: NoticeArticle[] = documentSnapshots.docs.map((document) => {
+        const fetchedData = document.data();
+        return {
+          createdDateTimestamp: fetchedData.createdDateTimestamp,
+          deptCode: fetchedData.deptCode,
+          deptName: fetchedData.deptName,
+          authorDept: fetchedData.authorDept,
+          title: fetchedData.title,
+          createdDate: fetchedData.createdDate,
+          authorName: fetchedData.authorName,
+          listId: fetchedData.listId,
+          favoriteCount: fetchedData.favoriteCount,
+        };
+      });
       return fetchedNoticeData;
     })
     .catch(() => {
@@ -40,13 +38,7 @@ export const loadInitialNoticeList = async (departmentList: string[]) => {
   return initialNoticeList;
 };
 
-export const loadNoticeData = async ({
-  deptCode,
-  listId,
-}: {
-  deptCode: string;
-  listId: string;
-}) => {
+export const loadNoticeData = async ({ deptCode, listId }: { deptCode: string; listId: string }) => {
   const noticeDocumentId = getNoticeDocumentId(deptCode, listId);
   const noticeRef = noticeFirestore.doc(noticeDocumentId);
 
@@ -78,9 +70,7 @@ export const loadNoticeData = async ({
   return noticeData;
 };
 
-export async function updateUserFavoriteDepartmentList(
-  userData: UploadUserDepartmentListRequestPayload
-) {
+export async function updateUserFavoriteDepartmentList(userData: UploadUserDepartmentListRequestPayload) {
   const { expoPushToken, favoriteDepartmentList } = userData;
   await userDataFirestore.doc(expoPushToken).set({
     favoriteDepartmentList: favoriteDepartmentList,

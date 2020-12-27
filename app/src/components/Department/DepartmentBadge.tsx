@@ -16,11 +16,7 @@ const DepartmentBadgeContainer = styled.View`
   flex-wrap: wrap;
 `;
 
-const DepartmentBadgeItem = ({
-  departmentName,
-}: {
-  departmentName: string;
-}) => {
+const DepartmentBadgeItem = ({ departmentName }: { departmentName: string }) => {
   const dispatch = useDispatch();
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
 
@@ -72,8 +68,7 @@ const DepartmentBadgeItem = ({
             luminosity: "bright",
             alpha: 1,
           }),
-        }}
-      >
+        }}>
         <Text>{departmentName}</Text>
       </Chip>
     </View>
@@ -87,12 +82,7 @@ export default function DepartmentBadge() {
     <DepartmentBadgeContainer>
       {favoriteDepartmentList !== null ? (
         favoriteDepartmentList.map((departmentName) => {
-          return (
-            <DepartmentBadgeItem
-              key={departmentName}
-              departmentName={departmentName}
-            />
-          );
+          return <DepartmentBadgeItem key={departmentName} departmentName={departmentName} />;
         })
       ) : (
         <Text>아래 목록에서 선택해주세요</Text>

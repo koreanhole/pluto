@@ -7,10 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import LoadingIndicator from "modules/LoadingIndicator";
 import { HomeContainer } from "components/Home/index";
 import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
-import {
-  getAllArticleInitialNotice,
-  getNoticeFetchState,
-} from "components/Article/redux/selectors";
+import { getAllArticleInitialNotice, getNoticeFetchState } from "components/Article/redux/selectors";
 
 type ArticleListProps = {
   key: string;
@@ -33,7 +30,7 @@ export default function ArticleList({ route }: { route: ArticleListProps }) {
       fetchInitialNoticeListAsync.request({
         departmentList: [deptName],
         pageType: "ALL_ARTICLE",
-      })
+      }),
     );
   }, []);
 

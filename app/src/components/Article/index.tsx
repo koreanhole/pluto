@@ -53,9 +53,7 @@ export default function Article({ route }: { route: ArticleProps }) {
         <HeaderRightButton
           url={noticeData !== null ? noticeData.url : ""}
           notice={noticeData}
-          attachment={
-            noticeData !== null ? noticeData.attachmentLink : undefined
-          }
+          attachment={noticeData !== null ? noticeData.attachmentLink : undefined}
         />
       ),
     });
@@ -66,7 +64,7 @@ export default function Article({ route }: { route: ArticleProps }) {
       fetchNoticeDataAsync.request({
         deptCode: deptCode,
         listId: listId,
-      })
+      }),
     );
   }, [route]);
 
@@ -77,16 +75,12 @@ export default function Article({ route }: { route: ArticleProps }) {
           <AdMobBanner
             bannerSize="smartBannerPortrait"
             adUnitID={
-              Platform.OS == "ios"
-                ? "ca-app-pub-2034052364864446/2682349606"
-                : "ca-app-pub-2034052364864446/5161544413"
+              Platform.OS == "ios" ? "ca-app-pub-2034052364864446/2682349606" : "ca-app-pub-2034052364864446/5161544413"
             }
           />
           <ArticleContainer>
             <ArticleTitle>{noticeData.title}</ArticleTitle>
-            <ArticleAdditionalInformation>
-              {noticeData.createdDate}
-            </ArticleAdditionalInformation>
+            <ArticleAdditionalInformation>{noticeData.createdDate}</ArticleAdditionalInformation>
             <ArticleAdditionalInformation>
               {`${noticeData.authorName}`}
               {noticeData.authorDept && ` / ${noticeData.authorDept}`}

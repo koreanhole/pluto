@@ -21,15 +21,9 @@ export default function MoreStackNavigator() {
           fontSize: 20,
         },
         headerTitleAlign: "left",
-        headerBackImage: () => (
-          <StyledHeaderIcon
-            name="arrow-back"
-            size={theme.size.headerIconSize}
-          />
-        ),
+        headerBackImage: () => <StyledHeaderIcon name="arrow-back" size={theme.size.headerIconSize} />,
         headerBackTitleVisible: false,
-      }}
-    >
+      }}>
       <Stack.Screen name="More" component={More} />
     </Stack.Navigator>
   );

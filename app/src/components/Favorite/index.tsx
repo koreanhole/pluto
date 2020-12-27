@@ -27,18 +27,12 @@ export default function SavedArticles() {
             <FlatList
               data={savedNoticeArticle}
               keyExtractor={(item) => item.title}
-              renderItem={(data) => (
-                <PlainArticleListItem data={data.item} deleteEnabled={true} />
-              )}
+              renderItem={(data) => <PlainArticleListItem data={data.item} deleteEnabled={true} />}
             />
           </HomeContainer>
         </AppLayout>
       ) : (
-        <AppLayout
-          noDataText={
-            "저장된 공지사항이 없습니다.\n게시글에서 ♥︎를 눌러서 저장해주세요."
-          }
-        />
+        <AppLayout noDataText={"저장된 공지사항이 없습니다.\n게시글에서 ♥︎를 눌러서 저장해주세요."} />
       )}
     </>
   );

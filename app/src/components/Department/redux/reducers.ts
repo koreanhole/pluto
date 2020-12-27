@@ -1,10 +1,6 @@
 import { combineReducers } from "redux";
 import { createReducer } from "typesafe-actions";
-import {
-  addToFavoriteDepartmentList,
-  deleteFromFavoriteDepartmentList,
-  setExpoPushToken,
-} from "./actions";
+import { addToFavoriteDepartmentList, deleteFromFavoriteDepartmentList, setExpoPushToken } from "./actions";
 import _ from "underscore";
 
 const DEFALUT_DEPARTMENT_LIST = ["일반공지", "학사공지"];
@@ -25,12 +21,9 @@ const reducer = combineReducers({
         return state;
       }
     }),
-  expoPushToken: createReducer<string | undefined | null>(null).handleAction(
-    setExpoPushToken,
-    (_state, action) => {
-      return action.payload;
-    }
-  ),
+  expoPushToken: createReducer<string | undefined | null>(null).handleAction(setExpoPushToken, (_state, action) => {
+    return action.payload;
+  }),
 });
 
 export default reducer;

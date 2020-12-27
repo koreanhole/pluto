@@ -25,7 +25,7 @@ export default function HeaderRightButton() {
         if (buttonIndex == 2) {
           dispatch(sortSavedNotice("DESCENDING"));
         }
-      }
+      },
     );
   }, []);
   return (

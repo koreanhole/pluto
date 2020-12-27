@@ -10,10 +10,7 @@ const reducer = combineReducers({
       if (state == null) {
         return [action.payload];
       } else {
-        const sortedNotices = _.sortBy(
-          [...state, action.payload],
-          "createdDate"
-        ).reverse();
+        const sortedNotices = _.sortBy([...state, action.payload], "createdDate").reverse();
         return _.uniq(sortedNotices, true);
       }
     })

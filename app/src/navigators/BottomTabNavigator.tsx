@@ -19,8 +19,7 @@ export default function BottomTabNavigator() {
           backgroundColor: theme.colors.ligthGrey,
         },
         showLabel: true,
-      }}
-    >
+      }}>
       <Tab.Screen
         name="Home"
         component={HomeStackNavigator}
@@ -29,13 +28,7 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ focused, color, size }) => {
             // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
             const iconName: any = focused ? "home" : "home-outline";
-            return (
-              <MaterialCommunityIcons
-                name={iconName}
-                size={size}
-                color={color}
-              />
-            );
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           },
         }}
       />
@@ -47,13 +40,7 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ focused, color, size }) => {
             // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
             const iconName: any = focused ? "book-open" : "book-open-outline";
-            return (
-              <MaterialCommunityIcons
-                name={iconName}
-                size={size}
-                color={color}
-              />
-            );
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           },
         }}
       />
@@ -65,13 +52,7 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ focused, color, size }) => {
             // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
             const iconName: any = focused ? "heart" : "heart-outline";
-            return (
-              <MaterialCommunityIcons
-                name={iconName}
-                size={size}
-                color={color}
-              />
-            );
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           },
         }}
       />
@@ -81,9 +62,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarLabel: "더보기",
           tabBarIcon: ({ color, size }) => {
-            return (
-              <MaterialIcons name="more-horiz" size={size} color={color} />
-            );
+            return <MaterialIcons name="more-horiz" size={size} color={color} />;
           },
         }}
       />

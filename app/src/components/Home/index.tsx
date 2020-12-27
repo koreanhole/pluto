@@ -12,10 +12,7 @@ import * as Notifications from "expo-notifications";
 import LoadingIndicator from "modules/LoadingIndicator";
 import theme from "theme";
 import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
-import {
-  getHomeInitialNotice,
-  getNoticeFetchState,
-} from "components/Article/redux/selectors";
+import { getHomeInitialNotice, getNoticeFetchState } from "components/Article/redux/selectors";
 import HeaderRightButton from "./HeaderRightButton";
 
 export const HomeContainer = styled(View)`
@@ -43,25 +40,21 @@ export default function Home() {
       fetchInitialNoticeListAsync.request({
         departmentList: favoriteDepartmentList,
         pageType: "HOME",
-      })
+      }),
     );
   }, [favoriteDepartmentList]);
 
   React.useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      dispatch(setExpoPushToken(token))
-    );
-    const subscription = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        const responseData = response.notification.request.content.data;
-        navigation.navigate("Article", {
-          // @ts-ignore Object is of type 'unknown'.ts(2571)
-          deptCode: responseData.deptCode,
-          // @ts-ignore Object is of type 'unknown'.ts(2571)
-          listId: responseData.listId,
-        });
-      }
-    );
+    registerForPushNotificationsAsync().then((token) => dispatch(setExpoPushToken(token)));
+    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+      const responseData = response.notification.request.content.data;
+      navigation.navigate("Article", {
+        // @ts-ignore Object is of type 'unknown'.ts(2571)
+        deptCode: responseData.deptCode,
+        // @ts-ignore Object is of type 'unknown'.ts(2571)
+        listId: responseData.listId,
+      });
+    });
     return () => subscription.remove();
   }, [navigation]);
 
@@ -80,7 +73,7 @@ export default function Home() {
                     fetchInitialNoticeListAsync.request({
                       departmentList: favoriteDepartmentList,
                       pageType: "HOME",
-                    })
+                    }),
                   )
                 }
                 tintColor={theme.colors.primary}

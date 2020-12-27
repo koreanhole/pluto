@@ -22,15 +22,9 @@ export default function FavoriteStackNavigator() {
           fontSize: 20,
         },
         headerTitleAlign: "left",
-        headerBackImage: () => (
-          <StyledHeaderIcon
-            name="arrow-back"
-            size={theme.size.headerIconSize}
-          />
-        ),
+        headerBackImage: () => <StyledHeaderIcon name="arrow-back" size={theme.size.headerIconSize} />,
         headerBackTitleVisible: false,
-      }}
-    >
+      }}>
       <Stack.Screen name="Favorite" component={Favorite} />
       <Stack.Screen name="Article" component={Article} />
     </Stack.Navigator>

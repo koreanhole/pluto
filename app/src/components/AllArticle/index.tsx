@@ -25,11 +25,7 @@ const DepartmentItem = ({ item }: { item: string }) => {
     <Ripple onPress={handleClickDepartmentItem}>
       <View style={AllArticleStyles.sectionItemContainerStyle}>
         <Text style={AllArticleStyles.sectionItemTextStyles}>{item}</Text>
-        <MaterialIcons
-          name="keyboard-arrow-right"
-          size={24}
-          color={theme.colors.darkGrey}
-        />
+        <MaterialIcons name="keyboard-arrow-right" size={24} color={theme.colors.darkGrey} />
       </View>
     </Ripple>
   );
@@ -51,9 +47,7 @@ export default function AllArticle() {
           sections={DEPARTMENT_SECTIONS}
           keyExtractor={(item) => item}
           renderItem={({ item }) => <DepartmentItem item={item} />}
-          renderSectionHeader={({ section: { title } }) => (
-            <DepartmentSectionHeader title={title} />
-          )}
+          renderSectionHeader={({ section: { title } }) => <DepartmentSectionHeader title={title} />}
         />
       </HomeContainer>
     </AppLayout>

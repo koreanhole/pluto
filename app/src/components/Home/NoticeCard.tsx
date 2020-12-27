@@ -40,37 +40,21 @@ const NoticeCardItemSubtitleText = styled.Text`
   color: ${theme.colors.darkGrey};
 `;
 
-export const NoticeCardHeader = ({
-  createdDate,
-  favoriteCount,
-}: {
-  createdDate: string;
-  favoriteCount?: number;
-}) => {
+export const NoticeCardHeader = ({ createdDate, favoriteCount }: { createdDate: string; favoriteCount?: number }) => {
   return (
     <View style={NoticeCardStyle.header}>
-      <Text
-        style={NoticeCardStyle.headerText}
-      >{`#${getDescriptiveDateDifference(createdDate)}`}</Text>
+      <Text style={NoticeCardStyle.headerText}>{`#${getDescriptiveDateDifference(createdDate)}`}</Text>
       {typeof favoriteCount !== "undefined" && favoriteCount > 0 && (
         <View style={NoticeCardStyle.favoriteContainer}>
           <MaterialIcons name="favorite-border" color={theme.colors.darkGrey} />
-          <Text style={NoticeCardStyle.favoriteCounterText}>
-            {favoriteCount}
-          </Text>
+          <Text style={NoticeCardStyle.favoriteCounterText}>{favoriteCount}</Text>
         </View>
       )}
     </View>
   );
 };
 
-const NoticeCardItemTitle = ({
-  deptName,
-  title,
-}: {
-  deptName: string;
-  title: string;
-}) => {
+const NoticeCardItemTitle = ({ deptName, title }: { deptName: string; title: string }) => {
   return (
     <NoticeCardItemTitleContainer>
       <TextAvatar
@@ -81,8 +65,7 @@ const NoticeCardItemTitle = ({
         })}
         textColor={theme.colors.white}
         size={34}
-        type={"circle"}
-      >
+        type={"circle"}>
         {`${deptName}`}
       </TextAvatar>
       <NoticeCardItemTitleText>{title}</NoticeCardItemTitleText>
@@ -111,16 +94,7 @@ const NoticeCardItemSubtitle = ({
 };
 
 export default function NoticeCard(props: NoticeArticle) {
-  const {
-    deptCode,
-    deptName,
-    authorDept,
-    title,
-    createdDate,
-    authorName,
-    listId,
-    favoriteCount,
-  } = props;
+  const { deptCode, deptName, authorDept, title, createdDate, authorName, listId, favoriteCount } = props;
   const navigation = useNavigation();
 
   const handleNoticeCardItemClick = React.useCallback(() => {
@@ -130,16 +104,9 @@ export default function NoticeCard(props: NoticeArticle) {
   return (
     <Ripple onPress={handleNoticeCardItemClick}>
       <NoticeCardContainer>
-        <NoticeCardHeader
-          createdDate={createdDate}
-          favoriteCount={favoriteCount}
-        />
+        <NoticeCardHeader createdDate={createdDate} favoriteCount={favoriteCount} />
         <NoticeCardItemTitle deptName={deptName} title={title} />
-        <NoticeCardItemSubtitle
-          createdDate={createdDate}
-          authorName={authorName}
-          authorDept={authorDept}
-        />
+        <NoticeCardItemSubtitle createdDate={createdDate} authorName={authorName} authorDept={authorDept} />
         <Divider />
       </NoticeCardContainer>
     </Ripple>

@@ -24,14 +24,7 @@ type AccordionTextProps = {
 export const DEPARTMENT_SECTIONS: DepartmentSection[] = [
   {
     title: "전체공지",
-    data: [
-      "일반공지",
-      "학사공지",
-      "직원채용",
-      "창업공지",
-      "입찰공고",
-      "시설공사",
-    ],
+    data: ["일반공지", "학사공지", "직원채용", "창업공지", "입찰공고", "시설공사"],
   },
   {
     title: "기타부서",
@@ -55,36 +48,15 @@ export const DEPARTMENT_SECTIONS: DepartmentSection[] = [
   },
   {
     title: "정경대학",
-    data: [
-      "정경대학",
-      "행정학과",
-      "국제관계학과",
-      "경제학부",
-      "사회복지학과",
-      "세무학과",
-    ],
+    data: ["정경대학", "행정학과", "국제관계학과", "경제학부", "사회복지학과", "세무학과"],
   },
   {
     title: "인문대학",
-    data: [
-      "인문대학",
-      "영어영문학과",
-      "국어국문학과",
-      "국사학과",
-      "철학과",
-      "중국어문화학과",
-    ],
+    data: ["인문대학", "영어영문학과", "국어국문학과", "국사학과", "철학과", "중국어문화학과"],
   },
   {
     title: "자연과학대학",
-    data: [
-      "자연과학대학",
-      "수학과",
-      "통계학과",
-      "물리학과",
-      "생명과학과",
-      "환경원예학과",
-    ],
+    data: ["자연과학대학", "수학과", "통계학과", "물리학과", "생명과학과", "환경원예학과"],
   },
 ];
 
@@ -109,11 +81,7 @@ const AccordionContentItemContainer = styled.View`
   justify-content: space-between;
 `;
 
-const AccordionHeader = (
-  section: DepartmentSection,
-  _index: number,
-  isActive: boolean
-) => {
+const AccordionHeader = (section: DepartmentSection, _index: number, isActive: boolean) => {
   return (
     <>
       <AccordionHeaderContainer>
@@ -133,22 +101,13 @@ const AccordionContent = (section: DepartmentSection) => {
   return (
     <View>
       {section.data.map((departmentName) => {
-        return (
-          <AccrodionContentItem
-            departmentName={departmentName}
-            key={departmentName}
-          />
-        );
+        return <AccrodionContentItem departmentName={departmentName} key={departmentName} />;
       })}
     </View>
   );
 };
 
-const AccrodionContentItem = ({
-  departmentName,
-}: {
-  departmentName: string;
-}) => {
+const AccrodionContentItem = ({ departmentName }: { departmentName: string }) => {
   const dispatch = useDispatch();
 
   const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
@@ -159,7 +118,7 @@ const AccrodionContentItem = ({
       showSnackbar({
         visible: true,
         message: "새로운 공지사항에 대해 알림을 수신합니다.",
-      })
+      }),
     );
     if (Platform.OS == "ios") {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -169,19 +128,16 @@ const AccrodionContentItem = ({
     <Ripple onPress={handleClickDepartmentName}>
       <AccordionContentItemContainer>
         <AccordionText type="CONTENT">{departmentName}</AccordionText>
-        {favoriteDepartmentList !== null &&
-        favoriteDepartmentList.includes(departmentName) ? (
-            <MaterialIcons name="check" color={theme.colors.green} size={20} />
-          ) : null}
+        {favoriteDepartmentList !== null && favoriteDepartmentList.includes(departmentName) ? (
+          <MaterialIcons name="check" color={theme.colors.green} size={20} />
+        ) : null}
       </AccordionContentItemContainer>
     </Ripple>
   );
 };
 
 export default function DepartmentAccordion() {
-  const [activeDepartmentSection, setActiveDepartmentSection] = React.useState<
-    number[]
-  >([]);
+  const [activeDepartmentSection, setActiveDepartmentSection] = React.useState<number[]>([]);
 
   return (
     <Accordion

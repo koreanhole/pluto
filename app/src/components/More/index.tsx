@@ -1,16 +1,7 @@
 import * as React from "react";
 import AppLayout from "modules/AppLayout";
 import { useNavigation } from "@react-navigation/native";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Linking,
-  Alert,
-  Image,
-  Dimensions,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, Linking, Alert, Image, Dimensions } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import theme from "theme";
 import Ripple from "react-native-material-ripple";
@@ -41,15 +32,13 @@ export default function More() {
     await Linking.openSettings();
   }, []);
   const handleClickContact = React.useCallback(() => {
-    WebBrowser.openBrowserAsync("https://open.kakao.com/o/s165sMNc").catch(
-      () => {
-        Alert.alert("페이지를 열 수 없습니다.", "", [
-          {
-            text: "확인",
-          },
-        ]);
-      }
-    );
+    WebBrowser.openBrowserAsync("https://open.kakao.com/o/s165sMNc").catch(() => {
+      Alert.alert("페이지를 열 수 없습니다.", "", [
+        {
+          text: "확인",
+        },
+      ]);
+    });
   }, []);
   const handleClickRating = React.useCallback(async () => {
     const storeReviewAvailable = await StoreReview.isAvailableAsync();
@@ -70,9 +59,7 @@ export default function More() {
   }, []);
 
   const handleClickViewCode = React.useCallback(() => {
-    WebBrowser.openBrowserAsync(
-      "https://github.com/koreanhole/pluto/tree/develop/app"
-    ).catch(() => {
+    WebBrowser.openBrowserAsync("https://github.com/koreanhole/pluto/tree/develop/app").catch(() => {
       Alert.alert("페이지를 열 수 없습니다.", "", [
         {
           text: "확인",
@@ -125,20 +112,12 @@ export default function More() {
           return (
             <Ripple onPress={item.handleClick} key={item.title}>
               <View style={SettingItemStyles.container}>
-                <MaterialCommunityIcons
-                  name={item.iconName}
-                  size={24}
-                  color={theme.colors.primary}
-                />
+                <MaterialCommunityIcons name={item.iconName} size={24} color={theme.colors.primary} />
                 <View style={SettingItemStyles.itemContainer}>
                   <View style={SettingItemStyles.titleTextContainer}>
-                    <Text style={SettingItemStyles.titleText}>
-                      {item.title}
-                    </Text>
+                    <Text style={SettingItemStyles.titleText}>{item.title}</Text>
                     {typeof item.subTitle !== "undefined" && (
-                      <Text style={SettingItemStyles.subTitleText}>
-                        {item.subTitle}
-                      </Text>
+                      <Text style={SettingItemStyles.subTitleText}>{item.subTitle}</Text>
                     )}
                   </View>
                   <View>

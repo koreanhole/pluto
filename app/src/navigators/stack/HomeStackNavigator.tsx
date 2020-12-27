@@ -23,15 +23,9 @@ export default function HomeStackNavigator() {
           fontSize: 20,
         },
         headerTitleAlign: "left",
-        headerBackImage: () => (
-          <StyledHeaderIcon
-            name="arrow-back"
-            size={theme.size.headerIconSize}
-          />
-        ),
+        headerBackImage: () => <StyledHeaderIcon name="arrow-back" size={theme.size.headerIconSize} />,
         headerBackTitleVisible: false,
-      }}
-    >
+      }}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Article" component={Article} />
       <Stack.Screen name="Department" component={Department} />

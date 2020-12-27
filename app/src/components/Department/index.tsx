@@ -27,7 +27,7 @@ export default function Department() {
         updateUserDataAsync.request({
           favoriteDepartmentList: favoriteDepartmentList,
           expoPushToken: expoPushToken,
-        })
+        }),
       );
     }
   }, [favoriteDepartmentList]);
