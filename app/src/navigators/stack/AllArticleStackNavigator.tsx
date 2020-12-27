@@ -1,10 +1,11 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import { MaterialIcons } from "@expo/vector-icons";
 import * as React from "react";
 import AllArticle from "components/AllArticle";
 import Article from "components/Article";
 import ArticleList from "components/AllArticle/ArticleList";
 import theme from "theme";
-import { StyledHeaderIcon } from "./base";
+import { HeaderIconStyles } from "./base";
 
 const Stack = createStackNavigator();
 
@@ -23,7 +24,9 @@ export default function AllArticleStackNavigator() {
           fontSize: 20,
         },
         headerTitleAlign: "left",
-        headerBackImage: () => <StyledHeaderIcon name="arrow-back" size={theme.size.headerIconSize} />,
+        headerBackImage: () => (
+          <MaterialIcons style={HeaderIconStyles.materialIcons} name="arrow-back" size={theme.size.headerIconSize} />
+        ),
         headerBackTitleVisible: false,
       }}>
       <Stack.Screen name="AllArticle" component={AllArticle} />

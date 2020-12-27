@@ -1,8 +1,9 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import styled from "styled-components/native";
+import { StyleSheet } from "react-native";
 import theme from "theme";
 
-export const StyledHeaderIcon = styled(MaterialIcons)`
-  margin-left: 16px;
-  color: ${theme.colors.black};
-`;
+export const HeaderIconStyles = StyleSheet.create({
+  materialIcons: {
+    marginLeft: 16,
+    color: theme.colors.black,
+  },
+});

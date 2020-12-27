@@ -3,8 +3,7 @@ import AppLayout from "modules/AppLayout";
 import { useSelector } from "react-redux";
 import { getSavedArticle } from "components/Article/redux/selectors";
 import { useNavigation } from "@react-navigation/native";
-import { FlatList } from "react-native";
-import { HomeContainer } from "components/Home/index";
+import { FlatList, StyleSheet, View } from "react-native";
 import HeaderRightButton from "./HeaderRightButton";
 import PlainArticleListItem from "modules/PlainArticleListItem";
 
@@ -23,13 +22,13 @@ export default function SavedArticles() {
     <>
       {savedNoticeArticle !== null && savedNoticeArticle.length !== 0 ? (
         <AppLayout>
-          <HomeContainer>
+          <View style={SavedArticlesStyles.container}>
             <FlatList
               data={savedNoticeArticle}
-              keyExtractor={(item) => item.title}
+              keyExtractor={(item) => `${item.deptCode}${item.listId}`}
               renderItem={(data) => <PlainArticleListItem data={data.item} deleteEnabled={true} />}
             />
-          </HomeContainer>
+          </View>
         </AppLayout>
       ) : (
         <AppLayout noDataText={"저장된 공지사항이 없습니다.\n게시글에서 ♥︎를 눌러서 저장해주세요."} />
@@ -37,3 +36,8 @@ export default function SavedArticles() {
     </>
   );
 }
+const SavedArticlesStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

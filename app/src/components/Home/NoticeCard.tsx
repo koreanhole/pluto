@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components/native";
 import { Text, View, StyleSheet } from "react-native";
 import Ripple from "react-native-material-ripple";
 import Divider from "modules/Divider";
@@ -11,34 +10,6 @@ import randomColor from "randomcolor";
 import { getDescriptiveDateDifference } from "./util";
 import { MaterialIcons } from "@expo/vector-icons";
 import { NoticeArticle } from "components/Article/redux/types";
-
-const NoticeCardContainer = styled.View`
-  padding: 0 16px;
-`;
-
-const NoticeCardItemTitleContainer = styled.View`
-  flex-direction: row;
-  margin-bottom: 8px;
-  align-items: center;
-`;
-
-const NoticeCardItemSubtitleContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 8px;
-`;
-
-const NoticeCardItemTitleText = styled.Text`
-  padding-left: 8px;
-  font-size: 15px;
-  align-self: center;
-  flex: 1;
-`;
-
-const NoticeCardItemSubtitleText = styled.Text`
-  font-size: 12px;
-  color: ${theme.colors.darkGrey};
-`;
 
 export const NoticeCardHeader = ({ createdDate, favoriteCount }: { createdDate: string; favoriteCount?: number }) => {
   return (
@@ -56,7 +27,7 @@ export const NoticeCardHeader = ({ createdDate, favoriteCount }: { createdDate: 
 
 const NoticeCardItemTitle = ({ deptName, title }: { deptName: string; title: string }) => {
   return (
-    <NoticeCardItemTitleContainer>
+    <View style={NoticeCardItemStyles.titleContainer}>
       <TextAvatar
         backgroundColor={randomColor({
           seed: deptName,
@@ -68,8 +39,8 @@ const NoticeCardItemTitle = ({ deptName, title }: { deptName: string; title: str
         type={"circle"}>
         {`${deptName}`}
       </TextAvatar>
-      <NoticeCardItemTitleText>{title}</NoticeCardItemTitleText>
-    </NoticeCardItemTitleContainer>
+      <Text style={NoticeCardItemStyles.titleText}>{title}</Text>
+    </View>
   );
 };
 
@@ -83,13 +54,13 @@ const NoticeCardItemSubtitle = ({
   authorDept: string;
 }) => {
   return (
-    <NoticeCardItemSubtitleContainer>
-      <NoticeCardItemSubtitleText>
+    <View style={NoticeCardItemStyles.subtitleContainer}>
+      <Text style={NoticeCardItemStyles.subtitleText}>
         {`${authorName}`}
         {authorDept && ` / ${authorDept}`}
-      </NoticeCardItemSubtitleText>
-      <NoticeCardItemSubtitleText>{`${createdDate}`}</NoticeCardItemSubtitleText>
-    </NoticeCardItemSubtitleContainer>
+      </Text>
+      <Text style={NoticeCardItemStyles.subtitleText}>{`${createdDate}`}</Text>
+    </View>
   );
 };
 
@@ -103,17 +74,21 @@ export default function NoticeCard(props: NoticeArticle) {
 
   return (
     <Ripple onPress={handleNoticeCardItemClick}>
-      <NoticeCardContainer>
+      <View style={NoticeCardStyle.container}>
         <NoticeCardHeader createdDate={createdDate} favoriteCount={favoriteCount} />
         <NoticeCardItemTitle deptName={deptName} title={title} />
         <NoticeCardItemSubtitle createdDate={createdDate} authorName={authorName} authorDept={authorDept} />
         <Divider />
-      </NoticeCardContainer>
+      </View>
     </Ripple>
   );
 }
 
 const NoticeCardStyle = StyleSheet.create({
+  container: {
+    paddingVertical: 0,
+    paddingHorizontal: 16,
+  },
   header: {
     marginVertical: 8,
     flexDirection: "row",
@@ -132,5 +107,28 @@ const NoticeCardStyle = StyleSheet.create({
     marginLeft: 2,
     color: theme.colors.darkGrey,
     fontSize: 12,
+  },
+});
+
+const NoticeCardItemStyles = StyleSheet.create({
+  titleContainer: {
+    flexDirection: "row",
+    marginBottom: 8,
+    alignItems: "center",
+  },
+  subtitleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
+  },
+  titleText: {
+    paddingLeft: 8,
+    fontSize: 15,
+    alignSelf: "center",
+    flex: 1,
+  },
+  subtitleText: {
+    fontSize: 12,
+    color: theme.colors.darkGrey,
   },
 });

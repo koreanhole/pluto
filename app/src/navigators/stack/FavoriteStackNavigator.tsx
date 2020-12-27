@@ -3,7 +3,8 @@ import * as React from "react";
 import Favorite from "components/Favorite";
 import Article from "components/Article";
 import theme from "theme";
-import { StyledHeaderIcon } from "./base";
+import { HeaderIconStyles } from "./base";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
@@ -22,7 +23,9 @@ export default function FavoriteStackNavigator() {
           fontSize: 20,
         },
         headerTitleAlign: "left",
-        headerBackImage: () => <StyledHeaderIcon name="arrow-back" size={theme.size.headerIconSize} />,
+        headerBackImage: () => (
+          <MaterialIcons style={HeaderIconStyles.materialIcons} name="arrow-back" size={theme.size.headerIconSize} />
+        ),
         headerBackTitleVisible: false,
       }}>
       <Stack.Screen name="Favorite" component={Favorite} />

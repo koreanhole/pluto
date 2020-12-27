@@ -2,7 +2,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import More from "components/More";
 import theme from "theme";
-import { StyledHeaderIcon } from "./base";
+import { HeaderIconStyles } from "./base";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
@@ -21,7 +22,9 @@ export default function MoreStackNavigator() {
           fontSize: 20,
         },
         headerTitleAlign: "left",
-        headerBackImage: () => <StyledHeaderIcon name="arrow-back" size={theme.size.headerIconSize} />,
+        headerBackImage: () => (
+          <MaterialIcons style={HeaderIconStyles.materialIcons} name="arrow-back" size={theme.size.headerIconSize} />
+        ),
         headerBackTitleVisible: false,
       }}>
       <Stack.Screen name="More" component={More} />

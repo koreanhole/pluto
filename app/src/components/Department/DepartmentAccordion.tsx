@@ -1,8 +1,7 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { View, Platform } from "react-native";
+import { View, Platform, StyleSheet, Text, TextStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
-import styled from "styled-components/native";
 import Divider from "modules/Divider";
 import Ripple from "react-native-material-ripple";
 import { addToFavoriteDepartmentList } from "./redux/actions";
@@ -15,10 +14,6 @@ import { showSnackbar } from "modules/Snackbar/redux/actions";
 type DepartmentSection = {
   title: string;
   data: string[];
-};
-
-type AccordionTextProps = {
-  type: "HEADER" | "CONTENT";
 };
 
 export const DEPARTMENT_SECTIONS: DepartmentSection[] = [
@@ -60,39 +55,19 @@ export const DEPARTMENT_SECTIONS: DepartmentSection[] = [
   },
 ];
 
-const AccordionHeaderContainer = styled.View`
-  padding: 10px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const AccordionText = styled.Text<AccordionTextProps>`
-  padding: 10px 0;
-  font-size: 15px;
-  ${(props) => (props.type == "HEADER" ? "font-weight: bold" : "")};
-`;
-
-const AccordionContentItemContainer = styled.View`
-  flex-direction: row;
-  margin-horizontal: 24px;
-  margin-vertical: 8px;
-  align-items: center;
-  justify-content: space-between;
-`;
-
 const AccordionHeader = (section: DepartmentSection, _index: number, isActive: boolean) => {
+  const headerTextStyles = StyleSheet.flatten([AccordionStyles.text, { fontWeight: "bold" } as TextStyle]);
   return (
     <>
-      <AccordionHeaderContainer>
-        <AccordionText type="HEADER">{section.title}</AccordionText>
+      <View style={AccordionStyles.headerContainer}>
+        <Text style={headerTextStyles}>{section.title}</Text>
         {isActive ? (
           <MaterialIcons name="keyboard-arrow-up" size={24} color="black" />
         ) : (
           <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
         )}
-      </AccordionHeaderContainer>
-      <Divider style={{ backgroundColor: theme.colors.grey }} />
+      </View>
+      <Divider />
     </>
   );
 };
@@ -126,12 +101,12 @@ const AccrodionContentItem = ({ departmentName }: { departmentName: string }) =>
   }, [favoriteDepartmentList]);
   return (
     <Ripple onPress={handleClickDepartmentName}>
-      <AccordionContentItemContainer>
-        <AccordionText type="CONTENT">{departmentName}</AccordionText>
+      <View style={AccordionStyles.contentItemContainer}>
+        <Text style={AccordionStyles.text}>{departmentName}</Text>
         {favoriteDepartmentList !== null && favoriteDepartmentList.includes(departmentName) ? (
           <MaterialIcons name="check" color={theme.colors.green} size={20} />
         ) : null}
-      </AccordionContentItemContainer>
+      </View>
     </Ripple>
   );
 };
@@ -151,3 +126,24 @@ export default function DepartmentAccordion() {
     />
   );
 }
+
+const AccordionStyles = StyleSheet.create({
+  headerContainer: {
+    padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  text: {
+    paddingVertical: 10,
+    paddingHorizontal: 0,
+    fontSize: 15,
+  },
+  contentItemContainer: {
+    flexDirection: "row",
+    marginHorizontal: 24,
+    marginVertical: 8,
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+});

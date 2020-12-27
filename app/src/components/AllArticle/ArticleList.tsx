@@ -1,13 +1,13 @@
 import * as React from "react";
-import { FlatList } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard from "components/Home/NoticeCard";
 import { useNavigation } from "@react-navigation/native";
 import LoadingIndicator from "modules/LoadingIndicator";
-import { HomeContainer } from "components/Home/index";
 import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
 import { getAllArticleInitialNotice, getNoticeFetchState } from "components/Article/redux/selectors";
+import { View } from "react-native";
 
 type ArticleListProps = {
   key: string;
@@ -42,11 +42,11 @@ export default function ArticleList({ route }: { route: ArticleListProps }) {
 
   return (
     <AppLayout>
-      <HomeContainer>
+      <View style={ArticleListStyles.container}>
         {noticeFetchState == "SUCCESS" ? (
           <FlatList
             data={noticeData}
-            keyExtractor={(item) => item.title}
+            keyExtractor={(item) => `${item.deptCode}${item.listId}`}
             renderItem={(data) => (
               <NoticeCard
                 deptCode={data.item.deptCode}
@@ -64,7 +64,13 @@ export default function ArticleList({ route }: { route: ArticleListProps }) {
         ) : (
           <LoadingIndicator />
         )}
-      </HomeContainer>
+      </View>
     </AppLayout>
   );
 }
+
+const ArticleListStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

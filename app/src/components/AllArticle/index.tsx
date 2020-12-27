@@ -1,7 +1,6 @@
 import * as React from "react";
 import { SectionList, Text, StyleSheet, View } from "react-native";
 import AppLayout from "modules/AppLayout";
-import { HomeContainer } from "components/Home/index";
 import { useNavigation } from "@react-navigation/native";
 import { DEPARTMENT_SECTIONS } from "components/Department/DepartmentAccordion";
 import theme from "theme";
@@ -42,19 +41,22 @@ export default function AllArticle() {
 
   return (
     <AppLayout>
-      <HomeContainer>
+      <View style={AllArticleStyles.container}>
         <SectionList
           sections={DEPARTMENT_SECTIONS}
           keyExtractor={(item) => item}
           renderItem={({ item }) => <DepartmentItem item={item} />}
           renderSectionHeader={({ section: { title } }) => <DepartmentSectionHeader title={title} />}
         />
-      </HomeContainer>
+      </View>
     </AppLayout>
   );
 }
 
 const AllArticleStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   sectionHeaderContainer: {
     paddingLeft: 16,
     paddingVertical: 8,

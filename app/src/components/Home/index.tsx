@@ -1,9 +1,8 @@
 import * as React from "react";
-import { View, FlatList, RefreshControl } from "react-native";
+import { View, FlatList, RefreshControl, StyleSheet } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard from "./NoticeCard";
-import styled from "styled-components/native";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
 import { useNavigation } from "@react-navigation/native";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
@@ -14,10 +13,6 @@ import theme from "theme";
 import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
 import { getHomeInitialNotice, getNoticeFetchState } from "components/Article/redux/selectors";
 import HeaderRightButton from "./HeaderRightButton";
-
-export const HomeContainer = styled(View)`
-  flex: 1;
-`;
 
 export default function Home() {
   const navigation = useNavigation();
@@ -60,11 +55,11 @@ export default function Home() {
 
   return (
     <AppLayout>
-      <HomeContainer>
+      <View style={HomeStyles.container}>
         {noticeFetchState == "SUCCESS" ? (
           <FlatList
             data={noticeData}
-            keyExtractor={(item) => item.title}
+            keyExtractor={(item) => `${item.deptCode}${item.listId}`}
             refreshControl={
               <RefreshControl
                 refreshing={false}
@@ -97,7 +92,12 @@ export default function Home() {
         ) : (
           <LoadingIndicator />
         )}
-      </HomeContainer>
+      </View>
     </AppLayout>
   );
 }
+const HomeStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
