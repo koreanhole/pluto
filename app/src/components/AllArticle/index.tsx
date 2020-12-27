@@ -49,7 +49,7 @@ export default function AllArticle() {
       <HomeContainer>
         <SectionList
           sections={DEPARTMENT_SECTIONS}
-          keyExtractor={(item, index) => item + index}
+          keyExtractor={(item) => item}
           renderItem={({ item }) => <DepartmentItem item={item} />}
           renderSectionHeader={({ section: { title } }) => (
             <DepartmentSectionHeader title={title} />

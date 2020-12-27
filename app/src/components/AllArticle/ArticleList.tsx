@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard from "components/Home/NoticeCard";
 import { useNavigation } from "@react-navigation/native";
-import _ from "underscore";
 import LoadingIndicator from "modules/LoadingIndicator";
 import { HomeContainer } from "components/Home/index";
 import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
@@ -50,7 +49,7 @@ export default function ArticleList({ route }: { route: ArticleListProps }) {
         {noticeFetchState == "SUCCESS" ? (
           <FlatList
             data={noticeData}
-            keyExtractor={(item, index) => item.title + index}
+            keyExtractor={(item) => item.title}
             renderItem={(data) => (
               <NoticeCard
                 deptCode={data.item.deptCode}

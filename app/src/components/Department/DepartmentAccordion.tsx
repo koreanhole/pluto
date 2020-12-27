@@ -112,8 +112,7 @@ const AccordionContentItemContainer = styled.View`
 const AccordionHeader = (
   section: DepartmentSection,
   _index: number,
-  isActive: boolean,
-  _sections: DepartmentSection[]
+  isActive: boolean
 ) => {
   return (
     <>
@@ -172,8 +171,8 @@ const AccrodionContentItem = ({
         <AccordionText type="CONTENT">{departmentName}</AccordionText>
         {favoriteDepartmentList !== null &&
         favoriteDepartmentList.includes(departmentName) ? (
-          <MaterialIcons name="check" color={theme.colors.green} size={20} />
-        ) : null}
+            <MaterialIcons name="check" color={theme.colors.green} size={20} />
+          ) : null}
       </AccordionContentItemContainer>
     </Ripple>
   );

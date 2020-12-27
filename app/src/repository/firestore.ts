@@ -48,7 +48,7 @@ export const loadNoticeData = async ({
   listId: string;
 }) => {
   const noticeDocumentId = getNoticeDocumentId(deptCode, listId);
-  let noticeRef = noticeFirestore.doc(noticeDocumentId);
+  const noticeRef = noticeFirestore.doc(noticeDocumentId);
 
   const noticeData = await noticeRef
     .get()

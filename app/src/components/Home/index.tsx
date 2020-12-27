@@ -6,7 +6,6 @@ import NoticeCard from "./NoticeCard";
 import styled from "styled-components/native";
 import { getFavoriteDepartmentList } from "../Department/redux/selectors";
 import { useNavigation } from "@react-navigation/native";
-import _ from "underscore";
 import { registerForPushNotificationsAsync } from "util/pushNotification";
 import { setExpoPushToken } from "components/Department/redux/actions";
 import * as Notifications from "expo-notifications";
@@ -72,7 +71,7 @@ export default function Home() {
         {noticeFetchState == "SUCCESS" ? (
           <FlatList
             data={noticeData}
-            keyExtractor={(item, index) => item.title + index}
+            keyExtractor={(item) => item.title}
             refreshControl={
               <RefreshControl
                 refreshing={false}

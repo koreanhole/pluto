@@ -20,6 +20,7 @@ import * as StoreReview from "expo-store-review";
 
 type SettingItem = {
   // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
+  //@ts-ignore: Unexpected any. Specify a different type
   iconName: any;
   title: string;
   subTitle?: string;

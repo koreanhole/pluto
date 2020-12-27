@@ -30,14 +30,14 @@ export default function HeaderRightButton({
   const fileLink =
     typeof attachment !== "undefined"
       ? attachment.map((item) => {
-          return item.file_link;
-        })
+        return item.file_link;
+      })
       : [];
   const fileName =
     typeof attachment !== "undefined"
       ? attachment.map((item) => {
-          return item.file_name;
-        })
+        return item.file_name;
+      })
       : [];
   fileName.splice(0, 0, "취소");
 
@@ -60,17 +60,15 @@ export default function HeaderRightButton({
         options: fileName,
         cancelButtonIndex: 0,
       },
-      async (buttonIndex) => {
+      (buttonIndex) => {
         if (buttonIndex !== 0) {
-          await WebBrowser.openBrowserAsync(fileLink[buttonIndex - 1]).catch(
-            () => {
-              Alert.alert("첨부 파일을 열 수 없습니다.", "", [
-                {
-                  text: "확인",
-                },
-              ]);
-            }
-          );
+          WebBrowser.openBrowserAsync(fileLink[buttonIndex - 1]).catch(() => {
+            Alert.alert("첨부 파일을 열 수 없습니다.", "", [
+              {
+                text: "확인",
+              },
+            ]);
+          });
         }
       }
     );

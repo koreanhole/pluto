@@ -111,7 +111,7 @@ export default function Article({ route }: { route: ArticleProps }) {
                   }
                 }}
                 // react-native-webview 10.7에서 수정됨
-                onNavigationStateChange={(_navState) => {
+                onNavigationStateChange={() => {
                   StatusBar.setBarStyle("dark-content");
                 }}
                 viewportContent={"width=device-width, user-scalable=no"}
