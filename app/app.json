@@ -18,7 +18,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.koreanhole.app.pluto",
       "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "1",
+      "appStoreUrl": "https://apps.apple.com/us/app/uos%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD/id1529569963",
+      "buildNumber": "2",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~9247757959"
       }
@@ -31,6 +32,7 @@
       "googleServicesFile": "./google-services.json",
       "versionCode": 5,
       "useNextNotificationsApi": true,
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.koreanhole.app.pluto",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2034052364864446~6709418041"
       }

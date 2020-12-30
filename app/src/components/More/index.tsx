@@ -1,13 +1,12 @@
 import * as React from "react";
 import AppLayout from "modules/AppLayout";
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, StyleSheet, ScrollView, Linking, Alert, Image, Dimensions } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Linking, Alert, Image, Dimensions, Platform } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import theme from "theme";
 import Ripple from "react-native-material-ripple";
 import Divider from "modules/Divider";
 import * as WebBrowser from "expo-web-browser";
-import * as StoreReview from "expo-store-review";
 
 type SettingItem = {
   // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
@@ -49,80 +48,74 @@ export default function More() {
       ]);
     });
   }, []);
-  const handleClickRating = React.useCallback(async () => {
-    const storeReviewAvailable = await StoreReview.isAvailableAsync();
-    if (storeReviewAvailable) {
-      await StoreReview.requestReview();
-    } else {
-      const storeUrl = StoreReview.storeUrl();
-      if (storeUrl !== null) {
-        await Linking.openURL(storeUrl);
-      } else {
-        Alert.alert("앱스토어를 열 수 없습니다.", "", [
-          {
-            text: "확인",
-          },
-        ]);
-      }
+
+  const handleClickRating = React.useCallback(() => {
+    if (Platform.OS === "ios") {
+      const appstoreItemId = "1529569963";
+      Linking.openURL(
+        `itms-apps://itunes.apple.com/app/viewContentsUserReviews/id${appstoreItemId}?action=write-review`,
+      );
+    }
+    if (Platform.OS == "android") {
+      const androidPackageName = "com.koreanhole.app.pluto";
+      Linking.openURL(`market://details?id=${androidPackageName}&showAllReviews=true`);
     }
   }, []);
 
-  const handleClickViewCode = React.useCallback(() => {
-    WebBrowser.openBrowserAsync("https://github.com/koreanhole/pluto/tree/develop/app").catch(() => {
-      Alert.alert("페이지를 열 수 없습니다.", "", [
-        {
-          text: "확인",
-        },
-      ]);
-    });
-  }, []);
+  // const handleClickViewCode = React.useCallback(() => {
+  //   WebBrowser.openBrowserAsync("https://github.com/koreanhole/pluto/tree/develop/app").catch(() => {
+  //     Alert.alert("페이지를 열 수 없습니다.", "", [
+  //       {
+  //         text: "확인",
+  //       },
+  //     ]);
+  //   });
+  // }, []);
 
   const SETTING_ITEMS: SettingItem[] = [
     {
       iconName: "calendar-month-outline",
       title: "학사일정",
       handleClick: handleClickOpenBachelorSchedule,
-      isExternalLink: true,
+      isExternalLink: false,
     },
     {
       iconName: "bell-outline",
-      title: "알림설정",
+      title: "시스템 알림설정",
       handleClick: handleClickNotificationSetting,
       isExternalLink: true,
     },
     {
-      iconName: "help-circle-outline",
+      iconName: "message-text-outline",
       title: "문의하기",
       subTitle: "기능추가, 버그 제보",
       handleClick: handleClickContact,
       isExternalLink: true,
     },
     {
-      iconName: "emoticon-happy-outline",
-      title: "리뷰남기기",
+      iconName: "account-heart-outline",
+      title: "UOS공지사항 리뷰남기기",
       handleClick: handleClickRating,
-      isExternalLink: false,
-    },
-    {
-      iconName: "github",
-      title: "UOS공지사항 깃허브",
-      handleClick: handleClickViewCode,
       isExternalLink: true,
     },
+    // {
+    //   iconName: "github",
+    //   title: "UOS공지사항 깃허브",
+    //   handleClick: handleClickViewCode,
+    //   isExternalLink: true,
+    // },
   ];
 
   return (
     <AppLayout>
+      <Image
+        source={require("../../../assets/app_introduce.png")}
+        style={{
+          width: Dimensions.get("window").width,
+          marginVertical: 32,
+        }}
+      />
       <ScrollView>
-        <Image
-          source={require("../../../assets/app_introduce.png")}
-          style={{
-            alignSelf: "center",
-            width: Dimensions.get("window").width,
-            marginVertical: 32,
-          }}
-          resizeMode="cover"
-        />
         {SETTING_ITEMS.map((item) => {
           return (
             <Ripple onPress={item.handleClick} key={item.title}>
