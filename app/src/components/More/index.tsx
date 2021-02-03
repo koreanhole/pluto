@@ -5,7 +5,6 @@ import { View, Text, StyleSheet, ScrollView, Linking, Alert, Platform } from "re
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import theme from "theme";
 import Ripple from "react-native-material-ripple";
-import Divider from "modules/Divider";
 import * as WebBrowser from "expo-web-browser";
 import HeaderRightButton from "./HeaderRightButton";
 
@@ -64,16 +63,6 @@ export default function More() {
     }
   }, []);
 
-  // const handleClickViewCode = React.useCallback(() => {
-  //   WebBrowser.openBrowserAsync("https://github.com/koreanhole/pluto/tree/develop/app").catch(() => {
-  //     Alert.alert("페이지를 열 수 없습니다.", "", [
-  //       {
-  //         text: "확인",
-  //       },
-  //     ]);
-  //   });
-  // }, []);
-
   const SETTING_ITEMS: SettingItem[] = [
     {
       iconName: "calendar-month-outline",
@@ -100,12 +89,6 @@ export default function More() {
       handleClick: handleClickRating,
       isExternalLink: true,
     },
-    // {
-    //   iconName: "github",
-    //   title: "UOS공지사항 깃허브",
-    //   handleClick: handleClickViewCode,
-    //   isExternalLink: true,
-    // },
   ];
 
   return (
@@ -135,7 +118,6 @@ export default function More() {
                   </View>
                 </View>
               </View>
-              <Divider />
             </Ripple>
           );
         })}
@@ -149,7 +131,7 @@ const SettingItemStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 16,
-    paddingVertical: 12,
+    paddingVertical: 16,
   },
   subItemContainer: {
     flex: 2,
