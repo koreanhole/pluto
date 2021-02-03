@@ -2,6 +2,7 @@ import * as React from "react";
 import { View, Text, StatusBar, StyleSheet } from "react-native";
 import theme from "theme";
 import Snackbar from "modules/Snackbar";
+import Dialog from "modules/Dialog";
 
 type AppLayoutProps = {
   children?: React.ReactNode;
@@ -25,6 +26,7 @@ export default function AppLayout(props: AppLayoutProps) {
           )}
         </View>
         <Snackbar />
+        <Dialog />
       </View>
     </React.Fragment>
   );

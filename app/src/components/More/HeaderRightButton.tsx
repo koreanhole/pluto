@@ -2,9 +2,18 @@ import * as React from "react";
 import { HeaderRightStyles } from "modules/headerRightButton/base";
 import theme from "theme";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { setDialogContent, showDialog } from "modules/Dialog/redux/actions";
+import { View, Image, Dimensions } from "react-native";
 
 export default function HeaderRightButton() {
-  const handleClickQuestionClicked = React.useCallback(() => {}, []);
+  const dispatch = useDispatch();
+
+  const handleClickQuestionClicked = React.useCallback(() => {
+    dispatch(showDialog());
+    dispatch(setDialogContent(dialogContent));
+  }, []);
+
   return (
     <AntDesign
       name="questioncircleo"
@@ -14,3 +23,17 @@ export default function HeaderRightButton() {
     />
   );
 }
+
+const dialogContent = () => {
+  return (
+    <View>
+      <Image
+        source={require("../../../assets/app_introduce.png")}
+        style={{
+          width: Dimensions.get("window").width,
+          marginVertical: 32,
+        }}
+      />
+    </View>
+  );
+};

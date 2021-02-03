@@ -1,7 +1,7 @@
 import * as React from "react";
 import AppLayout from "modules/AppLayout";
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, StyleSheet, ScrollView, Linking, Alert, Image, Dimensions, Platform } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Linking, Alert, Platform } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import theme from "theme";
 import Ripple from "react-native-material-ripple";
@@ -110,13 +110,6 @@ export default function More() {
 
   return (
     <AppLayout>
-      <Image
-        source={require("../../../assets/app_introduce.png")}
-        style={{
-          width: Dimensions.get("window").width,
-          marginVertical: 32,
-        }}
-      />
       <ScrollView>
         {SETTING_ITEMS.map((item) => {
           return (
