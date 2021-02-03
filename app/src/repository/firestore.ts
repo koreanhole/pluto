@@ -38,6 +38,38 @@ export const loadInitialNoticeList = async (departmentList: string[]) => {
   return initialNoticeList;
 };
 
+export const loadSearchedNoticeList = async (departmentList: string[], searchQuery: string) => {
+  const query = noticeFirestore
+    .where("deptName", "in", departmentList)
+    .where("contentString", "array-contains", searchQuery)
+    .orderBy("createdDateTimestamp", "desc")
+    .limit(50);
+  const noticeList = await query
+    .get()
+    .then((documentSnapshots) => {
+      const fetchedNoticeData: NoticeArticle[] = documentSnapshots.docs.map((document) => {
+        const fetchedData = document.data();
+        return {
+          createdDateTimestamp: fetchedData.createdDateTimestamp,
+          deptCode: fetchedData.deptCode,
+          deptName: fetchedData.deptName,
+          authorDept: fetchedData.authorDept,
+          title: fetchedData.title,
+          createdDate: fetchedData.createdDate,
+          authorName: fetchedData.authorName,
+          listId: fetchedData.listId,
+          favoriteCount: fetchedData.favoriteCount,
+        };
+      });
+      return fetchedNoticeData;
+    })
+    .catch((error) => {
+      console.log(error);
+      return null;
+    });
+  return noticeList;
+};
+
 export const loadNoticeData = async ({ deptCode, listId }: { deptCode: string; listId: string }) => {
   const noticeDocumentId = getNoticeDocumentId(deptCode, listId);
   const noticeRef = noticeFirestore.doc(noticeDocumentId);

@@ -7,10 +7,18 @@ import { Ionicons } from "@expo/vector-icons";
 import theme from "theme";
 import { HeaderRightStyles } from "modules/headerRightButton/base";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useSelector, useDispatch } from "react-redux";
+import { getFavoriteDepartmentList } from "../Department/redux/selectors";
+import { searchNoticeAsync } from "./redux/actions";
+import { getSearchedArticle } from "./redux/selectors";
 
 export default function Search() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const favoriteDepartmentList = useSelector(getFavoriteDepartmentList);
   const [searchQuery, setSearchQuery] = React.useState<string>("");
+
+  const searchResult = useSelector(getSearchedArticle);
 
   const onChangeSearch = React.useCallback((query: string) => {
     setSearchQuery(query);
@@ -20,9 +28,18 @@ export default function Search() {
 
   const handleDestroySearchScreen = React.useCallback(() => navigation.goBack(), []);
 
-  const handleSubmitSearchQuery = React.useCallback(({ nativeEvent: { text } }) => {
-    console.log(text);
-  }, []);
+  const handleSubmitSearchQuery = React.useCallback(
+    ({ nativeEvent: { text } }) => {
+      dispatch(
+        searchNoticeAsync.request({
+          departmentList: favoriteDepartmentList,
+          query: text,
+          pageType: "HOME",
+        }),
+      );
+    },
+    [searchResult],
+  );
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
