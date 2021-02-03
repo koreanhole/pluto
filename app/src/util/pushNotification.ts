@@ -14,12 +14,12 @@ export async function registerForPushNotificationsAsync() {
       finalStatus = status;
     }
     if (finalStatus !== "granted") {
-      alert("알림 설정을 하는데 실패했습니다. 설정을 확인해주세요");
+      alert("더보기 -> 시스템 알림설정에서 UOS공지사항 알림을 켜주세요");
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
   } else {
-    alert("Must use physical device for Push Notifications");
+    alert("시뮬레이터가 아닌 실제 기기를 사용해주세요.");
   }
 
   if (Platform.OS === "android") {
