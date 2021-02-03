@@ -7,6 +7,7 @@ import theme from "theme";
 import Ripple from "react-native-material-ripple";
 import Divider from "modules/Divider";
 import * as WebBrowser from "expo-web-browser";
+import HeaderRightButton from "./HeaderRightButton";
 
 type SettingItem = {
   // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
@@ -23,6 +24,7 @@ export default function More() {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "더보기",
+      headerRight: () => <HeaderRightButton />,
     });
   });
 
