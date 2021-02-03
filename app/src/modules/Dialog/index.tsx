@@ -18,7 +18,7 @@ export default function Dialog() {
     <Portal>
       <RnpDialog visible={dialogVisible} onDismiss={onDismissDialog}>
         <RnpDialog.ScrollArea>
-          <ScrollView>{dialogContent()}</ScrollView>
+          <ScrollView>{dialogContent}</ScrollView>
         </RnpDialog.ScrollArea>
       </RnpDialog>
     </Portal>

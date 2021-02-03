@@ -6,6 +6,18 @@ import { useDispatch } from "react-redux";
 import { setDialogContent, showDialog } from "modules/Dialog/redux/actions";
 import { View, Image, Dimensions } from "react-native";
 
+const dialogContent = (
+  <View>
+    <Image
+      source={require("../../../assets/app_introduce.png")}
+      style={{
+        width: Dimensions.get("window").width,
+        marginVertical: 32,
+      }}
+    />
+  </View>
+);
+
 export default function HeaderRightButton() {
   const dispatch = useDispatch();
 
@@ -23,17 +35,3 @@ export default function HeaderRightButton() {
     />
   );
 }
-
-const dialogContent = () => {
-  return (
-    <View>
-      <Image
-        source={require("../../../assets/app_introduce.png")}
-        style={{
-          width: Dimensions.get("window").width,
-          marginVertical: 32,
-        }}
-      />
-    </View>
-  );
-};
