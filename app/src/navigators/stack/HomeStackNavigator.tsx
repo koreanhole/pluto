@@ -33,7 +33,13 @@ export default function HomeStackNavigator() {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Article" component={Article} />
       <Stack.Screen name="Department" component={Department} />
-      <Stack.Screen name="Search" component={Search} />
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{
+          gestureEnabled: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
