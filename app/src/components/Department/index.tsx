@@ -17,7 +17,7 @@ export default function Department() {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: null,
+      headerTitle: "홈 화면 설정",
     });
   });
 
