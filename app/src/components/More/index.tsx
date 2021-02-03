@@ -1,12 +1,12 @@
 import * as React from "react";
 import AppLayout from "modules/AppLayout";
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, StyleSheet, ScrollView, Linking, Alert, Image, Dimensions, Platform } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Linking, Alert, Platform } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import theme from "theme";
 import Ripple from "react-native-material-ripple";
-import Divider from "modules/Divider";
 import * as WebBrowser from "expo-web-browser";
+import HeaderRightButton from "./HeaderRightButton";
 
 type SettingItem = {
   // FIXME: https://github.com/expo/vector-icons/issues/153 이 이슈 해결되면 수정
@@ -23,6 +23,7 @@ export default function More() {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "더보기",
+      headerRight: () => <HeaderRightButton />,
     });
   });
 
@@ -62,16 +63,6 @@ export default function More() {
     }
   }, []);
 
-  // const handleClickViewCode = React.useCallback(() => {
-  //   WebBrowser.openBrowserAsync("https://github.com/koreanhole/pluto/tree/develop/app").catch(() => {
-  //     Alert.alert("페이지를 열 수 없습니다.", "", [
-  //       {
-  //         text: "확인",
-  //       },
-  //     ]);
-  //   });
-  // }, []);
-
   const SETTING_ITEMS: SettingItem[] = [
     {
       iconName: "calendar-month-outline",
@@ -98,23 +89,10 @@ export default function More() {
       handleClick: handleClickRating,
       isExternalLink: true,
     },
-    // {
-    //   iconName: "github",
-    //   title: "UOS공지사항 깃허브",
-    //   handleClick: handleClickViewCode,
-    //   isExternalLink: true,
-    // },
   ];
 
   return (
     <AppLayout>
-      <Image
-        source={require("../../../assets/app_introduce.png")}
-        style={{
-          width: Dimensions.get("window").width,
-          marginVertical: 32,
-        }}
-      />
       <ScrollView>
         {SETTING_ITEMS.map((item) => {
           return (
@@ -140,7 +118,6 @@ export default function More() {
                   </View>
                 </View>
               </View>
-              <Divider />
             </Ripple>
           );
         })}
@@ -154,7 +131,7 @@ const SettingItemStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 16,
-    paddingVertical: 12,
+    paddingVertical: 16,
   },
   subItemContainer: {
     flex: 2,
