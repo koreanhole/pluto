@@ -9,16 +9,7 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "incremental": true,
-    "baseUrl": "./src",
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
-    "jsx": "react-native",
-    "lib": ["dom", "esnext"],
-    "moduleResolution": "node",
-    "noEmitHelpers": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "strict": true
+    "baseUrl": "./",
+    "incremental": true
   }
 }
