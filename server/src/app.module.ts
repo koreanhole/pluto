@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NoticeModule } from './notice/notice.module';
 import { Notice } from './notice/notice.entity';
+import { GraphQLModule } from '@nestjs/graphql';
 
 @Module({
   imports: [
@@ -11,6 +12,10 @@ import { Notice } from './notice/notice.entity';
       synchronize: true,
       useUnifiedTopology: true,
       entities: [Notice],
+    }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+      sortSchema: true,
     }),
     NoticeModule,
   ],
