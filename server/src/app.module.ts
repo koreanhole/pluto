@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { typeOrmConfig } from './config/typeorm.config';
 import { DepartmentModule } from './department/department.module';
 import { UserModule } from './user/user.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UserModule } from './user/user.module';
     NoticeModule,
     DepartmentModule,
     UserModule,
+    NotificationModule,
   ],
 })
 export class AppModule {}
