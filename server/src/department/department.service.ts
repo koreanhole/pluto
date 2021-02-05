@@ -20,6 +20,16 @@ export class DepartmentService {
     return await this.departmentRepository.findOne({ id });
   }
 
+  async getManyDepartmentsById(ids: string[]): Promise<Department[]> {
+    return await this.departmentRepository.find({
+      where: {
+        id: {
+          $in: ids,
+        },
+      },
+    });
+  }
+
   async createDepartment(
     createDepartmentInput: CreateDepartmentInput,
   ): Promise<Department> {
