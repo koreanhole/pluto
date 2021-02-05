@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { Department } from 'src/department/department.entity';
 import { Notice } from 'src/notice/notice.entity';
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -6,5 +7,5 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   url: 'mongodb://localhost/notice',
   synchronize: true,
   useUnifiedTopology: true,
-  entities: [Notice],
+  entities: [Notice, Department],
 };

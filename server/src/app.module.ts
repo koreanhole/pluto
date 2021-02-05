@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { NoticeModule } from './notice/notice.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { typeOrmConfig } from './config/typeorm.config';
+import { DepartmentModule } from './department/department.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { typeOrmConfig } from './config/typeorm.config';
       sortSchema: true,
     }),
     NoticeModule,
+    DepartmentModule,
   ],
 })
 export class AppModule {}
