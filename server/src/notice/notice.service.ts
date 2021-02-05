@@ -5,6 +5,8 @@ import { CreateNoticeInput } from './notice.input';
 import { Notice } from './notice.entity';
 import { v4 as uuid } from 'uuid';
 
+const BUNDLE_SIZE = 20;
+
 @Injectable()
 export class NoticeService {
   constructor(
@@ -16,17 +18,31 @@ export class NoticeService {
   }
 
   async getPaginatedNotices(offset: number): Promise<Notice[]> {
-    const bundleSize = 20;
-
     const notice = await this.noticeRepository.find({
       order: {
         createdDatetime: 'DESC',
       },
-      skip: offset * bundleSize,
-      take: bundleSize,
+      skip: offset * BUNDLE_SIZE,
+      take: BUNDLE_SIZE,
     });
 
     return notice;
+  }
+
+  async getNoticeByDeptCode(
+    deptCode: string,
+    offset: number,
+  ): Promise<Notice[]> {
+    return await this.noticeRepository.find({
+      where: {
+        deptCode,
+      },
+      order: {
+        createdDatetime: 'DESC',
+      },
+      skip: offset * BUNDLE_SIZE,
+      take: BUNDLE_SIZE,
+    });
   }
 
   async createNotice(createNoticeInput: CreateNoticeInput): Promise<Notice> {
@@ -43,6 +59,7 @@ export class NoticeService {
       title,
       url,
     } = createNoticeInput;
+
     const notice = this.noticeRepository.create({
       id: uuid(),
       attachmentLinks,
@@ -57,6 +74,7 @@ export class NoticeService {
       title,
       url,
     });
-    return this.noticeRepository.save(notice);
+
+    return await this.noticeRepository.save(notice);
   }
 }

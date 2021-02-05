@@ -8,8 +8,8 @@ export class NoticeResolver {
   constructor(private noticeService: NoticeService) {}
 
   @Query(() => NoticeType)
-  getNotice(@Args('id') id: string) {
-    return this.noticeService.getNotice(id);
+  async getNotice(@Args('id') id: string) {
+    return await this.noticeService.getNotice(id);
   }
 
   @Query(() => [NoticeType])
@@ -17,10 +17,18 @@ export class NoticeResolver {
     return await this.noticeService.getPaginatedNotices(offset);
   }
 
+  @Query(() => [NoticeType])
+  async getNoticeByDeptCode(
+    @Args('deptCode') deptCode: string,
+    @Args('offset') offset: number,
+  ) {
+    return await this.noticeService.getNoticeByDeptCode(deptCode, offset);
+  }
+
   @Mutation(() => NoticeType)
-  createNotice(
+  async createNotice(
     @Args('createNoticeInput') createNoticeInput: CreateNoticeInput,
   ) {
-    return this.noticeService.createNotice(createNoticeInput);
+    return await this.noticeService.createNotice(createNoticeInput);
   }
 }
