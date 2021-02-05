@@ -20,13 +20,21 @@ export class UserResolver {
   ) {}
 
   @Query(() => UserType)
-  async getUserInfo(@Args('id') id: string) {
-    return await this.userService.getUserInfo(id);
+  async getUser(@Args('id') id: string) {
+    return await this.userService.getUser(id);
   }
 
   @Mutation(() => UserType)
   async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
     return await this.userService.createUser(createUserInput);
+  }
+
+  @Mutation(() => UserType)
+  async updateUserDepartment(
+    @Args('id') id: string,
+    @Args('department') department: string,
+  ) {
+    return await this.updateUserDepartment(id, department);
   }
 
   @ResolveField('departments')

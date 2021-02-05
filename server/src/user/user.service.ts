@@ -11,8 +11,14 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async getUserInfo(id: string): Promise<User> {
+  async getUser(id: string): Promise<User> {
     return await this.userRepository.findOne({ id });
+  }
+
+  async updateUserDepartment(id: string, department: string): Promise<User> {
+    const user = await this.userRepository.findOne({ id });
+    user.departments = [...user.departments, department];
+    return await this.userRepository.save(user);
   }
 
   async createUser(createUserInput: CreateUserInput): Promise<User> {
