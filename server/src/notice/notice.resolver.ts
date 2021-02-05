@@ -11,12 +11,16 @@ import { NoticeService } from './notice.service';
 import { CreateNoticeInput } from './notice.input';
 import { Notice } from './notice.entity';
 import { DepartmentService } from 'src/department/department.service';
+import { UserService } from '../user/user.service';
+import { NotificationService } from '../notification/notification.service';
 
 @Resolver(() => NoticeType)
 export class NoticeResolver {
   constructor(
     private noticeService: NoticeService,
     private departmentService: DepartmentService,
+    private userService: UserService,
+    private notificationService: NotificationService,
   ) {}
 
   @Query(() => NoticeType)
@@ -41,7 +45,26 @@ export class NoticeResolver {
   async createNotice(
     @Args('createNoticeInput') createNoticeInput: CreateNoticeInput,
   ) {
-    return await this.noticeService.createNotice(createNoticeInput);
+    const notice = await this.noticeService.createNotice(createNoticeInput);
+
+    // createdNotice를 저장한 User의 expoPushTokens를 가져온다.
+    const expoPushTokens = await this.userService.getUserExpoPushTokensByDepartmentId(
+      notice.department,
+    );
+
+    const department = await this.departmentService.getDepartmentById(
+      notice.department,
+    );
+
+    // 거져온 expoPushTokens를 사용해 notificationService를 통해 푸시알림을 보낸다.
+    await this.notificationService.sendPushNotification({
+      pushTokenList: expoPushTokens,
+      title: department.deptName,
+      body: notice.title,
+      extraData: { deptCode: department.deptCode, listId: notice.listId },
+    });
+
+    return notice;
   }
 
   @ResolveField('department')

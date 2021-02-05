@@ -11,8 +11,26 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async getUser(id: string): Promise<User> {
+  async getUserByUserId(id: string): Promise<User> {
     return await this.userRepository.findOne({ id });
+  }
+  // department로 User를 찾아 반환한다.
+  // TODO: 로직 맞나 확인
+  async getUserExpoPushTokensByDepartmentId(
+    departmentId: string,
+  ): Promise<string[]> {
+    const users = this.userRepository.find({
+      where: {
+        id: {
+          $in: departmentId,
+        },
+      },
+    });
+    const expoPushTokens = (await users).map((user) => {
+      return user.expoPushToken;
+    });
+
+    return expoPushTokens;
   }
 
   async updateUserDepartment(id: string, department: string): Promise<User> {
