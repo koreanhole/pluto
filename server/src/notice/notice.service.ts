@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateNoticeInput } from './inputs/notice.input';
+import { CreateNoticeInput } from './notice.input';
 import { Notice } from './notice.entity';
 import { v4 as uuid } from 'uuid';
 

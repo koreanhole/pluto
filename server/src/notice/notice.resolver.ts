@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { NoticeType } from './notice.type';
 import { NoticeService } from './notice.service';
-import { CreateNoticeInput } from './inputs/notice.input';
+import { CreateNoticeInput } from './notice.input';
 
 @Resolver(() => NoticeType)
 export class NoticeResolver {

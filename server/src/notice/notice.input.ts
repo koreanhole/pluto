@@ -2,9 +2,18 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsDateString } from 'class-validator';
 
 @InputType()
+class AttachmentLinksInput {
+  @Field()
+  fileName: string;
+
+  @Field()
+  fileLink: string;
+}
+
+@InputType()
 export class CreateNoticeInput {
-  @Field(() => [String])
-  attachmentLinks: string[];
+  @Field(() => [AttachmentLinksInput])
+  attachmentLinks: AttachmentLinksInput[];
 
   @Field()
   authorDept: string;

@@ -1,5 +1,10 @@
 import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
+class AttachmentLinks {
+  fileName: string;
+  fileLink: string;
+}
+
 @Entity()
 export class Notice {
   @ObjectIdColumn()
@@ -9,7 +14,7 @@ export class Notice {
   id: string;
 
   @Column()
-  attachmentLinks: string[];
+  attachmentLinks: AttachmentLinks[];
 
   @Column()
   authorDept: string;

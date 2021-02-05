@@ -1,12 +1,21 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
+@ObjectType()
+class AttachmentLinksType {
+  @Field()
+  fileName: string;
+
+  @Field()
+  fileLink: string;
+}
+
 @ObjectType('Notice')
 export class NoticeType {
   @Field(() => ID)
   id: string;
 
-  @Field(() => [String], { nullable: true })
-  attachmentLinks: string[];
+  @Field(() => [AttachmentLinksType], { nullable: true })
+  attachmentLinks: AttachmentLinksType[];
 
   @Field()
   authorDept: string;
