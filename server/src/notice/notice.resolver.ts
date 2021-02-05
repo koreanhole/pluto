@@ -12,6 +12,11 @@ export class NoticeResolver {
     return this.noticeService.getNotice(id);
   }
 
+  @Query(() => [NoticeType])
+  async getPaginatedNotice(@Args('offset') offset: number) {
+    return await this.noticeService.getPaginatedNotices(offset);
+  }
+
   @Mutation(() => NoticeType)
   createNotice(
     @Args('createNoticeInput') createNoticeInput: CreateNoticeInput,

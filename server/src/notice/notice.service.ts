@@ -12,7 +12,21 @@ export class NoticeService {
   ) {}
 
   async getNotice(id: string): Promise<Notice> {
-    return this.noticeRepository.findOne({ id });
+    return await this.noticeRepository.findOne({ id });
+  }
+
+  async getPaginatedNotices(offset: number): Promise<Notice[]> {
+    const bundleSize = 20;
+
+    const notice = await this.noticeRepository.find({
+      order: {
+        createdDatetime: 'DESC',
+      },
+      skip: offset * bundleSize,
+      take: bundleSize,
+    });
+
+    return notice;
   }
 
   async createNotice(createNoticeInput: CreateNoticeInput): Promise<Notice> {
