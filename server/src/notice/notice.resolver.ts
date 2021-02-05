@@ -1,11 +1,23 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { NoticeType } from './notice.type';
 import { NoticeService } from './notice.service';
 import { CreateNoticeInput } from './notice.input';
+import { Notice } from './notice.entity';
+import { DepartmentService } from 'src/department/department.service';
 
 @Resolver(() => NoticeType)
 export class NoticeResolver {
-  constructor(private noticeService: NoticeService) {}
+  constructor(
+    private noticeService: NoticeService,
+    private departmentService: DepartmentService,
+  ) {}
 
   @Query(() => NoticeType)
   async getNotice(@Args('id') id: string) {
@@ -30,5 +42,10 @@ export class NoticeResolver {
     @Args('createNoticeInput') createNoticeInput: CreateNoticeInput,
   ) {
     return await this.noticeService.createNotice(createNoticeInput);
+  }
+
+  @ResolveField('department')
+  async department(@Parent() notice: Notice) {
+    return await this.departmentService.getDepartmentById(notice.department);
   }
 }

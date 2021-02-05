@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { DepartmentType } from '../department/department.type';
 
 @ObjectType()
 class AttachmentLinksType {
@@ -32,11 +33,8 @@ export class NoticeType {
   @Field()
   createdDatetime: string;
 
-  @Field()
-  deptCode: string;
-
-  @Field({ nullable: true })
-  deptName: string;
+  @Field(() => DepartmentType)
+  department: string;
 
   @Field()
   listId: string;

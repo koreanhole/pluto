@@ -32,13 +32,10 @@ export class Notice {
   createdDatetime: string;
 
   @Column()
-  deptCode: string;
-
-  @Column()
-  deptName: string;
-
-  @Column()
   listId: string;
+
+  @Column()
+  department: string;
 
   @Column()
   title: string;

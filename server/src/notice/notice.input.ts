@@ -1,5 +1,5 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsDateString } from 'class-validator';
+import { Field, ID, InputType } from '@nestjs/graphql';
+import { IsDateString, IsUUID } from 'class-validator';
 
 @InputType()
 class AttachmentLinksInput {
@@ -31,11 +31,9 @@ export class CreateNoticeInput {
   @Field()
   createdDatetime: string;
 
-  @Field()
-  deptCode: string;
-
-  @Field()
-  deptName: string;
+  @IsUUID('4')
+  @Field(() => ID)
+  department: string;
 
   @Field()
   listId: string;
