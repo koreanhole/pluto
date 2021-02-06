@@ -73,9 +73,9 @@ export class NoticeService {
       title,
       url,
     } = createNoticeInput;
-
+    const noticeId = uuid();
     const notice = this.noticeRepository.create({
-      id: uuid(),
+      id: noticeId,
       attachmentLinks,
       authorDept,
       authorName,
@@ -89,7 +89,11 @@ export class NoticeService {
     });
 
     try {
-      return await this.noticeRepository.save(notice);
+      const savedNotice = await this.noticeRepository.save(notice);
+      this.logger.log(
+        `create notice, noticeId: ${noticeId}, url: ${url} departmentId: ${department}`,
+      );
+      return savedNotice;
     } catch (error) {
       this.logger.error(
         `notice save error departmentId: ${department} listId: ${listId}`,
