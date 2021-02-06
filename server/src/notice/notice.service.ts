@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateNoticeInput } from './notice.input';
@@ -9,40 +9,55 @@ const BUNDLE_SIZE = 20;
 
 @Injectable()
 export class NoticeService {
+  private logger = new Logger('NoticeService');
   constructor(
     @InjectRepository(Notice) private noticeRepository: Repository<Notice>,
   ) {}
 
   async getNotice(id: string): Promise<Notice> {
-    return await this.noticeRepository.findOne({ id });
+    try {
+      return await this.noticeRepository.findOne({ id });
+    } catch (error) {
+      this.logger.error(`get notice by id: ${id} error`, error.stack);
+    }
   }
 
   async getPaginatedNotices(offset: number): Promise<Notice[]> {
-    const notice = await this.noticeRepository.find({
-      order: {
-        createdDatetime: 'DESC',
-      },
-      skip: offset * BUNDLE_SIZE,
-      take: BUNDLE_SIZE,
-    });
-
-    return notice;
+    try {
+      const notice = await this.noticeRepository.find({
+        order: {
+          createdDatetime: 'DESC',
+        },
+        skip: offset * BUNDLE_SIZE,
+        take: BUNDLE_SIZE,
+      });
+      return notice;
+    } catch (error) {
+      this.logger.error('get paginated all notice error', error.stack);
+    }
   }
 
   async getNoticeByDeptCode(
     deptCode: string,
     offset: number,
   ): Promise<Notice[]> {
-    return await this.noticeRepository.find({
-      where: {
-        deptCode,
-      },
-      order: {
-        createdDatetime: 'DESC',
-      },
-      skip: offset * BUNDLE_SIZE,
-      take: BUNDLE_SIZE,
-    });
+    try {
+      return await this.noticeRepository.find({
+        where: {
+          deptCode,
+        },
+        order: {
+          createdDatetime: 'DESC',
+        },
+        skip: offset * BUNDLE_SIZE,
+        take: BUNDLE_SIZE,
+      });
+    } catch (error) {
+      this.logger.error(
+        `get notice by deptCode: ${deptCode} error`,
+        error.stack,
+      );
+    }
   }
 
   async createNotice(createNoticeInput: CreateNoticeInput): Promise<Notice> {
@@ -73,6 +88,13 @@ export class NoticeService {
       url,
     });
 
-    return await this.noticeRepository.save(notice);
+    try {
+      return await this.noticeRepository.save(notice);
+    } catch (error) {
+      this.logger.error(
+        `notice save error departmentId: ${department} listId: ${listId}`,
+        error.stack,
+      );
+    }
   }
 }
