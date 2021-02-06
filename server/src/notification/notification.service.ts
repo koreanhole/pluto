@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Expo, ExpoPushMessage } from 'expo-server-sdk';
-import { SendNotificationDto } from './send-notification.dto';
+import { SendNotificationInput } from './notification.input';
 
 @Injectable()
 export class NotificationService {
-  async sendPushNotification(sendNotificationDto: SendNotificationDto) {
-    const { pushTokenList, title, body, extraData } = sendNotificationDto;
+  async sendPushNotification(sendNotificationInput: SendNotificationInput) {
+    const { pushTokenList, title, body, extraData } = sendNotificationInput;
     const expo = new Expo();
     const messages: ExpoPushMessage[] = [];
 
@@ -47,8 +47,11 @@ export class NotificationService {
           // https://docs.expo.io/push-notifications/sending-notifications/#individual-errors
         } catch (error) {
           console.error(error);
+          return false;
         }
       }
     })();
+    console.log(pushTokenList);
+    return true;
   }
 }

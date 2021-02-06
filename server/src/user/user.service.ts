@@ -22,7 +22,7 @@ export class UserService {
     const users = this.userRepository.find({
       where: {
         id: {
-          $in: departmentId,
+          $in: [departmentId],
         },
       },
     });
