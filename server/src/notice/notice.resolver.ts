@@ -10,7 +10,7 @@ import { NoticeType } from './notice.type';
 import { NoticeService } from './notice.service';
 import { CreateNoticeInput } from './notice.input';
 import { Notice } from './notice.entity';
-import { DepartmentService } from 'src/department/department.service';
+import { DepartmentService } from '.././department/department.service';
 import { UserService } from '../user/user.service';
 import { NotificationService } from '../notification/notification.service';
 
