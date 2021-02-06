@@ -1,24 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Expo, ExpoPushMessage } from 'expo-server-sdk';
 import { SendNotificationInput } from './notification.input';
 
 @Injectable()
 export class NotificationService {
+  private logger = new Logger('NotificationService');
   async sendPushNotification(sendNotificationInput: SendNotificationInput) {
     const { pushTokenList, title, body, extraData } = sendNotificationInput;
     const expo = new Expo();
     const messages: ExpoPushMessage[] = [];
 
     for (const pushToken of pushTokenList) {
-      // Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
-
-      // Check that all your push tokens appear to be valid Expo push tokens
       if (!Expo.isExpoPushToken(pushToken)) {
-        console.error(`Push token ${pushToken} is not a valid Expo push token`);
+        this.logger.error(
+          `Push token ${pushToken} is not a valid Expo push token`,
+        );
         continue;
       }
 
-      // Construct a message (see https://docs.expo.io/push-notifications/sending-notifications/)
       messages.push({
         to: pushToken,
         sound: 'default',
@@ -45,7 +44,7 @@ export class NotificationService {
           // documentation:
           // https://docs.expo.io/push-notifications/sending-notifications/#individual-errors
         } catch (error) {
-          console.error(error);
+          this.logger.error(error);
           return false;
         }
       }

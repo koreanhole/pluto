@@ -14,8 +14,7 @@ export class UserService {
   async getUserByUserId(id: string): Promise<User> {
     return await this.userRepository.findOne({ id });
   }
-  // department로 User를 찾아 반환한다.
-  // TODO: 로직 맞나 확인
+  // departmentId로 User를 찾아 반환한다.
   async getUserExpoPushTokensByDepartmentId(
     departmentId: string,
   ): Promise<string[]> {
