@@ -10,8 +10,11 @@ export class NotificationService {
     const expo = new Expo();
     const messages: ExpoPushMessage[] = [];
 
+    let numFailedDevices = 0;
+
     for (const pushToken of pushTokenList) {
       if (!Expo.isExpoPushToken(pushToken)) {
+        numFailedDevices += 1;
         this.logger.error(
           `Push token ${pushToken} is not a valid Expo push token`,
         );
@@ -40,7 +43,11 @@ export class NotificationService {
           const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
           tickets.push(...ticketChunk);
           this.logger.log(
-            `send expoPushNotification for ${pushTokenList.length} number of devices, title: ${title}, deptCode: ${extraData.deptCode}, listId: ${extraData.listId}`,
+            `send expoPushNotification for ${
+              pushTokenList.length - numFailedDevices
+            } number of devices, failed for ${numFailedDevices} number of devices, title: ${title}, deptCode: ${
+              extraData.deptCode
+            }, listId: ${extraData.listId}`,
           );
           // NOTE: If a ticket contains an error code in ticket.details.error, you
           // must handle it appropriately. The error codes are listed in the Expo
