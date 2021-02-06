@@ -40,7 +40,6 @@ export class NotificationService {
         try {
           const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
           tickets.push(...ticketChunk);
-          console.log('notification sent');
           // NOTE: If a ticket contains an error code in ticket.details.error, you
           // must handle it appropriately. The error codes are listed in the Expo
           // documentation:
@@ -51,7 +50,6 @@ export class NotificationService {
         }
       }
     })();
-    console.log(pushTokenList);
     return true;
   }
 }

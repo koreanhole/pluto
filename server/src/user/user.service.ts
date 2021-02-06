@@ -19,14 +19,12 @@ export class UserService {
   async getUserExpoPushTokensByDepartmentId(
     departmentId: string,
   ): Promise<string[]> {
-    const users = this.userRepository.find({
+    const users = await this.userRepository.find({
       where: {
-        id: {
-          $in: [departmentId],
-        },
+        departments: departmentId,
       },
     });
-    const expoPushTokens = (await users).map((user) => {
+    const expoPushTokens = users.map((user) => {
       return user.expoPushToken;
     });
 
