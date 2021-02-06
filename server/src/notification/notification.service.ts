@@ -39,6 +39,9 @@ export class NotificationService {
         try {
           const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
           tickets.push(...ticketChunk);
+          this.logger.log(
+            `send expoPushNotification for ${pushTokenList.length} number of devices, title: ${title}, deptCode: ${extraData.deptCode}, listId: ${extraData.listId}`,
+          );
           // NOTE: If a ticket contains an error code in ticket.details.error, you
           // must handle it appropriately. The error codes are listed in the Expo
           // documentation:
