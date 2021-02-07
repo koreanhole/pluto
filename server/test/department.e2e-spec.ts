@@ -7,6 +7,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmTestConfig } from '../src/config/typeorm.test.config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { graphqlConfig } from '../src/config/graphql.config';
+import { Department } from '../src/department/department.entity';
+import { DepartmentType } from '../src/department/department.type';
+
+const TEST_DEPARTMENT: Department = {
+  _id: null,
+  id: null,
+  deptName: 'test_dept',
+  deptCode: '1234',
+};
 
 describe('DepartmentModule (e2e)', () => {
   let app: INestApplication;
@@ -33,15 +42,16 @@ describe('DepartmentModule (e2e)', () => {
     await connection.close();
   });
 
-  it('createDepartment by deptCode: 1234, deptName: test_dept', () => {
+  it('creates department', () => {
     const createDepartmentQuery = `
       mutation {
         createDepartment(createDepartmentInput: {
-          deptCode: "1234"
-          deptName: "test_dept"
+          deptCode: ${JSON.stringify(TEST_DEPARTMENT.deptCode)}
+          deptName: ${JSON.stringify(TEST_DEPARTMENT.deptName)}
         }) {
           deptCode
           deptName
+          id
         }
       }`;
 
@@ -50,10 +60,12 @@ describe('DepartmentModule (e2e)', () => {
       .send({ query: createDepartmentQuery })
       .expect(200)
       .expect((response) => {
-        expect(response.body.data.createDepartment).toEqual({
-          deptCode: '1234',
-          deptName: 'test_dept',
-        });
+        const data: DepartmentType = response.body.data.createDepartment;
+        TEST_DEPARTMENT.id = data.id;
+
+        expect(data.deptName).toBe(TEST_DEPARTMENT.deptName);
+        expect(data.deptCode).toBe(TEST_DEPARTMENT.deptCode);
+        expect(data.id).not.toBeNull();
       });
   });
 
@@ -63,6 +75,7 @@ describe('DepartmentModule (e2e)', () => {
         getAllDepartment {
           deptCode
           deptName
+          id
         }
       }`;
 
@@ -72,7 +85,11 @@ describe('DepartmentModule (e2e)', () => {
       .expect(200)
       .expect((response) => {
         expect(response.body.data.getAllDepartment).toEqual([
-          { deptCode: '1234', deptName: 'test_dept' },
+          {
+            deptCode: TEST_DEPARTMENT.deptCode,
+            deptName: TEST_DEPARTMENT.deptName,
+            id: TEST_DEPARTMENT.id,
+          },
         ]);
       });
   });
