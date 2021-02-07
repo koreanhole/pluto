@@ -10,6 +10,9 @@ import { graphqlConfig } from '../src/config/graphql.config';
 import { DepartmentType } from '../src/department/department.type';
 import { UserModule } from '../src/user/user.module';
 import { UserType } from '../src/user/user.type';
+import { NoticeType } from '../src/notice/notice.type';
+import { NoticeModule } from '../src/notice/notice.module';
+import { NOTICE_PAGINATED_BUNDLE_SIZE } from '../src/notice/notice.service';
 
 const TEST_DEPARTMENT: DepartmentType = {
   id: null,
@@ -31,6 +34,25 @@ const TEST_USER: UserType = {
   departments: null,
 };
 
+const TEST_NOTICE: NoticeType = {
+  id: null,
+  attachmentLinks: [
+    {
+      fileLink: 'test file link',
+      fileName: 'test file name',
+    },
+  ],
+  authorDept: 'test author dept',
+  authorName: 'test author name',
+  contentHtml: 'test content html',
+  contentString: 'test content string',
+  createdDatetime: '2021-02-07T12:27:08.059Z',
+  department: null,
+  listId: 'test list id',
+  title: 'test title',
+  url: 'test url',
+};
+
 describe('AppModule (e2e)', () => {
   let app: INestApplication;
   let module: TestingModule;
@@ -43,6 +65,7 @@ describe('AppModule (e2e)', () => {
         GraphQLModule.forRoot(graphqlConfig),
         DepartmentModule,
         UserModule,
+        NoticeModule,
       ],
     }).compile();
 
@@ -235,6 +258,244 @@ describe('AppModule (e2e)', () => {
             expoPushToken: TEST_USER.expoPushToken,
             departments: [TEST_DEPARTMENT, SECOND_TEST_DEPARTMENT],
           });
+        });
+    });
+  });
+
+  describe('NoticeModule (e2e)', () => {
+    it('creates new notice', async () => {
+      TEST_NOTICE.department = TEST_DEPARTMENT.id;
+      const createNewNoticeQuery = `
+      mutation {
+        createNotice(createNoticeInput: {
+          attachmentLinks: [{
+            fileLink: ${JSON.stringify(TEST_NOTICE.attachmentLinks[0].fileLink)}
+            fileName: ${JSON.stringify(TEST_NOTICE.attachmentLinks[0].fileName)}
+          }]
+          authorDept: ${JSON.stringify(TEST_NOTICE.authorDept)}
+          authorName: ${JSON.stringify(TEST_NOTICE.authorName)}
+          contentHtml: ${JSON.stringify(TEST_NOTICE.contentHtml)}
+          contentString: ${JSON.stringify(TEST_NOTICE.contentString)}
+          createdDatetime: ${JSON.stringify(TEST_NOTICE.createdDatetime)}
+          department: ${JSON.stringify(TEST_NOTICE.department)}
+          listId: ${JSON.stringify(TEST_NOTICE.listId)}
+          title: ${JSON.stringify(TEST_NOTICE.title)}
+          url: ${JSON.stringify(TEST_NOTICE.url)}
+        }) {
+          attachmentLinks {
+            fileName
+            fileLink
+          }
+          authorDept
+          authorName
+          contentHtml
+          contentString
+          createdDatetime
+          department {
+            deptCode
+            deptName
+            id
+          }
+          listId
+          title
+          url
+          id
+        }
+      }`;
+      return await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: createNewNoticeQuery })
+        .expect(200)
+        .expect((response) => {
+          const data = response.body.data.createNotice;
+          TEST_NOTICE.id = data.id;
+          expect(data).toEqual({
+            attachmentLinks: [
+              {
+                fileName: TEST_NOTICE.attachmentLinks[0].fileName,
+                fileLink: TEST_NOTICE.attachmentLinks[0].fileLink,
+              },
+            ],
+            authorDept: TEST_NOTICE.authorDept,
+            authorName: TEST_NOTICE.authorName,
+            contentHtml: TEST_NOTICE.contentHtml,
+            contentString: TEST_NOTICE.contentString,
+            createdDatetime: TEST_NOTICE.createdDatetime,
+            department: {
+              deptCode: TEST_DEPARTMENT.deptCode,
+              deptName: TEST_DEPARTMENT.deptName,
+              id: TEST_DEPARTMENT.id,
+            },
+            listId: TEST_NOTICE.listId,
+            title: TEST_NOTICE.title,
+            url: TEST_NOTICE.url,
+            id: TEST_NOTICE.id,
+          });
+        });
+    });
+    it('gets notice by notice id', () => {
+      const getNoticeQuery = `
+      query {
+        getNotice(id: ${JSON.stringify(TEST_NOTICE.id)}) {
+          attachmentLinks {
+            fileName
+            fileLink
+          }
+          authorDept
+          authorName
+          contentHtml
+          contentString
+          createdDatetime
+          department {
+            deptCode
+            deptName
+            id
+          }
+          listId
+          title
+          url
+          id
+        }
+      }`;
+      return request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: getNoticeQuery })
+        .expect(200)
+        .expect((response) => {
+          expect(response.body.data.getNotice).toEqual({
+            attachmentLinks: [
+              {
+                fileName: TEST_NOTICE.attachmentLinks[0].fileName,
+                fileLink: TEST_NOTICE.attachmentLinks[0].fileLink,
+              },
+            ],
+            authorDept: TEST_NOTICE.authorDept,
+            authorName: TEST_NOTICE.authorName,
+            contentHtml: TEST_NOTICE.contentHtml,
+            contentString: TEST_NOTICE.contentString,
+            createdDatetime: TEST_NOTICE.createdDatetime,
+            department: {
+              deptCode: TEST_DEPARTMENT.deptCode,
+              deptName: TEST_DEPARTMENT.deptName,
+              id: TEST_DEPARTMENT.id,
+            },
+            listId: TEST_NOTICE.listId,
+            title: TEST_NOTICE.title,
+            url: TEST_NOTICE.url,
+            id: TEST_NOTICE.id,
+          });
+        });
+    });
+    // TODO: 1. query로 input 전달하는 효율적인 방법 찾아서 2. 두번째 notice도 생성 후 결과 확인하는 테스트도 작성
+    it(`it gets paginated notices, bundleSize: ${NOTICE_PAGINATED_BUNDLE_SIZE}`, () => {
+      const getPaginatedNoticeQuery = `
+      query {
+        getPaginatedNotice(offset: 0) {
+          attachmentLinks {
+            fileName
+            fileLink
+          }
+          authorDept
+          authorName
+          contentHtml
+          contentString
+          createdDatetime
+          department {
+            deptCode
+            deptName
+            id
+          }
+          listId
+          title
+          url
+          id
+        }
+      }`;
+      return request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: getPaginatedNoticeQuery })
+        .expect((response) => {
+          expect(response.body.data.getPaginatedNotice).toEqual([
+            {
+              attachmentLinks: [
+                {
+                  fileName: TEST_NOTICE.attachmentLinks[0].fileName,
+                  fileLink: TEST_NOTICE.attachmentLinks[0].fileLink,
+                },
+              ],
+              authorDept: TEST_NOTICE.authorDept,
+              authorName: TEST_NOTICE.authorName,
+              contentHtml: TEST_NOTICE.contentHtml,
+              contentString: TEST_NOTICE.contentString,
+              createdDatetime: TEST_NOTICE.createdDatetime,
+              department: {
+                deptCode: TEST_DEPARTMENT.deptCode,
+                deptName: TEST_DEPARTMENT.deptName,
+                id: TEST_DEPARTMENT.id,
+              },
+              listId: TEST_NOTICE.listId,
+              title: TEST_NOTICE.title,
+              url: TEST_NOTICE.url,
+              id: TEST_NOTICE.id,
+            },
+          ]);
+        })
+        .expect(200);
+    });
+    it('gets notice by departmentId', () => {
+      const getNoticeByDepartmentIdQuery = `
+      query {
+        getNoticeByDepartmentId(departmentId: ${JSON.stringify(
+          TEST_DEPARTMENT.id,
+        )}, offset: 0) {
+          attachmentLinks {
+            fileName
+            fileLink
+          }
+          authorDept
+          authorName
+          contentHtml
+          contentString
+          createdDatetime
+          department {
+            deptCode
+            deptName
+            id
+          }
+          listId
+          title
+          url
+          id
+        }
+      }`;
+      return request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: getNoticeByDepartmentIdQuery })
+        .expect((response) => {
+          expect(response.body.data.getNoticeByDepartmentId).toEqual([
+            {
+              attachmentLinks: [
+                {
+                  fileName: TEST_NOTICE.attachmentLinks[0].fileName,
+                  fileLink: TEST_NOTICE.attachmentLinks[0].fileLink,
+                },
+              ],
+              authorDept: TEST_NOTICE.authorDept,
+              authorName: TEST_NOTICE.authorName,
+              contentHtml: TEST_NOTICE.contentHtml,
+              contentString: TEST_NOTICE.contentString,
+              createdDatetime: TEST_NOTICE.createdDatetime,
+              department: {
+                deptCode: TEST_DEPARTMENT.deptCode,
+                deptName: TEST_DEPARTMENT.deptName,
+                id: TEST_DEPARTMENT.id,
+              },
+              listId: TEST_NOTICE.listId,
+              title: TEST_NOTICE.title,
+              url: TEST_NOTICE.url,
+              id: TEST_NOTICE.id,
+            },
+          ]);
         });
     });
   });
