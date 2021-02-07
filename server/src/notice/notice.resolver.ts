@@ -34,11 +34,14 @@ export class NoticeResolver {
   }
 
   @Query(() => [NoticeType])
-  async getNoticeByDeptCode(
-    @Args('deptCode') deptCode: string,
+  async getNoticeByDepartmentId(
+    @Args('departmentId') departmentId: string,
     @Args('offset') offset: number,
   ) {
-    return await this.noticeService.getNoticeByDeptCode(deptCode, offset);
+    return await this.noticeService.getNoticeByDepartmentId(
+      departmentId,
+      offset,
+    );
   }
 
   @Mutation(() => NoticeType)
