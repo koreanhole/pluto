@@ -6,14 +6,12 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { DepartmentModule } from './department/department.module';
 import { UserModule } from './user/user.module';
 import { NotificationModule } from './notification/notification.module';
+import { graphqlConfig } from './config/graphql.config';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
-    GraphQLModule.forRoot({
-      autoSchemaFile: true,
-      sortSchema: true,
-    }),
+    GraphQLModule.forRoot(graphqlConfig),
     NoticeModule,
     DepartmentModule,
     UserModule,

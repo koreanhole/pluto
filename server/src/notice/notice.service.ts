@@ -5,7 +5,7 @@ import { CreateNoticeInput } from './notice.input';
 import { Notice } from './notice.entity';
 import { v4 as uuid } from 'uuid';
 
-const BUNDLE_SIZE = 20;
+export const NOTICE_PAGINATED_BUNDLE_SIZE = 20;
 
 @Injectable()
 export class NoticeService {
@@ -28,8 +28,8 @@ export class NoticeService {
         order: {
           createdDatetime: 'DESC',
         },
-        skip: offset * BUNDLE_SIZE,
-        take: BUNDLE_SIZE,
+        skip: offset * NOTICE_PAGINATED_BUNDLE_SIZE,
+        take: NOTICE_PAGINATED_BUNDLE_SIZE,
       });
       return notice;
     } catch (error) {
@@ -37,24 +37,24 @@ export class NoticeService {
     }
   }
 
-  async getNoticeByDeptCode(
-    deptCode: string,
+  async getNoticeByDepartmentId(
+    departmentId: string,
     offset: number,
   ): Promise<Notice[]> {
     try {
       return await this.noticeRepository.find({
         where: {
-          deptCode,
+          department: departmentId,
         },
         order: {
           createdDatetime: 'DESC',
         },
-        skip: offset * BUNDLE_SIZE,
-        take: BUNDLE_SIZE,
+        skip: offset * NOTICE_PAGINATED_BUNDLE_SIZE,
+        take: NOTICE_PAGINATED_BUNDLE_SIZE,
       });
     } catch (error) {
       this.logger.error(
-        `get notice by deptCode: ${deptCode} error`,
+        `get notice by deptCode: ${departmentId} error`,
         error.stack,
       );
     }

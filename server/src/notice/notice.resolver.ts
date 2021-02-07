@@ -10,7 +10,7 @@ import { NoticeType } from './notice.type';
 import { NoticeService } from './notice.service';
 import { CreateNoticeInput } from './notice.input';
 import { Notice } from './notice.entity';
-import { DepartmentService } from 'src/department/department.service';
+import { DepartmentService } from '.././department/department.service';
 import { UserService } from '../user/user.service';
 import { NotificationService } from '../notification/notification.service';
 
@@ -34,11 +34,14 @@ export class NoticeResolver {
   }
 
   @Query(() => [NoticeType])
-  async getNoticeByDeptCode(
-    @Args('deptCode') deptCode: string,
+  async getNoticeByDepartmentId(
+    @Args('departmentId') departmentId: string,
     @Args('offset') offset: number,
   ) {
-    return await this.noticeService.getNoticeByDeptCode(deptCode, offset);
+    return await this.noticeService.getNoticeByDepartmentId(
+      departmentId,
+      offset,
+    );
   }
 
   @Mutation(() => NoticeType)

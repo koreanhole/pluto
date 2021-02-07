@@ -34,7 +34,7 @@ export class UserResolver {
     @Args('id') id: string,
     @Args('department') department: string,
   ) {
-    return await this.updateUserDepartment(id, department);
+    return await this.userService.updateUserDepartment(id, department);
   }
 
   @ResolveField('departments')
