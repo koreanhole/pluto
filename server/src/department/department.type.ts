@@ -9,6 +9,9 @@ export class DepartmentType {
   @Field()
   deptCode: string;
 
+  @Field({ defaultValue: '' })
+  subDeptCode: string;
+
   @Field()
   deptClassification: DeptClassification;
 

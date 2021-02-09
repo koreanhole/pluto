@@ -7,6 +7,9 @@ export class CreateDepartmentInput {
   @Field()
   deptCode: string;
 
+  @Field()
+  subDeptCode: string;
+
   @IsEnum(DeptClassification)
   @Field(() => DeptClassification)
   deptClassification: DeptClassification;

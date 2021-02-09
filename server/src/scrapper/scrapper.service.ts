@@ -19,8 +19,18 @@ export class ScrapperService {
     const departments = await this.departmentService.getAllDepartment();
 
     departments.forEach(async (department) => {
-      const { id, deptCode, deptType, lastFetchedListId } = department;
-      const lastListId = await getDepartmentLastListId(deptCode, deptType);
+      const {
+        id,
+        deptCode,
+        subDeptCode,
+        deptType,
+        lastFetchedListId,
+      } = department;
+      const lastListId = await getDepartmentLastListId(
+        deptCode,
+        subDeptCode,
+        deptType,
+      );
       if (lastListId === null) {
         return;
       }

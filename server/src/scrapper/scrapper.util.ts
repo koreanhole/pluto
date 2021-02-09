@@ -11,9 +11,7 @@ async function getCheerio(url: string) {
   const html = await axios.get(url);
 
   if (html === null) {
-    logger.debug(
-      `notice last listId not found, deptType: ${deptType}, url: ${url}`,
-    );
+    logger.debug(`notice last listId not found, url: ${url}`);
     return null;
   }
   const $ = cheerio.load(html.data);
@@ -24,6 +22,7 @@ async function getCheerio(url: string) {
 // 공지사항의 최신 listId를 가져온다.
 export async function getDepartmentLastListId(
   deptCode: string,
+  subDeptCode: string,
   deptType: DeptType,
 ): Promise<string> {
   let fnView: string;
@@ -36,7 +35,11 @@ export async function getDepartmentLastListId(
     deptType == DeptType.Facility
   ) {
     const url =
-      'https://www.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
+      'https://www.uos.ac.kr/korNotice/list.do?' +
+      'list_id=' +
+      deptCode +
+      '&cate_id2=' +
+      subDeptCode;
     const $ = await getCheerio(url);
     fnView = $('div#container div#contents')
       .find('ul.listType > li:not(.on) > a')

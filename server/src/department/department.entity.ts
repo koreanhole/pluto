@@ -9,8 +9,11 @@ export class Department {
   @PrimaryColumn()
   id: string;
 
-  @Column()
+  @Column({ default: '' })
   deptCode: string;
+
+  @Column()
+  subDeptCode: string;
 
   @Column()
   deptClassification: DeptClassification;
