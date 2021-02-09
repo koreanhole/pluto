@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import { CreateNoticeInput } from '../notice/notice.input';
 import { AttachmentLinks } from '../notice/notice.entity';
 import { Logger } from '@nestjs/common';
@@ -7,11 +7,13 @@ import { DeptType } from '../department/department.enum';
 
 // 공지사항의 최신 listId를 가져온다.
 export async function getDepartmentLastListId(
-  baseUrl: string,
   deptCode: string,
   deptType: DeptType,
 ): Promise<string> {
-  const url = baseUrl + 'list_id=' + deptCode;
+  const logger = new Logger('Scrapper Utils');
+
+  const url =
+    'https://www.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
 
   const html = await axios.get(url);
   const $ = cheerio.load(html.data);
@@ -65,7 +67,6 @@ export async function getDepartmentLastListId(
 
   // fnView('0', '23240'); 에서 2번째 parameter가 해당 deptCode의 마지막 listId이다.
   const lastListIdRegex = new RegExp(`, '(.*?)'`);
-
   return fnView.match(lastListIdRegex)[1];
 }
 
@@ -87,7 +88,7 @@ export async function getNoticeData(
   try {
     html = await axios.get(url);
   } catch (error) {
-    logger.warn(`Notice not found, url: ${url}`);
+    logger.warn(`Notice Data not found, url: ${url}`);
   }
 
   const $ = cheerio.load(html.data);
@@ -121,6 +122,5 @@ export async function getNoticeData(
     contentHtml,
     contentString: $notice.find('li#view_content').text(),
   };
-
   return result;
 }

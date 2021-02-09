@@ -18,6 +18,6 @@ export class CreateDepartmentInput {
   @Field(() => DeptType)
   deptType: DeptType;
 
-  @Field({ nullable: true })
+  @Field()
   lastFetchedListId: string;
 }
