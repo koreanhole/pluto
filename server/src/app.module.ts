@@ -7,6 +7,7 @@ import { DepartmentModule } from './department/department.module';
 import { UserModule } from './user/user.module';
 import { NotificationModule } from './notification/notification.module';
 import { graphqlConfig } from './config/graphql.config';
+import { ScrapperModule } from './scrapper/scrapper.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { graphqlConfig } from './config/graphql.config';
     DepartmentModule,
     UserModule,
     NotificationModule,
+    ScrapperModule,
   ],
 })
 export class AppModule {}
