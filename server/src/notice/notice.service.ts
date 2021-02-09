@@ -90,9 +90,7 @@ export class NoticeService {
 
     try {
       const savedNotice = await this.noticeRepository.save(notice);
-      this.logger.log(
-        `create notice, noticeId: ${noticeId}, url: ${url} departmentId: ${department}`,
-      );
+      this.logger.log(`create notice, url: ${url} departmentId: ${department}`);
       return savedNotice;
     } catch (error) {
       this.logger.error(

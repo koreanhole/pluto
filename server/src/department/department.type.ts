@@ -7,9 +7,6 @@ export class DepartmentType {
   id: string;
 
   @Field()
-  deptName: string;
-
-  @Field()
   deptCode: string;
 
   @Field()

@@ -58,7 +58,6 @@ export class DepartmentService {
   ): Promise<Department> {
     const {
       deptCode,
-      deptName,
       deptType,
       deptClassification,
       lastFetchedListId,
@@ -67,7 +66,6 @@ export class DepartmentService {
     const department = this.departmentRepository.create({
       id: uuid(),
       deptCode,
-      deptName,
       deptType,
       deptClassification,
       lastFetchedListId,

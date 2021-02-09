@@ -10,9 +10,6 @@ export class Department {
   id: string;
 
   @Column()
-  deptName: string;
-
-  @Column()
   deptCode: string;
 
   @Column()

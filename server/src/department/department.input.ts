@@ -5,9 +5,6 @@ import { DeptClassification, DeptType } from './department.enum';
 @InputType()
 export class CreateDepartmentInput {
   @Field()
-  deptName: string;
-
-  @Field()
   deptCode: string;
 
   @IsEnum(DeptClassification)
