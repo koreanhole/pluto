@@ -8,11 +8,13 @@ import { UserModule } from './user/user.module';
 import { NotificationModule } from './notification/notification.module';
 import { graphqlConfig } from './config/graphql.config';
 import { ScrapperModule } from './scrapper/scrapper.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
     GraphQLModule.forRoot(graphqlConfig),
+    ScheduleModule.forRoot(),
     NoticeModule,
     DepartmentModule,
     UserModule,
