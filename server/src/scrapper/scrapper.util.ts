@@ -16,6 +16,12 @@ export async function getDepartmentLastListId(
     'https://www.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
 
   const html = await axios.get(url);
+  if (html === null) {
+    logger.debug(
+      `notice last listId not found, deptType: ${deptType}, url: ${url}`,
+    );
+    return null;
+  }
   const $ = cheerio.load(html.data);
 
   let fnView: string;
@@ -97,6 +103,11 @@ export async function getNoticeData(
   const $noticeHeader = $notice.find('li');
   const $author = $noticeHeader.find('ul');
 
+  if ($notice.find('li#view_content').html() == null) {
+    logger.debug(`notice not found, listId: ${listId}, url: ${url}`);
+    return null;
+  }
+
   const attachmentLinks: AttachmentLinks[] = [];
   $notice.find('a.dbtn').each((_, element) => {
     attachmentLinks.push({
@@ -110,6 +121,8 @@ export async function getNoticeData(
   // font-family attribute 삭제
   contentHtml = contentHtml.replace(/\s*font-family\s*:\s*[^;]*;/g, '');
 
+  const createdDatetimeString = $author.find('li').next().next().first().text();
+
   const result: CreateNoticeInput = {
     url,
     listId,
@@ -117,7 +130,7 @@ export async function getNoticeData(
     title: $noticeHeader.find('span').first().text(),
     authorName: $author.find('li').first().text(),
     authorDept: $author.find('li').next().first().text(),
-    createdDatetime: $author.find('li').next().next().first().text(),
+    createdDatetime: new Date(createdDatetimeString).toISOString(),
     attachmentLinks,
     contentHtml,
     contentString: $notice.find('li#view_content').text(),
