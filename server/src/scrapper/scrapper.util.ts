@@ -5,17 +5,11 @@ import { AttachmentLinks } from '../notice/notice.entity';
 import { Logger } from '@nestjs/common';
 import { DeptType } from '../department/department.enum';
 
-// 공지사항의 최신 listId를 가져온다.
-export async function getDepartmentLastListId(
-  deptCode: string,
-  deptType: DeptType,
-): Promise<string> {
+async function getCheerio(url: string) {
   const logger = new Logger('Scrapper Utils');
 
-  const url =
-    'https://www.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
-
   const html = await axios.get(url);
+
   if (html === null) {
     logger.debug(
       `notice last listId not found, deptType: ${deptType}, url: ${url}`,
@@ -24,6 +18,14 @@ export async function getDepartmentLastListId(
   }
   const $ = cheerio.load(html.data);
 
+  return $;
+}
+
+// 공지사항의 최신 listId를 가져온다.
+export async function getDepartmentLastListId(
+  deptCode: string,
+  deptType: DeptType,
+): Promise<string> {
   let fnView: string;
   if (
     deptType == DeptType.General ||
@@ -33,6 +35,9 @@ export async function getDepartmentLastListId(
     deptType == DeptType.Bidding ||
     deptType == DeptType.Facility
   ) {
+    const url =
+      'https://www.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
+    const $ = await getCheerio(url);
     fnView = $('div#container div#contents')
       .find('ul.listType > li:not(.on) > a')
       .attr('onclick');
@@ -43,6 +48,13 @@ export async function getDepartmentLastListId(
     deptType == DeptType.Chemical ||
     deptType == DeptType.Machine ||
     deptType == DeptType.NewMaterial ||
+    deptType == DeptType.Civil ||
+    deptType == DeptType.Politics ||
+    deptType == DeptType.Adminstration ||
+    deptType == DeptType.InternationalRelation ||
+    deptType == DeptType.Economics ||
+    deptType == DeptType.SocialWelfare ||
+    deptType == DeptType.Taxation ||
     deptType == DeptType.Humanitics ||
     deptType == DeptType.English ||
     deptType == DeptType.Korean ||
@@ -56,18 +68,34 @@ export async function getDepartmentLastListId(
     deptType == DeptType.LifeScience ||
     deptType == DeptType.EnvironmentalGardening
   ) {
+    const url =
+      'https://www.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
+    const $ = await getCheerio(url);
+
     fnView = $('div.tb-body')
       .find('ul[class="clearfix"] > li > a')
       .attr('onclick');
   } else if (deptType == DeptType.Business) {
+    const url =
+      'https://biz.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
+    const $ = await getCheerio(url);
+
     fnView = $('div.contents')
       .find('ul.listType > li:not(.on) > a')
       .attr('href');
   } else if (deptType == DeptType.InterChange) {
+    const url =
+      'https://kiice.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
+    const $ = await getCheerio(url);
+
     fnView = $('div#subContents')
       .find('tbody > tr:not(.noti) > td > a')
       .attr('onclick');
   } else if (deptType == DeptType.Dormitory) {
+    const url =
+      'https://dormitory.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
+    const $ = await getCheerio(url);
+
     fnView = $('div.contents').find('ul > li:not(.on) > a').attr('href');
   }
 

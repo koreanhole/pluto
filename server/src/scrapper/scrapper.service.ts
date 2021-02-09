@@ -15,8 +15,6 @@ export class ScrapperService {
 
   @Interval('scrapping', 10000)
   async scrapNotice() {
-    const interval = this.schedulerRegistry.getInterval('scrapping');
-
     this.logger.debug('scrapper started');
     const departments = await this.departmentService.getAllDepartment();
 
@@ -30,7 +28,6 @@ export class ScrapperService {
       let currentListId = lastFetchedListId;
 
       this.schedulerRegistry.deleteInterval('scrapping');
-      clearInterval(interval);
       while (parseInt(currentListId) < parseInt(lastListId)) {
         currentListId = (parseInt(currentListId) + 1).toString();
         const noticeData = await getNoticeData(currentListId, deptCode, id);
