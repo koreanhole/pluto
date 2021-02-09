@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
 import cheerio from 'cheerio';
 import { CreateNoticeInput } from '../notice/notice.input';
-import { DeptType, AttachmentLinks } from '../notice/notice.entity';
+import { AttachmentLinks } from '../notice/notice.entity';
 import { Logger } from '@nestjs/common';
+import { DeptType } from '../department/department.enum';
 
 // 공지사항의 최신 listId를 가져온다.
 export async function getDepartmentLastListId(
@@ -16,15 +17,36 @@ export async function getDepartmentLastListId(
   const $ = cheerio.load(html.data);
 
   let fnView: string;
-  if (deptType == DeptType.General) {
+  if (
+    deptType == DeptType.General ||
+    deptType == DeptType.Bachelor ||
+    deptType == DeptType.Recruit ||
+    deptType == DeptType.Enterpreneur ||
+    deptType == DeptType.Bidding ||
+    deptType == DeptType.Facility
+  ) {
     fnView = $('div#container div#contents')
       .find('ul.listType > li:not(.on) > a')
       .attr('onclick');
   } else if (
     deptType == DeptType.Engineering ||
-    deptType == DeptType.Economics ||
+    deptType == DeptType.Electronic ||
+    deptType == DeptType.Computer ||
+    deptType == DeptType.Chemical ||
+    deptType == DeptType.Machine ||
+    deptType == DeptType.NewMaterial ||
     deptType == DeptType.Humanitics ||
-    deptType == DeptType.NaturalScience
+    deptType == DeptType.English ||
+    deptType == DeptType.Korean ||
+    deptType == DeptType.History ||
+    deptType == DeptType.Philosophy ||
+    deptType == DeptType.Chinese ||
+    deptType == DeptType.NaturalScience ||
+    deptType == DeptType.Mathematics ||
+    deptType == DeptType.Statics ||
+    deptType == DeptType.Physics ||
+    deptType == DeptType.LifeScience ||
+    deptType == DeptType.EnvironmentalGardening
   ) {
     fnView = $('div.tb-body')
       .find('ul[class="clearfix"] > li > a')

@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsEnum } from 'class-validator';
-import { DeptType, DeptClassification } from './department.entity';
+import { DeptClassification, DeptType } from './department.enum';
 
 @InputType()
 export class CreateDepartmentInput {

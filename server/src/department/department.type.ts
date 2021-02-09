@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { DeptType, DeptClassification } from './department.entity';
+import { DeptClassification, DeptType } from './department.enum';
 
 @ObjectType('DepartmentType')
 export class DepartmentType {
