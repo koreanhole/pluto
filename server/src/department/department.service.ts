@@ -46,12 +46,21 @@ export class DepartmentService {
   async createDepartment(
     createDepartmentInput: CreateDepartmentInput,
   ): Promise<Department> {
-    const { deptCode, deptName } = createDepartmentInput;
+    const {
+      deptCode,
+      deptName,
+      deptType,
+      deptClassification,
+      lastFetchedListId,
+    } = createDepartmentInput;
 
     const department = this.departmentRepository.create({
       id: uuid(),
       deptCode,
       deptName,
+      deptType,
+      deptClassification,
+      lastFetchedListId,
     });
 
     try {
