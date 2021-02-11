@@ -40,7 +40,12 @@ export class ScrapperService {
       this.schedulerRegistry.deleteInterval('scrapping');
       while (parseInt(currentListId) < parseInt(lastListId)) {
         currentListId = (parseInt(currentListId) + 1).toString();
-        const noticeData = await getNoticeData(currentListId, deptCode, id);
+        const noticeData = await getNoticeData(
+          currentListId,
+          deptCode,
+          subDeptCode,
+          id,
+        );
 
         if (noticeData === null) {
           continue;

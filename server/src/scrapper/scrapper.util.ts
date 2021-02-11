@@ -35,11 +35,8 @@ export async function getDepartmentLastListId(
     deptType == DeptType.Facility
   ) {
     const url =
-      'https://www.uos.ac.kr/korNotice/list.do?' +
-      'list_id=' +
-      deptCode +
-      '&cate_id2=' +
-      subDeptCode;
+      'https://www.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
+
     const $ = await getCheerio(url);
     fnView = $('div#container div#contents')
       .find('ul.listType > li:not(.on) > a')
@@ -72,7 +69,12 @@ export async function getDepartmentLastListId(
     deptType == DeptType.EnvironmentalGardening
   ) {
     const url =
-      'https://www.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
+      'https://www.uos.ac.kr/korNotice/list.do?' +
+      'list_id=' +
+      deptCode +
+      '&cate_id2=' +
+      subDeptCode;
+
     const $ = await getCheerio(url);
 
     fnView = $('div.tb-body')
@@ -110,6 +112,7 @@ export async function getDepartmentLastListId(
 export async function getNoticeData(
   listId: string,
   deptCode: string,
+  subDeptCode: string,
   departmentId: string,
 ): Promise<CreateNoticeInput> {
   const logger = new Logger('Scrapper Utils');
@@ -118,9 +121,14 @@ export async function getNoticeData(
     'list_id=' +
     deptCode +
     '&seq=' +
+    listId +
+    '&cate_id2=' +
+    subDeptCode +
     listId;
 
   let html: AxiosResponse;
+
+  console.log(url);
 
   try {
     html = await axios.get(url);
