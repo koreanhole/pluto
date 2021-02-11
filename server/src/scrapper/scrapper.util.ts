@@ -116,15 +116,18 @@ export async function getNoticeData(
   departmentId: string,
 ): Promise<CreateNoticeInput> {
   const logger = new Logger('Scrapper Utils');
-  const url =
+  let url =
     'https://www.uos.ac.kr/korNotice/view.do?' +
     'list_id=' +
     deptCode +
     '&seq=' +
-    listId +
-    '&cate_id2=' +
-    subDeptCode +
     listId;
+
+  logger.debug(subDeptCode);
+
+  if (subDeptCode !== '') {
+    url += '&cate_id2=' + subDeptCode;
+  }
 
   let html: AxiosResponse;
 

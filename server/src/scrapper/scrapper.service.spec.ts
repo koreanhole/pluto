@@ -6,9 +6,10 @@ describe('ScrapperUtils', () => {
       const createDepartmentInput = await getNoticeData(
         '23222',
         'FA1',
+        '',
         'test_department_id',
       );
-      expect(createDepartmentInput['url']).toBe(
+      expect(createDepartmentInput.url).toBe(
         'https://www.uos.ac.kr/korNotice/view.do?list_id=FA1&seq=23222',
       );
       expect(createDepartmentInput.listId).toBe('23222');
