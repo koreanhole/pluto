@@ -4,6 +4,10 @@ import { CreateNoticeInput } from '../notice/notice.input';
 import { AttachmentLinks } from '../notice/notice.entity';
 import { Logger } from '@nestjs/common';
 import { DeptType } from '../department/department.enum';
+import {
+  GetDepartmentLastListIdInput,
+  GetNoticeDataInput,
+} from './scrapper.input';
 
 async function getCheerio(url: string) {
   const logger = new Logger('Scrapper Utils');
@@ -21,10 +25,9 @@ async function getCheerio(url: string) {
 
 // 공지사항의 최신 listId를 가져온다.
 export async function getDepartmentLastListId(
-  deptCode: string,
-  subDeptCode: string,
-  deptType: DeptType,
+  getDepartmentLastListIdInput: GetDepartmentLastListIdInput,
 ): Promise<string> {
+  const { deptCode, subDeptCode, deptType } = getDepartmentLastListIdInput;
   let fnView: string;
   if (
     deptType == DeptType.General ||
@@ -110,11 +113,10 @@ export async function getDepartmentLastListId(
 }
 
 export async function getNoticeData(
-  listId: string,
-  deptCode: string,
-  subDeptCode: string,
-  departmentId: string,
+  getNoticeDataInput: GetNoticeDataInput,
 ): Promise<CreateNoticeInput> {
+  const { listId, deptCode, subDeptCode, departmentId } = getNoticeDataInput;
+
   const logger = new Logger('Scrapper Utils');
   let url =
     'https://www.uos.ac.kr/korNotice/view.do?' +
@@ -125,7 +127,7 @@ export async function getNoticeData(
 
   logger.debug(subDeptCode);
 
-  if (subDeptCode !== '') {
+  if (typeof subDeptCode !== 'undefined') {
     url += '&cate_id2=' + subDeptCode;
   }
 

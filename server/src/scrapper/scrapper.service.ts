@@ -26,11 +26,11 @@ export class ScrapperService {
         deptType,
         lastFetchedListId,
       } = department;
-      const lastListId = await getDepartmentLastListId(
+      const lastListId = await getDepartmentLastListId({
         deptCode,
         subDeptCode,
         deptType,
-      );
+      });
       if (lastListId === null) {
         return;
       }
@@ -40,12 +40,12 @@ export class ScrapperService {
       this.schedulerRegistry.deleteInterval('scrapping');
       while (parseInt(currentListId) < parseInt(lastListId)) {
         currentListId = (parseInt(currentListId) + 1).toString();
-        const noticeData = await getNoticeData(
-          currentListId,
+        const noticeData = await getNoticeData({
+          listId: currentListId,
           deptCode,
           subDeptCode,
-          id,
-        );
+          departmentId: id,
+        });
 
         if (noticeData === null) {
           continue;

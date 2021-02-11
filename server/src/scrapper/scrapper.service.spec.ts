@@ -3,12 +3,11 @@ import { getNoticeData } from './scrapper.util';
 describe('ScrapperUtils', () => {
   describe('일반, 학사, 채용, 창업, 입찰, 시설 공지', () => {
     it('parse notice', async () => {
-      const createDepartmentInput = await getNoticeData(
-        '23222',
-        'FA1',
-        '',
-        'test_department_id',
-      );
+      const createDepartmentInput = await getNoticeData({
+        listId: '23222',
+        deptCode: 'FA1',
+        departmentId: 'test_department_id',
+      });
       expect(createDepartmentInput.url).toBe(
         'https://www.uos.ac.kr/korNotice/view.do?list_id=FA1&seq=23222',
       );
