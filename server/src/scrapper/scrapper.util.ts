@@ -4,10 +4,7 @@ import { CreateNoticeInput } from '../notice/notice.input';
 import { AttachmentLinks } from '../notice/notice.entity';
 import { Logger } from '@nestjs/common';
 import { DeptType } from '../department/department.enum';
-import {
-  GetDepartmentLastListIdInput,
-  GetNoticeDataInput,
-} from './scrapper.input';
+import { GetRecentListIdsInput, GetNoticeDataInput } from './scrapper.input';
 
 async function getCheerio(url: string) {
   const logger = new Logger('Scrapper Utils');
@@ -24,11 +21,21 @@ async function getCheerio(url: string) {
 }
 
 // 공지사항의 최신 listId를 가져온다.
-export async function getDepartmentLastListId(
-  getDepartmentLastListIdInput: GetDepartmentLastListIdInput,
-): Promise<string> {
-  const { deptCode, subDeptCode, deptType } = getDepartmentLastListIdInput;
-  let fnView: string;
+export async function getRecentListIds(
+  getRecentListIdsInput: GetRecentListIdsInput,
+): Promise<string[]> {
+  const {
+    deptCode,
+    subDeptCode,
+    deptType,
+    lastFetchedListId,
+  } = getRecentListIdsInput;
+  const result: string[] = [];
+  // fnView('0', '23240'); 에서 2번째 parameter가 해당 deptCode의 마지막 listId이다.
+  const fnViewRegex = new RegExp(`, '(.*?)'`);
+  let newListId = '1000000';
+  let pageIndex = '1';
+
   if (
     deptType == DeptType.General ||
     deptType == DeptType.Bachelor ||
@@ -37,13 +44,30 @@ export async function getDepartmentLastListId(
     deptType == DeptType.Bidding ||
     deptType == DeptType.Facility
   ) {
-    const url =
-      'https://www.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
-
+    const url = `https://uos.ac.kr/korNotice/list.do?list_id=${deptCode}&pageIndex=${pageIndex}`;
     const $ = await getCheerio(url);
-    fnView = $('div#container div#contents')
-      .find('ul.listType > li:not(.on) > a')
-      .attr('onclick');
+    const lastPageIndex = $('div.mTot').contents().text().substring(1);
+
+    while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
+      if (parseInt(lastPageIndex) <= parseInt(pageIndex)) {
+        return result;
+      }
+      const html = await axios.get(url + `&pageIndex=${pageIndex}`);
+      const $ = cheerio.load(html.data);
+      $('ul.listType')
+        .find('li:not(.on)')
+        .each((_, element) => {
+          const onClickAttribute = $(element).find('a').attr('onclick');
+          if (typeof onClickAttribute !== 'undefined') {
+            newListId = onClickAttribute.match(fnViewRegex)[1];
+            if (parseInt(newListId) <= parseInt(lastFetchedListId)) {
+              return false;
+            }
+            result.push(newListId);
+          }
+        });
+      pageIndex = (parseInt(pageIndex) + 1).toString();
+    }
   } else if (
     deptType == DeptType.Engineering ||
     deptType == DeptType.Electronic ||
@@ -71,45 +95,102 @@ export async function getDepartmentLastListId(
     deptType == DeptType.LifeScience ||
     deptType == DeptType.EnvironmentalGardening
   ) {
-    const url =
-      'https://www.uos.ac.kr/korNotice/list.do?' +
-      'list_id=' +
-      deptCode +
-      '&cate_id2=' +
-      subDeptCode;
+    const url = `https://uos.ac.kr/korNotice/list.do?list_id=${deptCode}&cate_id2=${subDeptCode}`;
 
-    const $ = await getCheerio(url);
-
-    fnView = $('div.tb-body')
-      .find('ul[class="clearfix"] > li > a')
-      .attr('onclick');
+    while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
+      const html = await axios.get(url + `&pageIndex=${pageIndex}`);
+      const $ = cheerio.load(html.data);
+      if ($('li.tb-wid02 a').text() === '게시글이 없습니다') {
+        return result;
+      }
+      $('div.table-style')
+        .find('ul.clearfix:not(.on)')
+        .each((_, element) => {
+          const onClickAttribute = $(element).find('a').attr('onclick');
+          if (typeof onClickAttribute !== 'undefined') {
+            newListId = onClickAttribute.match(fnViewRegex)[1];
+            if (parseInt(newListId) <= parseInt(lastFetchedListId)) {
+              return false;
+            }
+            result.push(newListId);
+          }
+        });
+      pageIndex = (parseInt(pageIndex) + 1).toString();
+    }
   } else if (deptType == DeptType.Business) {
-    const url =
-      'https://biz.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
-    const $ = await getCheerio(url);
-
-    fnView = $('div.contents')
-      .find('ul.listType > li:not(.on) > a')
-      .attr('href');
+    const url = `https://biz.uos.ac.kr/korNotice/list.do?list_id=${deptCode}`;
+    while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
+      const html = await axios.get(url + `&pageIndex=${pageIndex}`);
+      const $ = cheerio.load(html.data);
+      if ($('ul.listType').text() === '글이 없습니다') {
+        return result;
+      }
+      $('ul.listType')
+        .find('li:not(.on)')
+        .each((_, element) => {
+          const onClickAttribute = $(element).find('a').attr('href');
+          if (
+            typeof onClickAttribute !== 'undefined' &&
+            onClickAttribute !== '#a'
+          ) {
+            newListId = onClickAttribute.match(fnViewRegex)[1];
+            if (parseInt(newListId) <= parseInt(lastFetchedListId)) {
+              return false;
+            }
+            result.push(newListId);
+          }
+        });
+      pageIndex = (parseInt(pageIndex) + 1).toString();
+    }
   } else if (deptType == DeptType.InterChange) {
-    const url =
-      'https://kiice.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
-    const $ = await getCheerio(url);
-
-    fnView = $('div#subContents')
-      .find('tbody > tr:not(.noti) > td > a')
-      .attr('onclick');
+    const url = `https://kiice.uos.ac.kr/korNotice/list.do?list_id=${deptCode}`;
+    while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
+      const html = await axios.get(url + `&pageIndex=${pageIndex}`);
+      const $ = cheerio.load(html.data);
+      if ($('tbody tr td').text() === '글이 없습니다.') {
+        return result;
+      }
+      $('tbody')
+        .find('tr:not(.noti)')
+        .each((_, element) => {
+          const onClickAttribute = $(element).find('a').attr('onclick');
+          if (typeof onClickAttribute !== 'undefined') {
+            newListId = onClickAttribute.match(fnViewRegex)[1];
+            if (parseInt(newListId) <= parseInt(lastFetchedListId)) {
+              return false;
+            }
+            result.push(newListId);
+          }
+        });
+      pageIndex = (parseInt(pageIndex) + 1).toString();
+    }
   } else if (deptType == DeptType.Dormitory) {
-    const url =
-      'https://dormitory.uos.ac.kr/korNotice/list.do?' + 'list_id=' + deptCode;
-    const $ = await getCheerio(url);
-
-    fnView = $('div.contents').find('ul > li:not(.on) > a').attr('href');
+    const url = `https://dormitory.uos.ac.kr/korNotice/list.do?list_id=${deptCode}`;
+    while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
+      const html = await axios.get(url + `&pageIndex=${pageIndex}`);
+      const $ = cheerio.load(html.data);
+      if ($('ul.listType.line01 li').text() === '글이 없습니다') {
+        return result;
+      }
+      $('ul.listType')
+        .find('li:not(.on)')
+        .each((_, element) => {
+          const onClickAttribute = $(element).find('a').attr('href');
+          if (
+            typeof onClickAttribute !== 'undefined' &&
+            onClickAttribute !== '#a'
+          ) {
+            newListId = onClickAttribute.match(fnViewRegex)[1];
+            if (parseInt(newListId) <= parseInt(lastFetchedListId)) {
+              return false;
+            }
+            result.push(newListId);
+          }
+        });
+      pageIndex = (parseInt(pageIndex) + 1).toString();
+    }
   }
-
-  // fnView('0', '23240'); 에서 2번째 parameter가 해당 deptCode의 마지막 listId이다.
-  const lastListIdRegex = new RegExp(`, '(.*?)'`);
-  return fnView.match(lastListIdRegex)[1];
+  return result;
 }
 
 export async function getNoticeData(
@@ -125,15 +206,11 @@ export async function getNoticeData(
     '&seq=' +
     listId;
 
-  logger.debug(subDeptCode);
-
   if (typeof subDeptCode !== 'undefined') {
     url += '&cate_id2=' + subDeptCode;
   }
 
   let html: AxiosResponse;
-
-  console.log(url);
 
   try {
     html = await axios.get(url);

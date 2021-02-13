@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DepartmentService } from '../department/department.service';
 import { NoticeService } from '../notice/notice.service';
-import { getDepartmentLastListId, getNoticeData } from './scrapper.util';
+import { getRecentListIds, getNoticeData } from './scrapper.util';
 import { Interval, SchedulerRegistry } from '@nestjs/schedule';
 
 @Injectable()
@@ -26,36 +26,36 @@ export class ScrapperService {
         deptType,
         lastFetchedListId,
       } = department;
-      const lastListId = await getDepartmentLastListId({
+
+      const recentListIds = await getRecentListIds({
         deptCode,
         subDeptCode,
         deptType,
+        lastFetchedListId,
       });
-      if (lastListId === null) {
+
+      if (recentListIds.length == 0) {
         return;
       }
 
-      let currentListId = lastFetchedListId;
+      this.logger.debug(recentListIds);
 
       this.schedulerRegistry.deleteInterval('scrapping');
-      while (parseInt(currentListId) < parseInt(lastListId)) {
-        currentListId = (parseInt(currentListId) + 1).toString();
+      recentListIds.forEach(async (listId) => {
         const noticeData = await getNoticeData({
-          listId: currentListId,
+          listId,
           deptCode,
           subDeptCode,
           departmentId: id,
         });
-
-        if (noticeData === null) {
-          continue;
+        if (noticeData !== null) {
+          await this.noticeService.createNotice(noticeData);
         }
-        await this.noticeService.createNotice(noticeData);
-        await this.departmentService.updateLastFetchedListId(
-          id,
-          noticeData.listId,
-        );
-      }
+      });
+      await this.departmentService.updateLastFetchedListId(
+        id,
+        recentListIds[0],
+      );
       this.schedulerRegistry.addInterval(
         'scrapping',
         setInterval(() => this.logger.debug('scrapper resumed'), 10000),
