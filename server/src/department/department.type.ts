@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { DeptClassification, DeptType } from './department.enum';
 
 @ObjectType('DepartmentType')
 export class DepartmentType {
@@ -6,8 +7,17 @@ export class DepartmentType {
   id: string;
 
   @Field()
-  deptName: string;
+  deptCode: string;
+
+  @Field({ defaultValue: '' })
+  subDeptCode: string;
 
   @Field()
-  deptCode: string;
+  deptClassification: DeptClassification;
+
+  @Field()
+  deptType: DeptType;
+
+  @Field()
+  lastFetchedListId: string;
 }

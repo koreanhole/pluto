@@ -43,15 +43,34 @@ export class DepartmentService {
     }
   }
 
+  async updateLastFetchedListId(id: string, listId: string): Promise<void> {
+    try {
+      const department = await this.getDepartmentById(id);
+      department.lastFetchedListId = listId;
+      await this.departmentRepository.save(department);
+    } catch (error) {
+      this.logger.error('update last fetched list id error', error.stack);
+    }
+  }
+
   async createDepartment(
     createDepartmentInput: CreateDepartmentInput,
   ): Promise<Department> {
-    const { deptCode, deptName } = createDepartmentInput;
+    const {
+      deptCode,
+      subDeptCode,
+      deptType,
+      deptClassification,
+      lastFetchedListId,
+    } = createDepartmentInput;
 
     const department = this.departmentRepository.create({
       id: uuid(),
       deptCode,
-      deptName,
+      subDeptCode,
+      deptType,
+      deptClassification,
+      lastFetchedListId,
     });
 
     try {

@@ -62,7 +62,7 @@ export class NoticeResolver {
     // 거져온 expoPushTokens를 사용해 notificationService를 통해 푸시알림을 보낸다.
     await this.notificationService.sendPushNotification({
       pushTokenList: expoPushTokens,
-      title: department.deptName,
+      title: department.deptType,
       body: notice.title,
       extraData: { deptCode: department.deptCode, listId: notice.listId },
     });

@@ -1,6 +1,6 @@
 import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
-class AttachmentLinks {
+export class AttachmentLinks {
   fileName: string;
   fileLink: string;
 }

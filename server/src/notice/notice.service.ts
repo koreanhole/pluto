@@ -27,6 +27,7 @@ export class NoticeService {
       const notice = await this.noticeRepository.find({
         order: {
           createdDatetime: 'DESC',
+          listId: 'DESC',
         },
         skip: offset * NOTICE_PAGINATED_BUNDLE_SIZE,
         take: NOTICE_PAGINATED_BUNDLE_SIZE,
@@ -48,6 +49,7 @@ export class NoticeService {
         },
         order: {
           createdDatetime: 'DESC',
+          listId: 'DESC',
         },
         skip: offset * NOTICE_PAGINATED_BUNDLE_SIZE,
         take: NOTICE_PAGINATED_BUNDLE_SIZE,
@@ -90,9 +92,7 @@ export class NoticeService {
 
     try {
       const savedNotice = await this.noticeRepository.save(notice);
-      this.logger.log(
-        `create notice, noticeId: ${noticeId}, url: ${url} departmentId: ${department}`,
-      );
+      this.logger.log(`create notice, url: ${url} departmentId: ${department}`);
       return savedNotice;
     } catch (error) {
       this.logger.error(
