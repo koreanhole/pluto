@@ -1,0 +1,3 @@
+db:
+  synchronize: true
+  url: 'mongodb://localhost/uos_notice'

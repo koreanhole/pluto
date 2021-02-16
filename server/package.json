@@ -33,6 +33,7 @@
     "cheerio": "^1.0.0-rc.5",
     "class-transformer": "^0.3.2",
     "class-validator": "^0.13.1",
+    "config": "^3.3.3",
     "expo-server-sdk": "^3.6.0",
     "graphql": "^14.6.0",
     "graphql-tools": "^7.0.2",
