@@ -3,6 +3,7 @@ import { DepartmentService } from '../department/department.service';
 import { NoticeService } from '../notice/notice.service';
 import { getRecentListIds, getNoticeData } from './scrapper.util';
 import { Cron, SchedulerRegistry, CronExpression } from '@nestjs/schedule';
+import { CreateNoticeInput } from '../notice/notice.input';
 
 const CRON_NAME = 'SCRAPPING';
 
@@ -21,7 +22,8 @@ export class ScrapperService {
     const departments = await this.departmentService.getAllDepartment();
 
     this.schedulerRegistry.getCronJob(CRON_NAME).stop();
-    departments.forEach(async (department) => {
+
+    for (const department of departments) {
       const {
         id,
         deptCode,
@@ -29,34 +31,44 @@ export class ScrapperService {
         deptType,
         lastFetchedListId,
       } = department;
-
-      const recentListIds = await getRecentListIds({
-        deptCode,
-        subDeptCode,
-        deptType,
-        lastFetchedListId,
-      });
+      let recentListIds: string[];
+      try {
+        recentListIds = await getRecentListIds({
+          deptCode,
+          subDeptCode,
+          deptType,
+          lastFetchedListId,
+        });
+      } catch (error) {
+        this.logger.error('get recent listids error');
+      }
 
       if (recentListIds.length == 0) {
+        this.schedulerRegistry.getCronJob(CRON_NAME).start();
         return;
       }
 
-      recentListIds.forEach(async (listId) => {
-        const noticeData = await getNoticeData({
-          listId,
-          deptCode,
-          subDeptCode,
-          departmentId: id,
-        });
+      for (const listId of recentListIds) {
+        let noticeData: CreateNoticeInput;
+        try {
+          noticeData = await getNoticeData({
+            listId,
+            deptCode,
+            subDeptCode,
+            departmentId: id,
+          });
+        } catch (error) {
+          this.logger.error('get new notice data error', error.stack);
+        }
         if (typeof noticeData !== 'undefined') {
           await this.noticeService.createNotice(noticeData);
         }
-      });
+      }
       await this.departmentService.updateLastFetchedListId(
         id,
         recentListIds[0],
       );
-    });
+    }
     this.logger.debug('scrapper end');
     this.schedulerRegistry.getCronJob(CRON_NAME).start();
   }

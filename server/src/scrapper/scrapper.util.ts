@@ -5,7 +5,6 @@ import { Logger } from '@nestjs/common';
 import { DeptType } from '../department/department.enum';
 import { GetRecentListIdsInput, GetNoticeDataInput } from './scrapper.input';
 import { axiosInstance } from 'src/config/axios.config';
-import { load } from 'cheerio';
 
 async function getCheerio(url: string) {
   // const logger = new Logger('Scrapper Utils');
@@ -40,7 +39,7 @@ export async function getRecentListIds(
     deptType == DeptType.Bidding ||
     deptType == DeptType.Facility
   ) {
-    const url = `https://uos.ac.kr/korNotice/list.do?epTicket=LOG&list_id=${deptCode}`;
+    const url = `https://uos.ac.kr/korNotice/list.do?list_id=${deptCode}`;
     const $ = await getCheerio(url);
     const lastPageIndex = $('div.mTot').contents().text().substring(1);
 
@@ -90,7 +89,7 @@ export async function getRecentListIds(
     deptType == DeptType.LifeScience ||
     deptType == DeptType.EnvironmentalGardening
   ) {
-    const url = `https://uos.ac.kr/korNotice/list.do?epTicket=LOG&list_id=${deptCode}&cate_id2=${subDeptCode}`;
+    const url = `https://uos.ac.kr/korNotice/list.do?list_id=${deptCode}&cate_id2=${subDeptCode}`;
 
     while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
       const $ = await getCheerio(url + `&pageIndex=${pageIndex}`);
@@ -112,7 +111,7 @@ export async function getRecentListIds(
       pageIndex = (parseInt(pageIndex) + 1).toString();
     }
   } else if (deptType == DeptType.Business) {
-    const url = `https://biz.uos.ac.kr/korNotice/list.do?epTicket=LOG&list_id=${deptCode}`;
+    const url = `https://biz.uos.ac.kr/korNotice/list.do?list_id=${deptCode}`;
     while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
       const $ = await getCheerio(url + `&pageIndex=${pageIndex}`);
       if ($('ul.listType').text().trim() === '글이 없습니다') {
@@ -136,7 +135,7 @@ export async function getRecentListIds(
       pageIndex = (parseInt(pageIndex) + 1).toString();
     }
   } else if (deptType == DeptType.InterChange) {
-    const url = `https://kiice.uos.ac.kr/korNotice/list.do?epTicket=LOG&list_id=${deptCode}`;
+    const url = `https://kiice.uos.ac.kr/korNotice/list.do?list_id=${deptCode}`;
     while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
       const $ = await getCheerio(url + `&pageIndex=${pageIndex}`);
       if ($('tbody tr td').text().trim() === '글이 없습니다.') {
@@ -157,7 +156,7 @@ export async function getRecentListIds(
       pageIndex = (parseInt(pageIndex) + 1).toString();
     }
   } else if (deptType == DeptType.Dormitory) {
-    const url = `https://dormitory.uos.ac.kr/korNotice/list.do?epTicket=LOG&list_id=${deptCode}`;
+    const url = `https://dormitory.uos.ac.kr/korNotice/list.do?list_id=${deptCode}`;
     while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
       const $ = await getCheerio(url + `&pageIndex=${pageIndex}`);
       if ($('ul.listType.line01 li').text().trim() === '글이 없습니다') {
@@ -190,18 +189,12 @@ export async function getNoticeData(
   const { listId, deptCode, subDeptCode, departmentId } = getNoticeDataInput;
 
   const logger = new Logger('Scrapper Utils');
-  let url = `https://www.uos.ac.kr/korNotice/view.do?epTicket=LOG&list_id=${deptCode}&seq=${listId}`;
+  let url = `https://www.uos.ac.kr/korNotice/view.do?list_id=${deptCode}&seq=${listId}`;
 
   if (typeof subDeptCode !== 'undefined' && subDeptCode.trim() !== '') {
     url += '&cate_id2=' + subDeptCode;
   }
-  let $: ReturnType<typeof load>;
-  try {
-    $ = await getCheerio(url);
-  } catch (error) {
-    logger.error('get notice data error', error.stack);
-    return;
-  }
+  const $ = await getCheerio(url);
 
   const $notice = $('div#contents ul.listType.view');
   const $noticeHeader = $notice.find('li');
