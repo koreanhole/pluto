@@ -9,7 +9,7 @@ import { GetRecentListIdsInput, GetNoticeDataInput } from './scrapper.input';
 async function getCheerio(url: string) {
   const logger = new Logger('Scrapper Utils');
 
-  const html = await axios.get(url);
+  const html = await axios.get(url, { timeout: 5000 });
 
   if (html === null) {
     logger.debug(`notice last listId not found, url: ${url}`);
@@ -52,7 +52,9 @@ export async function getRecentListIds(
       if (parseInt(lastPageIndex) <= parseInt(pageIndex)) {
         return result;
       }
-      const html = await axios.get(url + `&pageIndex=${pageIndex}`);
+      const html = await axios.get(url + `&pageIndex=${pageIndex}`, {
+        timeout: 5000,
+      });
       const $ = cheerio.load(html.data);
       $('ul.listType')
         .find('li:not(.on)')
@@ -100,7 +102,7 @@ export async function getRecentListIds(
     while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
       const html = await axios.get(url + `&pageIndex=${pageIndex}`);
       const $ = cheerio.load(html.data);
-      if ($('li.tb-wid02 a').text() === '게시글이 없습니다') {
+      if ($('li.tb-wid02 a').text().trim() === '게시글이 없습니다') {
         return result;
       }
       $('div.table-style')
@@ -122,7 +124,7 @@ export async function getRecentListIds(
     while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
       const html = await axios.get(url + `&pageIndex=${pageIndex}`);
       const $ = cheerio.load(html.data);
-      if ($('ul.listType').text() === '글이 없습니다') {
+      if ($('ul.listType').text().trim() === '글이 없습니다') {
         return result;
       }
       $('ul.listType')
@@ -147,7 +149,7 @@ export async function getRecentListIds(
     while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
       const html = await axios.get(url + `&pageIndex=${pageIndex}`);
       const $ = cheerio.load(html.data);
-      if ($('tbody tr td').text() === '글이 없습니다.') {
+      if ($('tbody tr td').text().trim() === '글이 없습니다.') {
         return result;
       }
       $('tbody')
@@ -169,7 +171,7 @@ export async function getRecentListIds(
     while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
       const html = await axios.get(url + `&pageIndex=${pageIndex}`);
       const $ = cheerio.load(html.data);
-      if ($('ul.listType.line01 li').text() === '글이 없습니다') {
+      if ($('ul.listType.line01 li').text().trim() === '글이 없습니다') {
         return result;
       }
       $('ul.listType')
@@ -206,7 +208,7 @@ export async function getNoticeData(
     '&seq=' +
     listId;
 
-  if (typeof subDeptCode !== 'undefined') {
+  if (typeof subDeptCode !== 'undefined' && subDeptCode.trim() !== '') {
     url += '&cate_id2=' + subDeptCode;
   }
 
@@ -217,7 +219,9 @@ export async function getNoticeData(
   } catch (error) {
     logger.warn(`Notice Data not found, url: ${url}`);
   }
-
+  if (typeof html === 'undefined') {
+    return null;
+  }
   const $ = cheerio.load(html.data);
 
   const $notice = $('div#contents ul.listType.view');

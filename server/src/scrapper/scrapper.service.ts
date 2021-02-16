@@ -2,7 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { DepartmentService } from '../department/department.service';
 import { NoticeService } from '../notice/notice.service';
 import { getRecentListIds, getNoticeData } from './scrapper.util';
-import { Interval, SchedulerRegistry } from '@nestjs/schedule';
+import { Cron, SchedulerRegistry, CronExpression } from '@nestjs/schedule';
+
+const CRON_NAME = 'SCRAPPING';
 
 @Injectable()
 export class ScrapperService {
@@ -13,11 +15,12 @@ export class ScrapperService {
   ) {}
   private logger = new Logger(ScrapperService.name);
 
-  @Interval('scrapping', 10000)
+  @Cron(CronExpression.EVERY_5_MINUTES, { name: CRON_NAME })
   async scrapNotice() {
     this.logger.debug('scrapper started');
     const departments = await this.departmentService.getAllDepartment();
 
+    this.schedulerRegistry.getCronJob(CRON_NAME).stop();
     departments.forEach(async (department) => {
       const {
         id,
@@ -38,9 +41,6 @@ export class ScrapperService {
         return;
       }
 
-      this.logger.debug(recentListIds);
-
-      this.schedulerRegistry.deleteInterval('scrapping');
       recentListIds.forEach(async (listId) => {
         const noticeData = await getNoticeData({
           listId,
@@ -56,10 +56,8 @@ export class ScrapperService {
         id,
         recentListIds[0],
       );
-      this.schedulerRegistry.addInterval(
-        'scrapping',
-        setInterval(() => this.logger.debug('scrapper resumed'), 10000),
-      );
     });
+    this.logger.debug('scrapper end');
+    this.schedulerRegistry.getCronJob(CRON_NAME).start();
   }
 }
