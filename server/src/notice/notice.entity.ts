@@ -1,4 +1,4 @@
-import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 export class AttachmentLinks {
   fileName: string;
@@ -7,13 +7,10 @@ export class AttachmentLinks {
 
 @Entity()
 export class Notice {
-  @ObjectIdColumn()
-  _id: string;
-
   @PrimaryColumn()
   id: string;
 
-  @Column()
+  @Column('jsonb')
   attachmentLinks: AttachmentLinks[];
 
   @Column()
