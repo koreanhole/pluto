@@ -1,15 +1,12 @@
-import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { DeptClassification, DeptType } from './department.enum';
 
 @Entity()
 export class Department {
-  @ObjectIdColumn()
-  _id: string;
-
   @PrimaryColumn()
   id: string;
 
-  @Column({ default: '' })
+  @Column()
   deptCode: string;
 
   @Column()

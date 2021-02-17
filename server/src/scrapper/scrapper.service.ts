@@ -16,7 +16,7 @@ export class ScrapperService {
   ) {}
   private logger = new Logger(ScrapperService.name);
 
-  @Cron(CronExpression.EVERY_5_SECONDS, { name: CRON_NAME })
+  @Cron(CronExpression.EVERY_30_MINUTES, { name: CRON_NAME })
   async scrapNotice() {
     this.logger.debug('scrapper started');
     const departments = await this.departmentService.getAllDepartment();

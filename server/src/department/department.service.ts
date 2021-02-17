@@ -29,15 +29,10 @@ export class DepartmentService {
     }
   }
 
+  // 여러개의 departmentId를 받아서 배열로 반환한다.
   async getManyDepartmentsById(ids: string[]): Promise<Department[]> {
     try {
-      return await this.departmentRepository.find({
-        where: {
-          id: {
-            $in: ids,
-          },
-        },
-      });
+      return await this.departmentRepository.findByIds(ids);
     } catch (error) {
       this.logger.error('get many department by id error', error.stack);
     }

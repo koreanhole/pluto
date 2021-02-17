@@ -1,10 +1,7 @@
-import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class User {
-  @ObjectIdColumn()
-  _id: string;
-
   @PrimaryColumn()
   id: string;
 
@@ -14,6 +11,6 @@ export class User {
   @Column()
   expoPushToken: string;
 
-  @Column()
+  @Column('simple-array', { nullable: false })
   departments: string[];
 }
