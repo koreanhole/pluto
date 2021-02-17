@@ -11,6 +11,6 @@ export class User {
   @Column()
   expoPushToken: string;
 
-  @Column('simple-array', { array: true })
+  @Column('simple-array', { nullable: false })
   departments: string[];
 }
