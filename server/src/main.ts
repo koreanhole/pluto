@@ -1,12 +1,19 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as helmet from 'helmet';
 
 async function bootstrap() {
-  const logger = new Logger('bootstrap');
+  const logger = new Logger('Bootstrap');
 
   const app = await NestFactory.create(AppModule);
-
+  app.use(
+    helmet({
+      contentSecurityPolicy:
+        process.env.NODE_ENV === 'production' ? undefined : false,
+    }),
+  );
+  app.enableCors();
   const port = 3001;
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(port);
