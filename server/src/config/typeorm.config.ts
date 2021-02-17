@@ -8,7 +8,7 @@ const dbConfig = config.get('db');
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: dbConfig.type,
-  url: dbConfig.url,
+  url: process.env.DB_URL,
   synchronize: process.env.TYPEORM_SYNC || dbConfig.synchronize,
   useUnifiedTopology: true,
   entities: [Notice, Department, User],
