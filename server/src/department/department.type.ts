@@ -18,6 +18,6 @@ export class DepartmentType {
   @Field()
   deptType: DeptType;
 
-  @Field()
+  @Field({ defaultValue: '' })
   lastFetchedListId: string;
 }
