@@ -15,7 +15,6 @@ async function bootstrap() {
         process.env.NODE_ENV === 'production' ? undefined : false,
     }),
   );
-  app.enableCors();
   const port = process.env.PORT || serverConfig.port;
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(port);
