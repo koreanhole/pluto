@@ -6,8 +6,14 @@ import RootNavigator from "navigators/RootNavigator";
 import createReduxStore from "redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 const { store, persistor } = createReduxStore();
+
+export const client = new ApolloClient({
+  uri: "http://pluto-server.ap-northeast-2.elasticbeanstalk.com/",
+  cache: new InMemoryCache(),
+});
 
 export default function App() {
   //https://github.com/facebook/react-native/issues/12981
@@ -22,14 +28,16 @@ export default function App() {
   };
 
   return (
-    <StoreProvider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <ActionSheetProvider>
-          <PaperProvider theme={theme}>
-            <RootNavigator />
-          </PaperProvider>
-        </ActionSheetProvider>
-      </PersistGate>
-    </StoreProvider>
+    <ApolloProvider client={client}>
+      <StoreProvider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <ActionSheetProvider>
+            <PaperProvider theme={theme}>
+              <RootNavigator />
+            </PaperProvider>
+          </ActionSheetProvider>
+        </PersistGate>
+      </StoreProvider>
+    </ApolloProvider>
   );
 }
