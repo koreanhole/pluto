@@ -10,7 +10,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 const { store, persistor } = createReduxStore();
 
-export const client = new ApolloClient({
+const client = new ApolloClient({
   uri: "http://pluto-server.ap-northeast-2.elasticbeanstalk.com/",
   cache: new InMemoryCache(),
 });

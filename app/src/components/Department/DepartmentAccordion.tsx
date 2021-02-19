@@ -10,11 +10,7 @@ import theme from "theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { showSnackbar } from "modules/Snackbar/redux/actions";
-
-type DepartmentSection = {
-  title: string;
-  data: string[];
-};
+import { DepartmentSection } from "./redux/types";
 
 export const DEPARTMENT_SECTIONS: DepartmentSection[] = [
   {
