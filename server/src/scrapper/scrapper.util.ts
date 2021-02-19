@@ -41,7 +41,7 @@ export async function getRecentListIds(
   ) {
     const url = `https://uos.ac.kr/korNotice/list.do?list_id=${deptCode}`;
     const $ = await getCheerio(url);
-    const lastPageIndex = $('div.mTot').contents().text().substring(1);
+    const lastPageIndex = $('div.mTot').contents().text().substring(1).trim();
 
     while (parseInt(newListId) >= parseInt(lastFetchedListId)) {
       if (parseInt(lastPageIndex) <= parseInt(pageIndex)) {

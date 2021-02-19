@@ -16,7 +16,7 @@ export class ScrapperService {
   ) {}
   private logger = new Logger(ScrapperService.name);
 
-  @Cron(CronExpression.EVERY_30_MINUTES, { name: CRON_NAME })
+  @Cron(CronExpression.EVERY_10_SECONDS, { name: CRON_NAME })
   async scrapNotice() {
     this.logger.debug('scrapper started');
     const departments = await this.departmentService.getAllDepartment();
@@ -41,9 +41,6 @@ export class ScrapperService {
         });
       } catch (error) {
         this.logger.error('get recent listids error');
-      }
-
-      if (recentListIds.length == 0) {
         this.schedulerRegistry.getCronJob(CRON_NAME).start();
         return;
       }
@@ -62,12 +59,9 @@ export class ScrapperService {
         }
         if (typeof noticeData !== 'undefined') {
           await this.noticeService.createNotice(noticeData);
+          await this.departmentService.updateLastFetchedListId(id, listId);
         }
       }
-      await this.departmentService.updateLastFetchedListId(
-        id,
-        recentListIds[0],
-      );
     }
     this.logger.debug('scrapper end');
     this.schedulerRegistry.getCronJob(CRON_NAME).start();
