@@ -1,13 +1,13 @@
 import * as React from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "modules/AppLayout";
 import NoticeCard from "components/Home/NoticeCard";
 import { useNavigation } from "@react-navigation/native";
 import LoadingIndicator from "modules/LoadingIndicator";
-import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
-import { getAllArticleInitialNotice, getNoticeFetchState } from "components/Article/redux/selectors";
 import { View } from "react-native";
+import { useQuery } from "@apollo/client";
+import { NOTICE_BY_DEPARTMENT_NAME } from "./queries";
+import { NoticeArticleData } from "../Article/redux/types";
 
 type ArticleListProps = {
   key: string;
@@ -19,20 +19,8 @@ type ArticleListProps = {
 
 export default function ArticleList({ route }: { route: ArticleListProps }) {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const noticeData = useSelector(getAllArticleInitialNotice);
-  const noticeFetchState = useSelector(getNoticeFetchState);
 
   const deptName = route.params.deptName;
-
-  React.useEffect(() => {
-    dispatch(
-      fetchInitialNoticeListAsync.request({
-        departmentList: [deptName],
-        pageType: "ALL_ARTICLE",
-      }),
-    );
-  }, []);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -40,29 +28,42 @@ export default function ArticleList({ route }: { route: ArticleListProps }) {
     });
   }, [navigation]);
 
+  const { loading, data } = useQuery<NoticeArticleData>(NOTICE_BY_DEPARTMENT_NAME, {
+    variables: {
+      deptName,
+      offset: 0,
+    },
+  });
+
+  if (loading)
+    return (
+      <AppLayout>
+        <View style={ArticleListStyles.container}>
+          <LoadingIndicator />
+        </View>
+      </AppLayout>
+    );
+
   return (
     <AppLayout>
       <View style={ArticleListStyles.container}>
-        {noticeFetchState == "SUCCESS" ? (
+        {typeof data !== "undefined" && (
           <FlatList
-            data={noticeData}
-            keyExtractor={(item) => `${item.deptCode}${item.listId}`}
+            data={data.getNoticeByDepartmentName}
+            keyExtractor={(item) => item.id}
             renderItem={(data) => (
               <NoticeCard
-                deptCode={data.item.deptCode}
-                deptName={data.item.deptName}
+                deptCode={data.item.department.deptCode}
+                deptName={data.item.department.deptType}
                 authorDept={data.item.authorDept}
                 title={data.item.title}
-                createdDate={data.item.createdDate}
+                createdDate={data.item.createdDatetime}
                 authorName={data.item.authorName}
                 listId={data.item.listId}
-                createdDateTimestamp={data.item.createdDateTimestamp}
-                favoriteCount={data.item.favoriteCount}
+                createdDateTimestamp={data.item.createdDatetime}
               />
             )}
           />
-        ) : (
-          <LoadingIndicator />
         )}
       </View>
     </AppLayout>

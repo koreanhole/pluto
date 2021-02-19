@@ -1,7 +1,7 @@
-import { parse, differenceInDays, format, getDay } from "date-fns";
+import { parse, differenceInDays, format, getDay, parseISO } from "date-fns";
 
 export function getDescriptiveDateDifference(date: string) {
-  const parsedDateTime = parse(date, "yyyy-MM-dd", new Date());
+  const parsedDateTime = parseISO(date);
   const dateDifference = differenceInDays(new Date(), parsedDateTime);
 
   if (dateDifference < 1) {
@@ -15,8 +15,8 @@ export function getDescriptiveDateDifference(date: string) {
   }
 }
 
-export function getFormattedDateString(date: Date) {
-  return format(date, "yyyy-MM-dd");
+export function getFormattedDateString(date: string) {
+  return format(parseISO(date), "yyyy-MM-dd");
 }
 
 export function getLocalizedDay(date: string) {

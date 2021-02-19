@@ -85,7 +85,6 @@ export default function Home() {
                 authorName={data.item.authorName}
                 listId={data.item.listId}
                 createdDateTimestamp={data.item.createdDateTimestamp}
-                favoriteCount={data.item.favoriteCount}
               />
             )}
           />
