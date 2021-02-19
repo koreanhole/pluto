@@ -13,6 +13,7 @@ import { Notice } from './notice.entity';
 import { DepartmentService } from '.././department/department.service';
 import { UserService } from '../user/user.service';
 import { NotificationService } from '../notification/notification.service';
+import { DeptType } from '../department/department.enum';
 
 @Resolver(() => NoticeType)
 export class NoticeResolver {
@@ -40,6 +41,20 @@ export class NoticeResolver {
   ) {
     return await this.noticeService.getNoticeByDepartmentId(
       departmentId,
+      offset,
+    );
+  }
+
+  @Query(() => [NoticeType])
+  async getNoticeByDepartmentName(
+    @Args('deptName') deptName: DeptType,
+    @Args('offset') offset: number,
+  ) {
+    const department = await this.departmentService.getDepartmentByName(
+      deptName,
+    );
+    return await this.noticeService.getNoticeByDepartmentId(
+      department.id,
       offset,
     );
   }

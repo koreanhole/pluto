@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Department } from './department.entity';
 import { v4 as uuid } from 'uuid';
 import { CreateDepartmentInput } from './department.input';
+import { DeptType } from './department.enum';
 
 @Injectable()
 export class DepartmentService {
@@ -24,6 +25,16 @@ export class DepartmentService {
   async getDepartmentById(id: string): Promise<Department> {
     try {
       return await this.departmentRepository.findOne({ id });
+    } catch (error) {
+      this.logger.error('get department by id error', error.stack);
+    }
+  }
+
+  async getDepartmentByName(deptType: DeptType): Promise<Department> {
+    try {
+      return await this.departmentRepository.findOne({
+        deptType,
+      });
     } catch (error) {
       this.logger.error('get department by id error', error.stack);
     }
