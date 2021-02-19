@@ -8,8 +8,7 @@ import Ripple from "react-native-material-ripple";
 import { useApolloClient } from "@apollo/client";
 import { DepartmentData } from "./types";
 import { ALL_DEPARTMENTS } from "./queries";
-import { DepartmentSection } from "components/Department/redux/types";
-import _ from "underscore";
+import { DepartmentSection, getDepartmentData } from "util/department";
 
 const DepartmentSectionHeader = ({ title }: { title: string }) => {
   return (
@@ -52,19 +51,7 @@ export default function AllArticle() {
         query: ALL_DEPARTMENTS,
       })
       .then((result) => {
-        const departments: DepartmentSection[] = [];
-        result.data.getAllDepartment.forEach((data) => {
-          const item = _.findWhere(departmentSections, { title: data.deptClassification });
-          if (typeof item !== "undefined") {
-            item.data.push(data.deptType);
-          } else {
-            departments.push({
-              title: data.deptClassification,
-              data: [data.deptType],
-            });
-          }
-        });
-        setDepartmentSections(departments);
+        setDepartmentSections(getDepartmentData(result.data));
       });
   }, []);
 

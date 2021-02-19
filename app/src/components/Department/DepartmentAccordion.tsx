@@ -10,46 +10,10 @@ import theme from "theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { showSnackbar } from "modules/Snackbar/redux/actions";
-import { DepartmentSection } from "./redux/types";
-
-export const DEPARTMENT_SECTIONS: DepartmentSection[] = [
-  {
-    title: "전체공지",
-    data: ["일반공지", "학사공지", "직원채용", "창업공지", "입찰공고", "시설공사"],
-  },
-  {
-    title: "기타부서",
-    data: ["생활관", "국제교육원"],
-  },
-  {
-    title: "공과대학",
-    data: [
-      "공과대학",
-      "전자전기컴퓨터공학부",
-      "컴퓨터과학부",
-      "화학공학과",
-      "기계정보공학과",
-      "신소재공학과",
-      "토목공학과",
-    ],
-  },
-  {
-    title: "경영대학",
-    data: ["경영학부"],
-  },
-  {
-    title: "정경대학",
-    data: ["정경대학", "행정학과", "국제관계학과", "경제학부", "사회복지학과", "세무학과"],
-  },
-  {
-    title: "인문대학",
-    data: ["인문대학", "영어영문학과", "국어국문학과", "국사학과", "철학과", "중국어문화학과"],
-  },
-  {
-    title: "자연과학대학",
-    data: ["자연과학대학", "수학과", "통계학과", "물리학과", "생명과학과", "환경원예학과"],
-  },
-];
+import { DepartmentSection, getDepartmentData } from "util/department";
+import { useApolloClient } from "@apollo/client";
+import { DepartmentData } from "components/AllArticle/types";
+import { ALL_DEPARTMENTS } from "components/AllArticle/queries";
 
 const AccordionHeader = (section: DepartmentSection, _index: number, isActive: boolean) => {
   const headerTextStyles = StyleSheet.flatten([AccordionStyles.text, { fontWeight: "bold" } as TextStyle]);
@@ -108,11 +72,24 @@ const AccrodionContentItem = ({ departmentName }: { departmentName: string }) =>
 };
 
 export default function DepartmentAccordion() {
+  const client = useApolloClient();
+
   const [activeDepartmentSection, setActiveDepartmentSection] = React.useState<number[]>([]);
+  const [departmentSections, setDepartmentSections] = React.useState<DepartmentSection[]>([]);
+
+  React.useEffect(() => {
+    client
+      .query<DepartmentData>({
+        query: ALL_DEPARTMENTS,
+      })
+      .then((result) => {
+        setDepartmentSections(getDepartmentData(result.data));
+      });
+  }, []);
 
   return (
     <Accordion
-      sections={DEPARTMENT_SECTIONS}
+      sections={departmentSections}
       activeSections={activeDepartmentSection}
       renderHeader={AccordionHeader}
       renderContent={AccordionContent}
