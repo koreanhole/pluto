@@ -8,7 +8,7 @@ export class DepartmentResolver {
   constructor(private departmentService: DepartmentService) {}
 
   @Query(() => [DepartmentType])
-  async getAllDepartment() {
+  async AllDepartments() {
     return await this.departmentService.getAllDepartment();
   }
 

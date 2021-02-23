@@ -25,17 +25,17 @@ export class NoticeResolver {
   ) {}
 
   @Query(() => NoticeType)
-  async getNotice(@Args('id') id: string) {
+  async NoticeByNoticeId(@Args('id') id: string) {
     return await this.noticeService.getNotice(id);
   }
 
   @Query(() => [NoticeType])
-  async getPaginatedNotice(@Args('offset') offset: number) {
+  async PaginatedNotice(@Args('offset') offset: number) {
     return await this.noticeService.getPaginatedNotices(offset);
   }
 
   @Query(() => [NoticeType])
-  async getNoticeByDepartmentId(
+  async NoticeByDepartmentId(
     @Args('departmentId') departmentId: string,
     @Args('offset') offset: number,
   ) {
@@ -46,7 +46,7 @@ export class NoticeResolver {
   }
 
   @Query(() => [NoticeType])
-  async getNoticeByDepartmentName(
+  async NoticeByDepartmentName(
     @Args('deptName') deptName: DeptType,
     @Args('offset') offset: number,
   ) {
