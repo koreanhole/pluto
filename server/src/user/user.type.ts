@@ -9,9 +9,6 @@ export class UserType {
   @Field()
   expoPushToken: string;
 
-  @Field()
-  deviceId: string;
-
   @Field(() => [DepartmentType])
   departments: string[];
 }

@@ -6,9 +6,6 @@ export class User {
   id: string;
 
   @Column()
-  deviceId: string;
-
-  @Column()
   expoPushToken: string;
 
   @Column('simple-array', { nullable: false })

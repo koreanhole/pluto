@@ -58,10 +58,9 @@ export class UserService {
   }
 
   async createUser(createUserInput: CreateUserInput): Promise<User> {
-    const { deviceId, expoPushToken, departments } = createUserInput;
+    const { expoPushToken, departments } = createUserInput;
     const user = this.userRepository.create({
       id: uuid(),
-      deviceId,
       expoPushToken,
       departments,
     });
@@ -69,7 +68,7 @@ export class UserService {
       return await this.userRepository.save(user);
     } catch (error) {
       this.logger.error(
-        `save createdUser error, deviceId: ${deviceId}, expoPushToken: ${expoPushToken}`,
+        `save createdUser error, expoPushToken: ${expoPushToken}`,
         error.stack,
       );
     }
