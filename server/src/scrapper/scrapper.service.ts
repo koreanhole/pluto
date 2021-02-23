@@ -59,9 +59,12 @@ export class ScrapperService {
         }
         if (typeof noticeData !== 'undefined') {
           await this.noticeService.createNotice(noticeData);
-          await this.departmentService.updateLastFetchedListId(id, listId);
         }
       }
+      await this.departmentService.updateLastFetchedListId(
+        id,
+        recentListIds[0],
+      );
     }
     this.logger.debug('scrapper end');
     this.schedulerRegistry.getCronJob(CRON_NAME).start();
