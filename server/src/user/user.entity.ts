@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 @Entity()
 export class User {
   @PrimaryColumn()
-  id: string;
+  readonly id: string;
 
   @Column()
   expoPushToken: string;

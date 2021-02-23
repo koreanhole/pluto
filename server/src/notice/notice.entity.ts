@@ -8,7 +8,7 @@ export class AttachmentLinks {
 @Entity()
 export class Notice {
   @PrimaryColumn()
-  id: string;
+  readonly id: string;
 
   @Column('jsonb')
   attachmentLinks: AttachmentLinks[];

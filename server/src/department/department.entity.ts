@@ -4,7 +4,7 @@ import { DeptClassification, DeptType } from './department.enum';
 @Entity()
 export class Department {
   @PrimaryColumn()
-  id: string;
+  readonly id: string;
 
   @Column()
   deptCode: string;
