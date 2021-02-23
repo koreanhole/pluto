@@ -13,8 +13,10 @@ import theme from "theme";
 import { fetchInitialNoticeListAsync } from "components/Article/redux/actions";
 import { getHomeInitialNotice, getNoticeFetchState } from "components/Article/redux/selectors";
 import HeaderRightButton from "./HeaderRightButton";
+import { useApolloClient } from "@apollo/client";
 
 export default function Home() {
+  const client = useApolloClient();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -40,7 +42,10 @@ export default function Home() {
   }, [favoriteDepartmentList]);
 
   React.useEffect(() => {
+    const token = registerForPushNotificationsAsync();
     registerForPushNotificationsAsync().then((token) => dispatch(setExpoPushToken(token)));
+
+    // when notification tapped -> redirect to article
     const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
       const responseData = response.notification.request.content.data;
       navigation.navigate("Article", {

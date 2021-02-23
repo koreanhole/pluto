@@ -9,49 +9,50 @@ import { useNavigation } from "@react-navigation/native";
 import { AdMobBanner } from "expo-ads-admob";
 import * as WebBrowser from "expo-web-browser";
 import LoadingIndicator from "modules/LoadingIndicator";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchNoticeDataAsync } from "./redux/actions";
-import { getNoticeData, getNoticeDataFetchState } from "./redux/selectors";
+import { useQuery } from "@apollo/client";
+import { GET_NOTICE_BY_NOTICE_ID } from "./queries";
+import { NoticeArticleData } from "./redux/types";
 
 type ArticleProps = {
   key: string;
   name: string;
   params: {
-    deptCode: string;
-    listId: string;
+    id: string;
   };
 };
 
 export default function Article({ route }: { route: ArticleProps }) {
-  const { deptCode, listId } = route.params;
+  const { id } = route.params;
   const navigation = useNavigation();
-  const dispatch = useDispatch();
 
-  const noticeData = useSelector(getNoticeData);
-  const noticeDataFetchState = useSelector(getNoticeDataFetchState);
+  const { loading, data } = useQuery<NoticeArticleData>(GET_NOTICE_BY_NOTICE_ID, {
+    variables: {
+      id,
+    },
+  });
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <HeaderRightButton
-          url={noticeData !== null ? noticeData.url : ""}
-          notice={noticeData}
-          attachment={noticeData !== null ? noticeData.attachmentLink : undefined}
-        />
-      ),
+      headerRight: () =>
+        typeof data !== "undefined" && (
+          <HeaderRightButton
+            url={data.getNotice.url}
+            notice={data.getNotice}
+            attachment={data.getNotice.attachmentLink}
+          />
+        ),
     });
   });
 
-  React.useEffect(() => {
-    dispatch(
-      fetchNoticeDataAsync.request({
-        deptCode: deptCode,
-        listId: listId,
-      }),
+  if (loading === true) {
+    return (
+      <AppLayout>
+        <LoadingIndicator />
+      </AppLayout>
     );
-  }, [route]);
+  }
 
-  if (noticeData !== null && noticeDataFetchState === "SUCCESS") {
+  if (typeof data !== "undefined") {
     return (
       <AppLayout>
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
@@ -62,19 +63,19 @@ export default function Article({ route }: { route: ArticleProps }) {
             }
           />
           <View style={ArticleStyles.container}>
-            <Text style={ArticleStyles.title}>{noticeData.title}</Text>
-            <Text style={ArticleStyles.additionalInformation}>{noticeData.createdDate}</Text>
+            <Text style={ArticleStyles.title}>{data.getNotice.title}</Text>
+            <Text style={ArticleStyles.additionalInformation}>{data.getNotice.createdDatetime}</Text>
             <Text style={ArticleStyles.additionalInformation}>
-              {`${noticeData.authorName}`}
-              {noticeData.authorDept && ` / ${noticeData.authorDept}`}
-              {` / ${noticeData.deptName}`}
+              {`${data.getNotice.authorName}`}
+              {data.getNotice.authorDept && ` / ${data.getNotice.authorDept}`}
+              {` / ${data.getNotice.department.deptType}`}
             </Text>
-            {typeof noticeData.contentHtml !== "undefined" && (
+            {typeof data.getNotice.contentHtml !== "undefined" && (
               <AutoHeightWebView
                 originWhitelist={["*"]}
                 scrollEnabled={false}
                 overScrollMode={"never"}
-                source={{ html: noticeData.contentHtml }}
+                source={{ html: data.getNotice.contentHtml }}
                 startInLoadingState={true}
                 renderLoading={() => {
                   return <LoadingIndicator />;
@@ -106,13 +107,8 @@ export default function Article({ route }: { route: ArticleProps }) {
         </ScrollView>
       </AppLayout>
     );
-  } else {
-    return (
-      <AppLayout>
-        <LoadingIndicator />
-      </AppLayout>
-    );
   }
+  return <AppLayout noDataText="불러올 공지사항이 없습니다." />;
 }
 
 const ArticleStyles = StyleSheet.create({

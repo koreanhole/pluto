@@ -2,7 +2,7 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
-import { Attachment, NoticeArticle } from "./redux/types";
+import { Attachment_Gql, NoticeArticleData, NoticeArtice_Gql } from "./redux/types";
 import theme from "theme";
 import { Alert, View, Platform, Share } from "react-native";
 import * as WebBrowser from "expo-web-browser";
@@ -20,8 +20,8 @@ export default function HeaderRightButton({
   notice,
 }: {
   url?: string;
-  attachment?: Attachment[];
-  notice: NoticeArticle | null;
+  attachment?: Attachment_Gql[];
+  notice: NoticeArtice_Gql;
 }) {
   const { showActionSheetWithOptions } = useActionSheet();
   const dispatch = useDispatch();
@@ -30,13 +30,13 @@ export default function HeaderRightButton({
   const fileLink =
     typeof attachment !== "undefined"
       ? attachment.map((item) => {
-          return item.file_link;
+          return item.fileLink;
         })
       : [];
   const fileName =
     typeof attachment !== "undefined"
       ? attachment.map((item) => {
-          return item.file_name;
+          return item.fileName;
         })
       : [];
   fileName.splice(0, 0, "취소");
@@ -75,33 +75,33 @@ export default function HeaderRightButton({
   }, [fileName, fileLink]);
 
   const handleClickSaveNotice = () => {
-    if (notice !== null) {
-      dispatch(saveNotice(notice));
-      dispatch(
-        showSnackbar({
-          visible: true,
-          message: "공지사항을 저장했습니다.",
-        }),
-      );
-      if (Platform.OS == "ios") {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      }
-    }
+    // if (notice !== null) {
+    //   dispatch(saveNotice(notice));
+    //   dispatch(
+    //     showSnackbar({
+    //       visible: true,
+    //       message: "공지사항을 저장했습니다.",
+    //     }),
+    //   );
+    //   if (Platform.OS == "ios") {
+    //     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    //   }
+    // }
   };
 
   const handleClickDeleteNotice = () => {
-    if (notice !== null) {
-      dispatch(deleteSavedNotice(notice));
-      dispatch(
-        showSnackbar({
-          visible: true,
-          message: "저장된 공지사항에서 삭제했습니다.",
-        }),
-      );
-      if (Platform.OS == "ios") {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      }
-    }
+    // if (notice !== null) {
+    //   dispatch(deleteSavedNotice(notice));
+    //   dispatch(
+    //     showSnackbar({
+    //       visible: true,
+    //       message: "저장된 공지사항에서 삭제했습니다.",
+    //     }),
+    //   );
+    //   if (Platform.OS == "ios") {
+    //     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    //   }
+    // }
   };
 
   const handleClickShareNotice = React.useCallback(() => {

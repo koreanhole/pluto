@@ -7,7 +7,7 @@ import LoadingIndicator from "modules/LoadingIndicator";
 import { View } from "react-native";
 import { useQuery } from "@apollo/client";
 import { NOTICE_BY_DEPARTMENT_NAME } from "./queries";
-import { NoticeArticleData } from "../Article/redux/types";
+import { NoticeArticleDataList } from "../Article/redux/types";
 
 type ArticleListProps = {
   key: string;
@@ -28,7 +28,7 @@ export default function ArticleList({ route }: { route: ArticleListProps }) {
     });
   }, [navigation]);
 
-  const { loading, data } = useQuery<NoticeArticleData>(NOTICE_BY_DEPARTMENT_NAME, {
+  const { loading, data } = useQuery<NoticeArticleDataList>(NOTICE_BY_DEPARTMENT_NAME, {
     variables: {
       deptName,
       offset: 0,
@@ -53,14 +53,13 @@ export default function ArticleList({ route }: { route: ArticleListProps }) {
             keyExtractor={(item) => item.id}
             renderItem={(data) => (
               <NoticeCard
-                deptCode={data.item.department.deptCode}
-                deptName={data.item.department.deptType}
+                id={data.item.id}
+                department={data.item.department}
                 authorDept={data.item.authorDept}
                 title={data.item.title}
-                createdDate={data.item.createdDatetime}
+                createdDatetime={data.item.createdDatetime}
                 authorName={data.item.authorName}
                 listId={data.item.listId}
-                createdDateTimestamp={data.item.createdDatetime}
               />
             )}
           />

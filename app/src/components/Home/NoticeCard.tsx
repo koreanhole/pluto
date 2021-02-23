@@ -9,7 +9,7 @@ import theme from "theme";
 import randomColor from "randomcolor";
 import { getDescriptiveDateDifference, getFormattedDateString } from "./util";
 import { MaterialIcons } from "@expo/vector-icons";
-import { NoticeArticle } from "components/Article/redux/types";
+import { NoticeArtice_Gql } from "../Article/redux/types";
 
 export const NoticeCardHeader = ({ createdDate }: { createdDate: string }) => {
   return (
@@ -62,20 +62,20 @@ const NoticeCardItemSubtitle = ({
   );
 };
 
-export default function NoticeCard(props: NoticeArticle) {
-  const { deptCode, deptName, authorDept, title, createdDate, authorName, listId } = props;
+export default function NoticeCard(props: NoticeArtice_Gql) {
+  const { department, authorDept, title, createdDatetime, authorName, id } = props;
   const navigation = useNavigation();
 
   const handleNoticeCardItemClick = React.useCallback(() => {
-    navigation.navigate("Article", { deptCode: deptCode, listId: listId });
+    navigation.navigate("Article", { id });
   }, []);
 
   return (
     <Ripple onPress={handleNoticeCardItemClick}>
       <View style={NoticeCardStyle.container}>
-        <NoticeCardHeader createdDate={createdDate} />
-        <NoticeCardItemTitle deptName={deptName} title={title} />
-        <NoticeCardItemSubtitle createdDate={createdDate} authorName={authorName} authorDept={authorDept} />
+        <NoticeCardHeader createdDate={createdDatetime} />
+        <NoticeCardItemTitle deptName={department.deptType} title={title} />
+        <NoticeCardItemSubtitle createdDate={createdDatetime} authorName={authorName} authorDept={authorDept} />
         <Divider />
       </View>
     </Ripple>

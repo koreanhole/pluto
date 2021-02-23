@@ -7,7 +7,7 @@ export type Attachment = {
   file_name: string;
 };
 
-type Attachment_Gql = {
+export type Attachment_Gql = {
   fileName: string;
   fileLink: string;
 };
@@ -18,7 +18,7 @@ type department_Gql = {
   id: string;
 };
 
-type NoticeArtice_Gql = {
+export type NoticeArtice_Gql = {
   id: string;
   attachmentLink?: Attachment_Gql[];
   authorDept: string;
@@ -33,6 +33,10 @@ type NoticeArtice_Gql = {
 };
 
 export type NoticeArticleData = {
+  getNotice: NoticeArtice_Gql;
+};
+
+export type NoticeArticleDataList = {
   getNoticeByDepartmentName: NoticeArtice_Gql[];
 };
 
