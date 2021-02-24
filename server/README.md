@@ -1,4 +1,8 @@
-## UOS공지사항의 백엔드 서버
+# UOS공지사항의 백엔드 서버
+
+## 주요 기술
+
+- TypeScript, NestJS, PostgesSQL, jest, cheerio
 
 ## 실행
 
