@@ -24,7 +24,7 @@ UOS공지사항
 
 ### 주요 기술
 
-TypeScript, React-Native, Expo, redux, redux-saga
+- TypeScript, React-Native, Expo, redux, redux-saga
 
 ## server
 
@@ -38,4 +38,4 @@ TypeScript, React-Native, Expo, redux, redux-saga
 
 ### 주요 기술
 
-TypeScript, NestJS, PostgesSQL, jest, cheerio
+- TypeScript, NestJS, PostgesSQL, jest, cheerio
