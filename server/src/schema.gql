@@ -1,0 +1,144 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AttachmentLinksInput {
+  fileLink: String!
+  fileName: String!
+}
+
+type AttachmentLinksType {
+  fileLink: String!
+  fileName: String!
+}
+
+input CreateDepartmentInput {
+  deptClassification: DeptClassification!
+  deptCode: String!
+  deptType: DeptType!
+  lastFetchedListId: String!
+  subDeptCode: String!
+}
+
+input CreateNoticeInput {
+  attachmentLinks: [AttachmentLinksInput!]!
+  authorDept: String!
+  authorName: String!
+  contentHtml: String!
+  contentString: String!
+  createdDatetime: String!
+  department: ID!
+  listId: String!
+  title: String!
+  url: String!
+}
+
+input CreateUserInput {
+  departments: [ID!]!
+  expoPushToken: String!
+}
+
+type DepartmentType {
+  deptClassification: String!
+  deptCode: String!
+  deptType: String!
+  id: ID!
+  lastFetchedListId: String!
+  subDeptCode: String!
+}
+
+enum DeptClassification {
+  Business
+  Economics
+  Engineering
+  General
+  Humanitics
+  NaturalScience
+  Others
+}
+
+enum DeptType {
+  Adminstration
+  Bachelor
+  Bidding
+  Business
+  Chemical
+  Chinese
+  Civil
+  Computer
+  Dormitory
+  Economics
+  Electronic
+  Engineering
+  English
+  Enterpreneur
+  EnvironmentalGardening
+  Facility
+  General
+  History
+  Humanitics
+  InterChange
+  InternationalRelation
+  Korean
+  LifeScience
+  Machine
+  Mathematics
+  NaturalScience
+  NewMaterial
+  Philosophy
+  Physics
+  Politics
+  Recruit
+  SocialWelfare
+  Statics
+  Taxation
+}
+
+type Mutation {
+  createDepartment(createDepartmentInput: CreateDepartmentInput!): DepartmentType!
+  createNotice(createNoticeInput: CreateNoticeInput!): Notice!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUserDepartment(department: String!, id: String!): User!
+}
+
+type Notice {
+  attachmentLinks: [AttachmentLinksType!]
+  authorDept: String!
+  authorName: String!
+  contentHtml: String!
+  contentString: String!
+  createdDatetime: String!
+  department: DepartmentType!
+  id: ID!
+  listId: String!
+  title: String!
+  url: String!
+}
+
+input NotificationExtraData {
+  deptCode: String!
+  listId: String!
+}
+
+type Query {
+  AllDepartments: [DepartmentType!]!
+  NoticeByDepartmentId(departmentId: String!, offset: Float!): [Notice!]!
+  NoticeByDepartmentName(deptName: String!, offset: Float!): [Notice!]!
+  NoticeByNoticeId(id: String!): Notice!
+  PaginatedNotice(offset: Float!): [Notice!]!
+  sendNotification(sendNotificationInput: SendNotificationInput!): Boolean!
+  User(id: String!): User!
+}
+
+input SendNotificationInput {
+  body: String!
+  extraData: NotificationExtraData!
+  pushTokenList: [String!]!
+  title: String!
+}
+
+type User {
+  departments: [DepartmentType!]!
+  expoPushToken: String!
+  id: ID!
+}
