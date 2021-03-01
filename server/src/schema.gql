@@ -115,9 +115,37 @@ type Notice {
   url: String!
 }
 
+type NoticeResponse {
+  page: NoticeTypeConnection!
+  pageData: PageData
+}
+
+type NoticeTypeConnection {
+  edges: [NoticeTypeEdge!]
+  pageInfo: NoticeTypePageInfo
+}
+
+type NoticeTypeEdge {
+  cursor: String
+  node: Notice
+}
+
+type NoticeTypePageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
 input NotificationExtraData {
   deptCode: String!
   listId: String!
+}
+
+type PageData {
+  count: Float!
+  limit: Float!
+  offset: Float!
 }
 
 type Query {
@@ -125,7 +153,19 @@ type Query {
   NoticeByDepartmentId(departmentId: String!, offset: Float!): [Notice!]!
   NoticeByDepartmentName(deptName: String!, offset: Float!): [Notice!]!
   NoticeByNoticeId(id: String!): Notice!
-  PaginatedNotice(offset: Float!): [Notice!]!
+  PaginatedNotice(
+    """Paginate after opaque cursor"""
+    after: String
+
+    """Paginate before opaque cursor"""
+    before: String
+
+    """Paginate first"""
+    first: Float
+
+    """Paginate last"""
+    last: Float
+  ): NoticeResponse!
   sendNotification(sendNotificationInput: SendNotificationInput!): Boolean!
   User(id: String!): User!
 }

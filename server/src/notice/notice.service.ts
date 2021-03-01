@@ -22,17 +22,20 @@ export class NoticeService {
     }
   }
 
-  async getPaginatedNotices(offset: number): Promise<Notice[]> {
+  async getPaginatedNotices(
+    limit: number,
+    offset: number,
+  ): Promise<[Notice[], number]> {
     try {
-      const notice = await this.noticeRepository.find({
+      const notices = await this.noticeRepository.findAndCount({
+        skip: offset,
+        take: limit,
         order: {
           createdDatetime: 'DESC',
           listId: 'DESC',
         },
-        skip: offset * NOTICE_PAGINATED_BUNDLE_SIZE,
-        take: NOTICE_PAGINATED_BUNDLE_SIZE,
       });
-      return notice;
+      return notices;
     } catch (error) {
       this.logger.error('get paginated all notice error', error.stack);
     }

@@ -14,6 +14,9 @@ import { DepartmentService } from '.././department/department.service';
 import { UserService } from '../user/user.service';
 import { NotificationService } from '../notification/notification.service';
 import { DeptType } from '../department/department.enum';
+import NoticeResponse from './notice.response';
+import ConnectionArgs from '../connection.args';
+import { connectionFromArraySlice } from 'graphql-relay';
 
 @Resolver(() => NoticeType)
 export class NoticeResolver {
@@ -29,9 +32,18 @@ export class NoticeResolver {
     return await this.noticeService.getNotice(id);
   }
 
-  @Query(() => [NoticeType])
-  async PaginatedNotice(@Args('offset') offset: number) {
-    return await this.noticeService.getPaginatedNotices(offset);
+  @Query(() => NoticeResponse)
+  async PaginatedNotice(@Args() args: ConnectionArgs): Promise<NoticeResponse> {
+    const { limit, offset } = args.pagingParams();
+    const [notices, count] = await this.noticeService.getPaginatedNotices(
+      limit,
+      offset,
+    );
+    const page = connectionFromArraySlice(notices, args, {
+      arrayLength: count,
+      sliceStart: offset || 0,
+    });
+    return { page, PageData: { count, limit, offset } };
   }
 
   @Query(() => [NoticeType])
