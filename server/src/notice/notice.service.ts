@@ -43,19 +43,20 @@ export class NoticeService {
 
   async getNoticeByDepartmentId(
     departmentId: string,
+    limit: number,
     offset: number,
-  ): Promise<Notice[]> {
+  ): Promise<[Notice[], number]> {
     try {
-      return await this.noticeRepository.find({
+      return await this.noticeRepository.findAndCount({
         where: {
           department: departmentId,
         },
+        skip: offset,
+        take: limit,
         order: {
           createdDatetime: 'DESC',
           listId: 'DESC',
         },
-        skip: offset * NOTICE_PAGINATED_BUNDLE_SIZE,
-        take: NOTICE_PAGINATED_BUNDLE_SIZE,
       });
     } catch (error) {
       this.logger.error(

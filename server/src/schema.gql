@@ -150,8 +150,34 @@ type PageData {
 
 type Query {
   AllDepartments: [DepartmentType!]!
-  NoticeByDepartmentId(departmentId: String!, offset: Float!): [Notice!]!
-  NoticeByDepartmentName(deptName: String!, offset: Float!): [Notice!]!
+  NoticeByDepartmentId(
+    """Paginate after opaque cursor"""
+    after: String
+
+    """Paginate before opaque cursor"""
+    before: String
+    departmentId: String!
+
+    """Paginate from first"""
+    first: Float
+
+    """Paginate from last"""
+    last: Float
+  ): NoticeResponse!
+  NoticeByDepartmentName(
+    """Paginate after opaque cursor"""
+    after: String
+
+    """Paginate before opaque cursor"""
+    before: String
+    deptName: String!
+
+    """Paginate from first"""
+    first: Float
+
+    """Paginate from last"""
+    last: Float
+  ): NoticeResponse!
   NoticeByNoticeId(id: String!): Notice!
   PaginatedNotice(
     """Paginate after opaque cursor"""
@@ -160,10 +186,10 @@ type Query {
     """Paginate before opaque cursor"""
     before: String
 
-    """Paginate first"""
+    """Paginate from first"""
     first: Float
 
-    """Paginate last"""
+    """Paginate from last"""
     last: Float
   ): NoticeResponse!
   sendNotification(sendNotificationInput: SendNotificationInput!): Boolean!

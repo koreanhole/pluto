@@ -46,29 +46,43 @@ export class NoticeResolver {
     return { page, PageData: { count, limit, offset } };
   }
 
-  @Query(() => [NoticeType])
+  @Query(() => NoticeResponse)
   async NoticeByDepartmentId(
+    @Args() args: ConnectionArgs,
     @Args('departmentId') departmentId: string,
-    @Args('offset') offset: number,
-  ) {
-    return await this.noticeService.getNoticeByDepartmentId(
+  ): Promise<NoticeResponse> {
+    const { limit, offset } = args.pagingParams();
+    const [notices, count] = await this.noticeService.getNoticeByDepartmentId(
       departmentId,
+      limit,
       offset,
     );
+    const page = connectionFromArraySlice(notices, args, {
+      arrayLength: count,
+      sliceStart: offset || 0,
+    });
+    return { page, PageData: { count, limit, offset } };
   }
 
-  @Query(() => [NoticeType])
+  @Query(() => NoticeResponse)
   async NoticeByDepartmentName(
+    @Args() args: ConnectionArgs,
     @Args('deptName') deptName: DeptType,
-    @Args('offset') offset: number,
-  ) {
+  ): Promise<NoticeResponse> {
+    const { limit, offset } = args.pagingParams();
     const department = await this.departmentService.getDepartmentByName(
       deptName,
     );
-    return await this.noticeService.getNoticeByDepartmentId(
+    const [notices, count] = await this.noticeService.getNoticeByDepartmentId(
       department.id,
+      limit,
       offset,
     );
+    const page = connectionFromArraySlice(notices, args, {
+      arrayLength: count,
+      sliceStart: offset || 0,
+    });
+    return { page, PageData: { count, limit, offset } };
   }
 
   @Mutation(() => NoticeType)
