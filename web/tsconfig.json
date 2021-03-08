@@ -1,5 +1,22 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"]
+    },
+    "typeRoots": [
+      "node_modules/@types",
+      "types"
+    ],
+    "rootDirs": [
+      "src"
+    ],
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
     "target": "es5",
     "lib": [
       "dom",
@@ -21,6 +38,7 @@
     "jsx": "preserve"
   },
   "include": [
+    "pages",
     "src"
   ],
   "exclude": [

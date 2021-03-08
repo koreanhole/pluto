@@ -1,5 +1,6 @@
 import * as React from "react";
+import TopAppBar from "~/modules/TopAppBar";
 
 export default function Home() {
-  return <div>Welcome</div>;
+  return <TopAppBar title="sample title" />;
 }
