@@ -16,7 +16,14 @@ async function bootstrap() {
     }),
   );
   const port = process.env.PORT || serverConfig.port;
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
   await app.listen(port);
   logger.log(`Application listening on port ${port}`);
 }

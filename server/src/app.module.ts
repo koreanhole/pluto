@@ -10,6 +10,7 @@ import { graphqlConfig } from './config/graphql.config';
 import { ScrapperModule } from './scrapper/scrapper.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
+import { NodesModule } from './nodes/nodes.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AppController } from './app.controller';
     UserModule,
     NotificationModule,
     ScrapperModule,
+    NodesModule,
   ],
   controllers: [AppController],
 })

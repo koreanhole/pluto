@@ -1,10 +1,14 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { DeptClassification, DeptType } from './department.enum';
+import { Node } from '../nodes/node.model';
+import { toGlobalId } from 'graphql-relay';
 
 @Entity()
+@ObjectType({ implements: Node })
 export class Department {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn('uuid')
+  readonly id: string;
 
   @Column()
   deptCode: string;
@@ -20,4 +24,9 @@ export class Department {
 
   @Column()
   lastFetchedListId: string;
+
+  @Field(() => ID, { name: 'id' })
+  get relayId(): string {
+    return toGlobalId('Department', this.id);
+  }
 }
