@@ -1,6 +1,10 @@
+import AppLayout from "~/modules/AppLayout";
 import * as React from "react";
-import TopAppBar from "~/modules/TopAppBar";
 
 export default function Home() {
-  return <TopAppBar title="sample title12" />;
+  return (
+    <AppLayout title="sample">
+      <div>123</div>
+    </AppLayout>
+  );
 }
