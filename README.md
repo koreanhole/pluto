@@ -33,7 +33,8 @@ UOS공지사항
 ### 주요내용
 
 - 30분마다 CRON job으로 공지사항 스크래핑 작업 수행
-- graphql api사용
+- graphql(relay 사용)
+- deploy to AWS elastic beanstalk
 
 
 ### 주요 기술
