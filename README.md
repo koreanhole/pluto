@@ -3,6 +3,7 @@
 UOS공지사항
 * iOS: https://apps.apple.com/us/app/id1529569963
 * Android: https://play.google.com/store/apps/details?id=com.koreanhole.app.pluto
+* Web(개발중)
 
 ## Intro
 
