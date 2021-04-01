@@ -1,10 +1,11 @@
 import AppLayout from "~/modules/AppLayout";
 import * as React from "react";
+import NoticeCard from "~/components/NoticeCard";
 
 export default function Home() {
   return (
     <AppLayout title="sample">
-      <div>123</div>
+      <NoticeCard />
     </AppLayout>
   );
 }

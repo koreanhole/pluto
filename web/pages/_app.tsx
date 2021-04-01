@@ -1,7 +1,8 @@
 // import App from "next/app";
 import type { AppProps /*, AppContext */ } from "next/app";
+import * as React from "react";
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />;
 }
 
@@ -17,4 +18,4 @@ function MyApp({ Component, pageProps }: AppProps) {
 //   return { ...appProps }
 // }
 
-export default MyApp;
+export default App;
