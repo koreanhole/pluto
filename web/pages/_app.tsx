@@ -1,6 +1,7 @@
 // import App from "next/app";
 import type { AppProps /*, AppContext */ } from "next/app";
 import * as React from "react";
+import "../src/styles/index.scss";
 
 function App({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />;
