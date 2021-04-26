@@ -50,7 +50,7 @@
   "devDependencies": {
     "@babel/core": "^7.13.8",
     "@babel/preset-env": "^7.13.9",
-    "@types/styled-components": "^5.1.7",
+    "@types/styled-components": "^5.1.9",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
     "babel-loader": "^8.2.2",

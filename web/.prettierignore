@@ -4,6 +4,8 @@
 .eslintignore
 .eslintrc
 .prettierrc
+.next
+node_modules
 
 /build/
 /packages/
