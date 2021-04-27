@@ -15,7 +15,7 @@ module.exports = {
     [
       "babel-plugin-styled-components",
       {
-        ssr: true,
+        ssr: false,
         displayName: !isProd,
         minify: isProd,
       },
