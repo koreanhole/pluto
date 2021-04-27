@@ -3,9 +3,10 @@ import { Avatar, Card, CardContent, CardHeader, Divider, Typography } from "@mat
 import { styled } from "@material-ui/core/styles";
 import { getDescriptiveDateDifference } from "~/utils/time";
 import { NoticeCardListData, NoticeCardData } from "./types";
+import theme from "~/styles/theme";
 
 const NoticeCardContainer = styled(Card)({
-  maxWidth: "18rem",
+  width: "18rem",
   marginTop: "2rem",
   marginLeft: "2rem",
 });
@@ -16,8 +17,9 @@ const CardItemInfoContainer = styled("div")({
   justifyContent: "space-between",
 });
 
-const CardItemInfoItem = styled(Typography)({
-  fontSize: "1rem",
+const CardSubInfoText = styled(Typography)({
+  fontSize: "0.75rem",
+  color: theme.palette.text.secondary,
 });
 
 function NoticeCardHeader({ department }: { department: string }) {
@@ -29,11 +31,11 @@ function NoticeCardItemList({ data }: { data: NoticeCardListData[] }) {
     <CardContent>
       {data.map((item) => (
         <React.Fragment key={item.id}>
-          <Typography>{`#${getDescriptiveDateDifference(item.createdDateTime)}`}</Typography>
+          <CardSubInfoText>{`#${getDescriptiveDateDifference(item.createdDateTime)}`}</CardSubInfoText>
           <Typography>{item.title}</Typography>
           <CardItemInfoContainer>
-            <CardItemInfoItem>{item.author}</CardItemInfoItem>
-            <CardItemInfoItem>{item.createdDateTime}</CardItemInfoItem>
+            <CardSubInfoText>{item.author}</CardSubInfoText>
+            <CardSubInfoText>{item.createdDateTime}</CardSubInfoText>
           </CardItemInfoContainer>
           <Divider />
         </React.Fragment>

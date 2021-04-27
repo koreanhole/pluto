@@ -2,6 +2,7 @@ import AppLayout from "~/modules/AppLayout";
 import * as React from "react";
 import NoticeCard from "~/components/NoticeCard";
 import { NoticeCardData } from "~/components/types";
+import { Grid } from "@material-ui/core";
 
 const MOCK_ITEM: NoticeCardData = {
   department: "컴퓨터과학부",
@@ -29,8 +30,30 @@ const MOCK_ITEM: NoticeCardData = {
 
 export default function Home() {
   return (
-    <AppLayout title="sample">
-      <NoticeCard department={MOCK_ITEM.department} noticaCardListData={MOCK_ITEM.noticaCardListData} />
+    <AppLayout title="UOS공지사항">
+      <Grid container>
+        <Grid item>
+          <NoticeCard department={MOCK_ITEM.department} noticaCardListData={MOCK_ITEM.noticaCardListData} />
+        </Grid>
+        <Grid item>
+          <NoticeCard department={MOCK_ITEM.department} noticaCardListData={MOCK_ITEM.noticaCardListData} />
+        </Grid>
+        <Grid item>
+          <NoticeCard department={MOCK_ITEM.department} noticaCardListData={MOCK_ITEM.noticaCardListData} />
+        </Grid>
+        <Grid item>
+          <NoticeCard department={MOCK_ITEM.department} noticaCardListData={MOCK_ITEM.noticaCardListData} />
+        </Grid>
+        <Grid item>
+          <NoticeCard department={MOCK_ITEM.department} noticaCardListData={MOCK_ITEM.noticaCardListData} />
+        </Grid>
+        <Grid item>
+          <NoticeCard department={MOCK_ITEM.department} noticaCardListData={MOCK_ITEM.noticaCardListData} />
+        </Grid>
+        <Grid item>
+          <NoticeCard department={MOCK_ITEM.department} noticaCardListData={MOCK_ITEM.noticaCardListData} />
+        </Grid>
+      </Grid>
     </AppLayout>
   );
 }
