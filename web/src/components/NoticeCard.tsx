@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Avatar, Card, CardContent, CardHeader, Divider, Typography } from "@material-ui/core";
 import { getDescriptiveDateDifference } from "~/utils/time";
-import { NoticeCardListData, NoticeCardData } from "./types";
+import { Notice, NoticeCardData } from "./types";
 import theme from "~/styles/theme";
 import styled from "styled-components";
 
@@ -25,16 +25,16 @@ function NoticeCardHeader({ department }: { department: string }) {
   return <CardHeader avatar={<Avatar aria-label="recipe">컴과</Avatar>} title={department} subheader="공과대학" />;
 }
 
-function NoticeCardItemList({ data }: { data: NoticeCardListData[] }) {
+function NoticeCardItemList({ data }: { data: Notice[] }) {
   return (
     <CardContent>
       {data.map((item) => (
         <React.Fragment key={item.id}>
-          <CardSubInfoText>{`#${getDescriptiveDateDifference(item.createdDateTime)}`}</CardSubInfoText>
+          <CardSubInfoText>{`#${getDescriptiveDateDifference(item.createdDatetime)}`}</CardSubInfoText>
           <Typography>{item.title}</Typography>
           <CardItemInfoContainer>
-            <CardSubInfoText>{item.author}</CardSubInfoText>
-            <CardSubInfoText>{item.createdDateTime}</CardSubInfoText>
+            <CardSubInfoText>{item.authorName}</CardSubInfoText>
+            <CardSubInfoText>{item.title}</CardSubInfoText>
           </CardItemInfoContainer>
           <Divider />
         </React.Fragment>
@@ -43,12 +43,11 @@ function NoticeCardItemList({ data }: { data: NoticeCardListData[] }) {
   );
 }
 
-export default function NoticeCard(data: NoticeCardData) {
-  const { department, noticaCardListData } = data;
+export default function NoticeCard({ data }: { data: NoticeCardData }) {
   return (
     <NoticeCardContainer>
-      <NoticeCardHeader department={department} />
-      <NoticeCardItemList data={noticaCardListData} />
+      <NoticeCardHeader department={data.department.deptType} />
+      <NoticeCardItemList data={data.noticeData} />
     </NoticeCardContainer>
   );
 }
