@@ -1,6 +1,6 @@
-import { parseISO, differenceInDays } from "date-fns";
+import { parseISO, differenceInDays, format } from "date-fns";
 
-export function getDescriptiveDateDifference(date: string) {
+export function getDescriptiveDateDifference(date: string): string {
   const parsedDateTime = parseISO(date);
   const dateDifference = differenceInDays(new Date(), parsedDateTime);
 
@@ -13,4 +13,10 @@ export function getDescriptiveDateDifference(date: string) {
   } else {
     return `${dateDifference}일전`;
   }
+}
+
+export function isoDateToKorean(date: string): string {
+  const parsedDateTime = parseISO(date);
+
+  return format(parsedDateTime, "yyyy-MM-dd");
 }
