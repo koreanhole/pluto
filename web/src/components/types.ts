@@ -3,11 +3,12 @@ export interface NoticeCardData {
   noticeData: Notice[];
 }
 
-interface DepartmentType {
+export interface DepartmentType {
   id: string;
   deptType: string;
   deptCode: string;
   subDeptCode: string;
+  deptClassification: string;
 }
 
 interface AttachmentLinksType {
