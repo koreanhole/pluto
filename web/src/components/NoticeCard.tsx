@@ -1,26 +1,25 @@
 import * as React from "react";
 import { Avatar, Card, CardContent, CardHeader, Divider, Typography } from "@material-ui/core";
-import { styled } from "@material-ui/core/styles";
 import { getDescriptiveDateDifference } from "~/utils/time";
 import { NoticeCardListData, NoticeCardData } from "./types";
 import theme from "~/styles/theme";
+import styled from "styled-components";
 
-const NoticeCardContainer = styled(Card)({
-  width: "18rem",
-  marginTop: "2rem",
-  marginLeft: "2rem",
-});
+const NoticeCardContainer = styled(Card)`
+  width: 18rem;
+  margin-bottom: 2rem;
+`;
 
-const CardItemInfoContainer = styled("div")({
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-});
+const CardItemInfoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
 
-const CardSubInfoText = styled(Typography)({
-  fontSize: "0.75rem",
-  color: theme.palette.text.secondary,
-});
+const CardSubInfoText = styled(Typography)`
+  font-size: "0.75rem";
+  color: ${theme.palette.text.primary};
+`;
 
 function NoticeCardHeader({ department }: { department: string }) {
   return <CardHeader avatar={<Avatar aria-label="recipe">컴과</Avatar>} title={department} subheader="공과대학" />;

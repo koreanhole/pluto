@@ -3,6 +3,7 @@ import * as React from "react";
 import NoticeCard from "~/components/NoticeCard";
 import { NoticeCardData } from "~/components/types";
 import { Grid } from "@material-ui/core";
+import styled from "styled-components";
 
 const MOCK_ITEM: NoticeCardData = {
   department: "컴퓨터과학부",
@@ -28,10 +29,14 @@ const MOCK_ITEM: NoticeCardData = {
   ],
 };
 
+const HomeGridContainer = styled(Grid)`
+  padding: 2rem;
+`;
+
 export default function Home() {
   return (
     <AppLayout title="UOS공지사항">
-      <Grid container>
+      <HomeGridContainer container spacing={4}>
         <Grid item>
           <NoticeCard department={MOCK_ITEM.department} noticaCardListData={MOCK_ITEM.noticaCardListData} />
         </Grid>
@@ -53,7 +58,7 @@ export default function Home() {
         <Grid item>
           <NoticeCard department={MOCK_ITEM.department} noticaCardListData={MOCK_ITEM.noticaCardListData} />
         </Grid>
-      </Grid>
+      </HomeGridContainer>
     </AppLayout>
   );
 }
