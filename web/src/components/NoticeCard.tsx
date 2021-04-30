@@ -1,10 +1,11 @@
 import * as React from "react";
-import { Avatar, Card, CardContent, CardHeader, Divider, Typography } from "@material-ui/core";
+import { Avatar, Card, CardActionArea, CardContent, CardHeader, Divider, Typography } from "@material-ui/core";
 import { getDescriptiveDateDifference, isoDateToKorean } from "~/utils/time";
 import { Notice, NoticeCardData, DepartmentType } from "./types";
 import theme from "~/styles/theme";
 import styled from "styled-components";
 import randomColor from "randomcolor";
+import { useRouter } from "next/router";
 
 const NoticeCardContainer = styled(Card)`
   width: 18rem;
@@ -21,6 +22,7 @@ const CardHashTagText = styled.p`
   margin-bottom: 1rem;
   color: ${theme.palette.grey[800]};
 `;
+
 const CardInfoText = styled.p`
   font-size: 0.875rem;
   margin-top: 1rem;
@@ -51,10 +53,15 @@ function NoticeCardHeader({ department }: { department: DepartmentType }) {
 }
 
 function NoticeCardItemList({ data }: { data: Notice[] }) {
+  const router = useRouter();
+  const handleClickCardContent = () => {
+    router.push("/article");
+  };
+
   return (
     <CardContent>
       {data.map((item) => (
-        <React.Fragment key={item.id}>
+        <CardActionArea key={item.id} onClick={handleClickCardContent}>
           <CardHashTagText>{`#${getDescriptiveDateDifference(item.createdDatetime)}`}</CardHashTagText>
           <Typography>{item.title}</Typography>
           <CardItemInfoContainer>
@@ -62,7 +69,7 @@ function NoticeCardItemList({ data }: { data: Notice[] }) {
             <CardInfoText>{isoDateToKorean(item.createdDatetime)}</CardInfoText>
           </CardItemInfoContainer>
           <Divider />
-        </React.Fragment>
+        </CardActionArea>
       ))}
     </CardContent>
   );
