@@ -1,7 +1,7 @@
-import { parse, differenceInDays } from "date-fns";
+import { parseISO, differenceInDays } from "date-fns";
 
 export function getDescriptiveDateDifference(date: string) {
-  const parsedDateTime = parse(date, "yyyy-MM-dd", new Date());
+  const parsedDateTime = parseISO(date);
   const dateDifference = differenceInDays(new Date(), parsedDateTime);
 
   if (dateDifference < 1) {
