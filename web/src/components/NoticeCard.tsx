@@ -52,26 +52,24 @@ function NoticeCardHeader({ department }: { department: DepartmentType }) {
   );
 }
 
-function NoticeCardItemList({ data }: { data: Notice[] }) {
+function NoticeCardItem({ data }: { data: Notice }) {
   const router = useRouter();
-  const handleClickCardContent = () => {
-    router.push(`/articles/${1}`);
+  const { id, createdDatetime, title, authorName } = data;
+
+  const handleClickListItem = () => {
+    router.push(`/articles/${id}`);
   };
 
   return (
-    <CardContent>
-      {data.map((item) => (
-        <CardActionArea key={item.id} onClick={handleClickCardContent}>
-          <CardHashTagText>{`#${getDescriptiveDateDifference(item.createdDatetime)}`}</CardHashTagText>
-          <Typography>{item.title}</Typography>
-          <CardItemInfoContainer>
-            <CardInfoText>{item.authorName}</CardInfoText>
-            <CardInfoText>{isoDateToKorean(item.createdDatetime)}</CardInfoText>
-          </CardItemInfoContainer>
-          <Divider />
-        </CardActionArea>
-      ))}
-    </CardContent>
+    <CardActionArea onClick={handleClickListItem}>
+      <CardHashTagText>{`#${getDescriptiveDateDifference(createdDatetime)}`}</CardHashTagText>
+      <Typography>{title}</Typography>
+      <CardItemInfoContainer>
+        <CardInfoText>{authorName}</CardInfoText>
+        <CardInfoText>{isoDateToKorean(createdDatetime)}</CardInfoText>
+      </CardItemInfoContainer>
+      <Divider />
+    </CardActionArea>
   );
 }
 
@@ -79,7 +77,11 @@ export default function NoticeCard({ data }: { data: NoticeCardData }) {
   return (
     <NoticeCardContainer>
       <NoticeCardHeader department={data.department} />
-      <NoticeCardItemList data={data.noticeData} />
+      <CardContent>
+        {data.noticeData.map((item) => (
+          <NoticeCardItem key={item.id} data={item} />
+        ))}
+      </CardContent>
     </NoticeCardContainer>
   );
 }
