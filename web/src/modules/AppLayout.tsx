@@ -1,9 +1,19 @@
 import * as React from "react";
-import TopAppBar from "src/modules/TopAppBar";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
 
 interface AppLayoutProps {
   title: string;
   children: React.ReactNode;
+}
+
+function TopAppBar({ title }: { title: string }) {
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h6">{title}</Typography>
+      </Toolbar>
+    </AppBar>
+  );
 }
 
 export default function AppLayout(props: AppLayoutProps) {
