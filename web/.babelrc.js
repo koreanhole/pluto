@@ -5,14 +5,6 @@ module.exports = {
   presets: ["next/babel"],
   plugins: [
     [
-      "module-resolver",
-      {
-        alias: {
-          "~": "./src",
-        },
-      },
-    ],
-    [
       "babel-plugin-styled-components",
       {
         ssr: true,

@@ -1,9 +1,9 @@
-import AppLayout from "~/modules/AppLayout";
+import AppLayout from "src/modules/AppLayout";
 import * as React from "react";
-import NoticeCard from "~/components/NoticeCard";
+import NoticeCard from "src/components/NoticeCard";
 import { Grid } from "@material-ui/core";
 import styled from "styled-components";
-import { MOCK_ITEM } from "~/data/sampleData";
+import { MOCK_ITEM } from "src/data/sampleData";
 
 const HomeGridContainer = styled(Grid)`
   padding: 2rem;

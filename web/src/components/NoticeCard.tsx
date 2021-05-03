@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Avatar, Card, CardActionArea, CardContent, CardHeader, Divider, Typography } from "@material-ui/core";
-import { getDescriptiveDateDifference, isoDateToKorean } from "~/utils/time";
+import { getDescriptiveDateDifference, isoDateToKorean } from "src/utils/time";
 import { Notice, NoticeCardData, DepartmentType } from "./types";
-import theme from "~/styles/theme";
+import theme from "src/styles/theme";
 import styled from "styled-components";
 import randomColor from "randomcolor";
 import { useRouter } from "next/router";
@@ -55,7 +55,7 @@ function NoticeCardHeader({ department }: { department: DepartmentType }) {
 function NoticeCardItemList({ data }: { data: Notice[] }) {
   const router = useRouter();
   const handleClickCardContent = () => {
-    router.push("/article");
+    router.push(`/articles/${1}`);
   };
 
   return (

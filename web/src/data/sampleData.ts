@@ -1,4 +1,4 @@
-import { NoticeCardData } from "~/components/types";
+import { NoticeCardData } from "src/components/types";
 
 export const MOCK_ITEM: NoticeCardData[] = [
   {

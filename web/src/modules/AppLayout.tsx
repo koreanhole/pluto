@@ -1,5 +1,5 @@
 import * as React from "react";
-import TopAppBar from "~/modules/TopAppBar";
+import TopAppBar from "src/modules/TopAppBar";
 
 interface AppLayoutProps {
   title: string;
