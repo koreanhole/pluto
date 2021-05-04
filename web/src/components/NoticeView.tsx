@@ -12,6 +12,15 @@ const NoticeViewContainer = styled.div`
   margin-block-end: 1rem;
   padding: 2rem;
   background-color: ${theme.palette.background.paper};
+  overflow: hidden;
+`;
+
+const InnerHtml = styled.div`
+  img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+  }
 `;
 
 export default function NoticeView({ data }: { data: Notice }) {
@@ -25,7 +34,7 @@ export default function NoticeView({ data }: { data: Notice }) {
       </NoticeViewContainer>
       <NoticeViewContainer>
         {data.contentHtml !== "" ? (
-          <div dangerouslySetInnerHTML={{ __html: data.contentHtml }} />
+          <InnerHtml dangerouslySetInnerHTML={{ __html: data.contentHtml }} />
         ) : (
           <Typography variant="body1">공지사항 본문이 없습니다</Typography>
         )}
