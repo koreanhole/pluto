@@ -9,7 +9,10 @@ export default function Article() {
   const { id } = router.query;
 
   return (
-    <AppLayout title="UOS공지사항" attachmentLinks={MOCK_ITEM[0].noticeData[0].attachmentLinks}>
+    <AppLayout
+      title="UOS공지사항"
+      attachmentLinks={MOCK_ITEM[0].noticeData[0].attachmentLinks}
+      noticeUrl={MOCK_ITEM[0].noticeData[0].url}>
       <NoticeView data={MOCK_ITEM[0].noticeData[0]} />
     </AppLayout>
   );
