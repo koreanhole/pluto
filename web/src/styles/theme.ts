@@ -20,6 +20,14 @@ const theme = createMuiTheme({
       "700": "#fff0",
     },
   },
+  typography: {
+    h6: {
+      fontWeight: 700,
+    },
+    body2: {
+      color: "#000",
+    },
+  },
 });
 
 export default theme;

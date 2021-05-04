@@ -18,5 +18,5 @@ export function getDescriptiveDateDifference(date: string): string {
 export function isoDateToKorean(date: string): string {
   const parsedDateTime = parseISO(date);
 
-  return format(parsedDateTime, "yyyy-MM-dd");
+  return format(parsedDateTime, "yyyy년 M월dd일");
 }
