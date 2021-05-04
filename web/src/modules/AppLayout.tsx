@@ -1,16 +1,30 @@
 import * as React from "react";
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
+import styled from "styled-components";
+import { useRouter } from "next/router";
 
 interface AppLayoutProps {
   title: string;
   children: React.ReactNode;
 }
 
+const AppBarHomeText = styled.div`
+  cursor: pointer;
+`;
+
 function TopAppBar({ title }: { title: string }) {
+  const router = useRouter();
+
+  const handleClickHome = () => {
+    router.push("/");
+  };
+
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <Typography variant="h6">{title}</Typography>
+        <AppBarHomeText onClick={handleClickHome}>
+          <Typography variant="h6">{title}</Typography>
+        </AppBarHomeText>
       </Toolbar>
     </AppBar>
   );

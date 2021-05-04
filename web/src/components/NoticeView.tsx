@@ -14,24 +14,14 @@ const NoticeViewContainer = styled.div`
   background-color: ${theme.palette.background.paper};
 `;
 
-const SubInfoContainer = styled.div`
-  margin-top: 1rem;
-  display: flex;
-  justify-content: flex-end;
-`;
-
 export default function NoticeView({ data }: { data: Notice }) {
   return (
     <>
-      <NoticeViewContainer>
-        <Typography variant="h6" style={{ textAlign: "center" }}>
-          {data.title}
-        </Typography>
-        <SubInfoContainer>
-          <Typography variant="body2">{`${isoDateToKorean(data.createdDatetime)} / ${data.authorName} / ${
-            data.authorDept
-          } / ${data.department.deptType}`}</Typography>
-        </SubInfoContainer>
+      <NoticeViewContainer style={{ textAlign: "center" }}>
+        <Typography variant="h6">{data.title}</Typography>
+        <Typography variant="body2">{`${isoDateToKorean(data.createdDatetime)} / ${data.authorName} / ${
+          data.authorDept
+        } / ${data.department.deptType}`}</Typography>
       </NoticeViewContainer>
       <NoticeViewContainer>
         {data.contentHtml !== "" ? (
