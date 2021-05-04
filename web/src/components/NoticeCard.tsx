@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 
 const NoticeCardContainer = styled(Card)`
   width: 18rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
 `;
 
 const CardItemInfoContainer = styled.div`

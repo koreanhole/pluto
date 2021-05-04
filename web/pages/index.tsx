@@ -6,13 +6,13 @@ import styled from "styled-components";
 import { MOCK_ITEM } from "src/data/sampleData";
 
 const HomeGridContainer = styled(Grid)`
-  padding: 2rem;
+  padding: 2rem 2rem 0 2rem;
 `;
 
 export default function Home() {
   return (
     <AppLayout title="UOS공지사항">
-      <HomeGridContainer container spacing={4}>
+      <HomeGridContainer container>
         {MOCK_ITEM.map((data) => (
           <Grid item key={data.department.id}>
             <NoticeCard data={data} />
