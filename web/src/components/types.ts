@@ -11,7 +11,7 @@ export interface DepartmentType {
   deptClassification: string;
 }
 
-interface AttachmentLinksType {
+export interface AttachmentLinksType {
   fileLink: string;
   fileName: string;
 }
