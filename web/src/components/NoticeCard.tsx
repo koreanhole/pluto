@@ -10,6 +10,9 @@ import { useRouter } from "next/router";
 const NoticeCardContainer = styled(Card)`
   width: 18rem;
   margin-right: 2rem;
+  @media (max-width: 640px) {
+    margin-right: 0rem;
+  }
   margin-bottom: 2rem;
 `;
 

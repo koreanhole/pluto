@@ -5,20 +5,24 @@ import { Grid } from "@material-ui/core";
 import styled from "styled-components";
 import { MOCK_ITEM } from "src/data/sampleData";
 
-const HomeGridContainer = styled(Grid)`
-  padding: 2rem 2rem 0 2rem;
+const HomeGrid = styled(Grid)`
+  padding: 2rem;
+  display: inline-block;
+  @media (max-width: 480px) {
+    justify-content: center;
+  }
 `;
 
 export default function Home() {
   return (
     <AppLayout title="UOS공지사항">
-      <HomeGridContainer container>
+      <HomeGrid container>
         {MOCK_ITEM.map((data) => (
           <Grid item key={data.department.id}>
             <NoticeCard data={data} />
           </Grid>
         ))}
-      </HomeGridContainer>
+      </HomeGrid>
     </AppLayout>
   );
 }
