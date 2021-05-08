@@ -1,9 +1,10 @@
 # pluto
 
 UOS공지사항
-* iOS: https://apps.apple.com/us/app/id1529569963
-* Android: https://play.google.com/store/apps/details?id=com.koreanhole.app.pluto
-* Web(개발중)
+
+- iOS: https://apps.apple.com/us/app/id1529569963
+- Android: https://play.google.com/store/apps/details?id=com.koreanhole.app.pluto
+- Web: https://uosnotify.netlify.app/
 
 ## Intro
 
@@ -13,7 +14,7 @@ UOS공지사항
 
 ## app
 
-* 사용자 어플리케이션
+- 사용자 어플리케이션
 
 ### 주요내용
 
@@ -29,13 +30,12 @@ UOS공지사항
 
 ## server
 
-* 백엔드 서버
+- 백엔드 서버
 
 ### 주요내용
 
 - 30분마다 CRON job으로 공지사항 스크래핑 작업 수행
 - deploy to AWS elastic beanstalk
-
 
 ### 주요 기술
 
