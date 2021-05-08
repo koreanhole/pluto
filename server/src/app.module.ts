@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { HttpException, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NoticeModule } from './notice/notice.module';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -11,6 +11,8 @@ import { ScrapperModule } from './scrapper/scrapper.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { NodesModule } from './nodes/nodes.module';
+import { RavenInterceptor, RavenModule } from 'nest-raven';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -23,7 +25,21 @@ import { NodesModule } from './nodes/nodes.module';
     NotificationModule,
     ScrapperModule,
     NodesModule,
+    RavenModule,
   ],
   controllers: [AppController],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useValue: new RavenInterceptor({
+        filters: [
+          {
+            type: HttpException,
+            filter: (exception: HttpException) => 500 > exception.getStatus(),
+          },
+        ],
+      }),
+    },
+  ],
 })
 export class AppModule {}

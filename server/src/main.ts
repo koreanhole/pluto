@@ -3,8 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as helmet from 'helmet';
 import * as config from 'config';
+import * as Sentry from '@sentry/node';
+import * as dotenv from 'dotenv';
 
 async function bootstrap() {
+  dotenv.config();
   const serverConfig = config.get('server');
   const logger = new Logger('Bootstrap');
 
@@ -24,6 +27,12 @@ async function bootstrap() {
       },
     }),
   );
+  logger.log(process.env.SENTRY_KEY);
+  Sentry.init({
+    environment: 'production',
+    dsn:
+      'https://b300eca0c4124c5ba196053cbf26bdcd@o629487.ingest.sentry.io/5754994',
+  });
   await app.listen(port);
   logger.log(`Application listening on port ${port}`);
 }

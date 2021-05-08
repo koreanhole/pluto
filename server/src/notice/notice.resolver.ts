@@ -17,7 +17,6 @@ import { DeptType } from '../department/department.enum';
 import NoticeResponse from './notice.response';
 import ConnectionArgs from '../connection.args';
 import { connectionFromArraySlice } from 'graphql-relay';
-
 @Resolver(() => NoticeType)
 export class NoticeResolver {
   constructor(
