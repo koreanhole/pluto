@@ -27,7 +27,6 @@ async function bootstrap() {
       },
     }),
   );
-  logger.log(process.env.SENTRY_KEY);
   Sentry.init({
     environment: 'production',
     dsn:

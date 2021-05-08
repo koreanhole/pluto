@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Department } from './department.entity';
@@ -69,6 +69,21 @@ export class DepartmentService {
       deptClassification,
       lastFetchedListId,
     } = createDepartmentInput;
+
+    if (
+      typeof (await this.departmentRepository.findOne({
+        deptType: deptType,
+      })) !== 'undefined'
+    ) {
+      this.logger.error('Department Duplicated Error');
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: '이미 존재하는 부서입니다.',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     const department = this.departmentRepository.create({
       id: uuid(),
