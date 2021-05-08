@@ -1,7 +1,8 @@
 import { parse, differenceInDays, format, getDay } from "date-fns";
 
 export function getDescriptiveDateDifference(date: string) {
-  const parsedDateTime = parse(date, "yyyy-MM-dd", new Date());
+  const slicedDate = date.slice(0, 10);
+  const parsedDateTime = parse(slicedDate, "yyyy-MM-dd", new Date());
   const dateDifference = differenceInDays(new Date(), parsedDateTime);
 
   if (dateDifference < 1) {

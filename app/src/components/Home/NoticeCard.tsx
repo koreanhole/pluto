@@ -59,7 +59,7 @@ const NoticeCardItemSubtitle = ({
         {`${authorName}`}
         {authorDept && ` / ${authorDept}`}
       </Text>
-      <Text style={NoticeCardItemStyles.subtitleText}>{`${createdDate}`}</Text>
+      <Text style={NoticeCardItemStyles.subtitleText}>{`${createdDate.slice(0, 10)}`}</Text>
     </View>
   );
 };
