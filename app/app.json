@@ -30,7 +30,7 @@
     "android": {
       "package": "com.koreanhole.app.pluto",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 6,
+      "versionCode": 10,
       "useNextNotificationsApi": true,
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.koreanhole.app.pluto",
       "config": {
