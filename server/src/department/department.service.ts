@@ -30,7 +30,7 @@ export class DepartmentService {
     }
   }
 
-  async getDepartmentByName(deptType: DeptType): Promise<Department> {
+  async getDepartmentByDeptType(deptType: DeptType): Promise<Department> {
     try {
       return await this.departmentRepository.findOne({
         deptType,

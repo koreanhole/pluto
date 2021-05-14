@@ -27,12 +27,14 @@ export class NoticeResolver {
   ) {}
 
   @Query(() => NoticeType)
-  async NoticeByNoticeId(@Args('id') id: string) {
+  async getNoticeByNoticeId(@Args('id') id: string) {
     return await this.noticeService.getNotice(id);
   }
 
   @Query(() => NoticeResponse)
-  async PaginatedNotice(@Args() args: ConnectionArgs): Promise<NoticeResponse> {
+  async getPaginatedNotice(
+    @Args() args: ConnectionArgs,
+  ): Promise<NoticeResponse> {
     const { limit, offset } = args.pagingParams();
     const [notices, count] = await this.noticeService.getPaginatedNotices(
       limit,
@@ -46,7 +48,7 @@ export class NoticeResolver {
   }
 
   @Query(() => NoticeResponse)
-  async NoticeByDepartmentId(
+  async getNoticeByDepartmentId(
     @Args() args: ConnectionArgs,
     @Args('departmentId') departmentId: string,
   ): Promise<NoticeResponse> {
@@ -64,13 +66,13 @@ export class NoticeResolver {
   }
 
   @Query(() => NoticeResponse)
-  async NoticeByDepartmentName(
+  async getNoticeByDeptType(
     @Args() args: ConnectionArgs,
-    @Args('deptName') deptName: DeptType,
+    @Args('deptType') deptType: DeptType,
   ): Promise<NoticeResponse> {
     const { limit, offset } = args.pagingParams();
-    const department = await this.departmentService.getDepartmentByName(
-      deptName,
+    const department = await this.departmentService.getDepartmentByDeptType(
+      deptType,
     );
     const [notices, count] = await this.noticeService.getNoticeByDepartmentId(
       department.id,
