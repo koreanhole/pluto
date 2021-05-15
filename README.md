@@ -4,13 +4,15 @@ UOS공지사항
 
 - iOS: https://apps.apple.com/us/app/id1529569963
 - Android: https://play.google.com/store/apps/details?id=com.koreanhole.app.pluto
-- Web: https://uosnotify.netlify.app/
+- Web(개발중): https://uosnotify.netlify.app/
 
 ## Intro
 
 - 서울시립대학교의 공지사항들을 웹/앱에서 쉽고 빠르게 볼 수 있게 하는 프로젝트.
 - 개발기간: 2020.07 ~ 현재
 - app, web, server의 monolithic repository.
+
+### 작동영상: https://youtu.be/wC8ZnXtSJPo?t=111
 
 ## app
 
