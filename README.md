@@ -12,7 +12,7 @@ UOS공지사항
 - 개발기간: 2020.07 ~ 현재
 - app, web, server의 monolithic repository.
 
-### 작동영상: https://youtu.be/wC8ZnXtSJPo?t=111
+![screenshot](./assets/images/pluto.png)
 
 ## app
 
