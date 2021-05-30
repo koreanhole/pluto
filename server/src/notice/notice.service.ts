@@ -41,7 +41,7 @@ export class NoticeService {
     }
   }
 
-  async getNoticeByDepartmentId(
+  async getPaginatedNoticeByDepartmentId(
     departmentId: string,
     limit: number,
     offset: number,

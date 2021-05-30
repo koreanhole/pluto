@@ -149,8 +149,8 @@ type PageData {
 }
 
 type Query {
-  AllDepartments: [DepartmentType!]!
-  NoticeByDepartmentId(
+  getAllDepartments: [DepartmentType!]!
+  getNoticeByDepartmentId(
     """Paginate after opaque cursor"""
     after: String
 
@@ -164,13 +164,13 @@ type Query {
     """Paginate from last"""
     last: Float
   ): NoticeResponse!
-  NoticeByDepartmentName(
+  getNoticeByDeptType(
     """Paginate after opaque cursor"""
     after: String
 
     """Paginate before opaque cursor"""
     before: String
-    deptName: String!
+    deptType: String!
 
     """Paginate from first"""
     first: Float
@@ -178,8 +178,9 @@ type Query {
     """Paginate from last"""
     last: Float
   ): NoticeResponse!
-  NoticeByNoticeId(id: String!): Notice!
-  PaginatedNotice(
+  getNoticeByNoticeId(id: String!): Notice!
+  getNoticesForEveryDepartments(count: Float!): [[Notice!]!]!
+  getPaginatedNotice(
     """Paginate after opaque cursor"""
     after: String
 

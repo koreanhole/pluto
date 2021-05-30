@@ -31,6 +31,23 @@ export class NoticeResolver {
     return await this.noticeService.getNotice(id);
   }
 
+  @Query(() => [[NoticeType]])
+  async getNoticesForEveryDepartments(@Args('count') limit: number) {
+    const departments = await this.departmentService.getAllDepartment();
+    const notices: Notice[][] = [];
+    for (const { id } of departments) {
+      const [
+        notice,
+      ] = await this.noticeService.getPaginatedNoticeByDepartmentId(
+        id,
+        limit,
+        0,
+      );
+      notices.push(notice);
+    }
+    return Promise.all(notices);
+  }
+
   @Query(() => NoticeResponse)
   async getPaginatedNotice(
     @Args() args: ConnectionArgs,
@@ -53,7 +70,10 @@ export class NoticeResolver {
     @Args('departmentId') departmentId: string,
   ): Promise<NoticeResponse> {
     const { limit, offset } = args.pagingParams();
-    const [notices, count] = await this.noticeService.getNoticeByDepartmentId(
+    const [
+      notices,
+      count,
+    ] = await this.noticeService.getPaginatedNoticeByDepartmentId(
       departmentId,
       limit,
       offset,
@@ -74,7 +94,10 @@ export class NoticeResolver {
     const department = await this.departmentService.getDepartmentByDeptType(
       deptType,
     );
-    const [notices, count] = await this.noticeService.getNoticeByDepartmentId(
+    const [
+      notices,
+      count,
+    ] = await this.noticeService.getPaginatedNoticeByDepartmentId(
       department.id,
       limit,
       offset,
