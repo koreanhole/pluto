@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Avatar, Card, CardActionArea, CardContent, CardHeader, Divider, Typography } from "@material-ui/core";
 import { getDescriptiveDateDifference, isoDateToKorean } from "src/utils/time";
-import { Notice, NoticeCardData, DepartmentType } from "./types";
+import { Notice, DepartmentType } from "./types";
 import theme from "src/styles/theme";
 import styled from "styled-components";
 import randomColor from "randomcolor";
@@ -62,7 +62,10 @@ function NoticeCardItem({ data }: { data: Notice }) {
   const { id, createdDatetime, title, authorName } = data;
 
   const handleClickListItem = () => {
-    router.push(`/articles/${id}`);
+    router.push({
+      pathname: "articles/[id]",
+      query: { id },
+    });
   };
 
   return (
@@ -78,12 +81,12 @@ function NoticeCardItem({ data }: { data: Notice }) {
   );
 }
 
-export default function NoticeCard({ data }: { data: NoticeCardData }) {
+export default function NoticeCard({ data }: { data: Notice[] }) {
   return (
     <NoticeCardContainer>
-      <NoticeCardHeader department={data.department} />
+      <NoticeCardHeader department={data[0].department} />
       <CardContent>
-        {data.noticeData.map((item) => (
+        {data.map((item) => (
           <NoticeCardItem key={item.id} data={item} />
         ))}
       </CardContent>
