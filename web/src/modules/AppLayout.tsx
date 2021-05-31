@@ -39,7 +39,7 @@ export default function AppLayout(props: AppLayoutProps) {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="sticky">
         <Toolbar>
           <AppBarHomeText onClick={handleClickHome}>
             <Typography variant="h6">{title}</Typography>

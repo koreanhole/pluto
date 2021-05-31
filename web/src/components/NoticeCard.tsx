@@ -8,7 +8,7 @@ import randomColor from "randomcolor";
 import { useRouter } from "next/router";
 
 const NoticeCardContainer = styled(Card)`
-  width: 18rem;
+  width: 20rem;
   margin-right: 2rem;
   @media (max-width: 640px) {
     margin-right: 0rem;
