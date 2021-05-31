@@ -5,6 +5,12 @@ import "../src/styles/index.scss";
 import Head from "next/head";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "../src/styles/theme";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+
+const client = new ApolloClient({
+  uri: process.env.API_URL,
+  cache: new InMemoryCache(),
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -13,9 +19,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>UOS공지사항</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <ApolloProvider client={client}>
+        <ThemeProvider theme={theme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </ApolloProvider>
     </>
   );
 }

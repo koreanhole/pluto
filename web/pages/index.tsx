@@ -1,9 +1,14 @@
 import AppLayout from "src/modules/AppLayout";
 import * as React from "react";
 import NoticeCard from "src/components/NoticeCard";
-import { Grid } from "@material-ui/core";
+import { CircularProgress, Grid } from "@material-ui/core";
 import styled from "styled-components";
-import { MOCK_ITEM } from "src/data/sampleData";
+import { useQuery } from "@apollo/client";
+import {
+  GET_ALL_NOTICES,
+  NoticesForEveryDepartmentData,
+  NoticesForEveryDepartmentVars,
+} from "../src/queries/noticeQueries";
 
 const HomeGrid = styled(Grid)`
   padding: 2rem;
@@ -14,15 +19,23 @@ const HomeGrid = styled(Grid)`
 `;
 
 export default function Home() {
+  const { loading, data } = useQuery<NoticesForEveryDepartmentData, NoticesForEveryDepartmentVars>(GET_ALL_NOTICES, {
+    variables: { count: 3 },
+  });
   return (
     <AppLayout title="UOS공지사항">
-      <HomeGrid container>
-        {MOCK_ITEM.map((data) => (
-          <Grid item key={data.department.id}>
-            <NoticeCard data={data} />
-          </Grid>
-        ))}
-      </HomeGrid>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <HomeGrid container direction="row" justify="center">
+          {data &&
+            data.getNoticesForEveryDepartments.map((item, index) => (
+              <Grid key={index}>
+                <NoticeCard data={item} />
+              </Grid>
+            ))}
+        </HomeGrid>
+      )}
     </AppLayout>
   );
 }

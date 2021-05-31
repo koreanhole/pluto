@@ -1,19 +1,25 @@
 import AppLayout from "src/modules/AppLayout";
 import * as React from "react";
 import { useRouter } from "next/router";
-import { MOCK_ITEM } from "src/data/sampleData";
 import NoticeView from "src/components/NoticeView";
+import { useQuery } from "@apollo/client";
+import { NoticeByNoticeIdData, NoticeByNoticeIdVars, GET_NOTICE_BY_NOTICEID } from "../../src/queries/noticeQueries";
 
 export default function Article() {
   const router = useRouter();
   const { id } = router.query;
-
-  return (
-    <AppLayout
-      title="UOS공지사항"
-      attachmentLinks={MOCK_ITEM[0].noticeData[0].attachmentLinks}
-      noticeUrl={MOCK_ITEM[0].noticeData[0].url}>
-      <NoticeView data={MOCK_ITEM[0].noticeData[0]} />
-    </AppLayout>
-  );
+  const { loading, data } = useQuery<NoticeByNoticeIdData, NoticeByNoticeIdVars>(GET_NOTICE_BY_NOTICEID, {
+    variables: { id },
+  });
+  if (loading) return null;
+  if (data) {
+    return (
+      <AppLayout
+        title="UOS공지사항"
+        attachmentLinks={data.getNoticeByNoticeId.attachmentLinks}
+        noticeUrl={data.getNoticeByNoticeId.url}>
+        <NoticeView data={data.getNoticeByNoticeId} />
+      </AppLayout>
+    );
+  }
 }

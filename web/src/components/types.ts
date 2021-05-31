@@ -1,8 +1,3 @@
-export interface NoticeCardData {
-  department: DepartmentType;
-  noticeData: Notice[];
-}
-
 export interface DepartmentType {
   id: string;
   deptType: string;
