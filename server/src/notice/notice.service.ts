@@ -1,9 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { createQueryBuilder, getRepository, Repository } from 'typeorm';
 import { CreateNoticeInput } from './notice.input';
 import { Notice } from './notice.entity';
 import { v4 as uuid } from 'uuid';
+import { Department } from '../department/department.entity';
 
 export const NOTICE_PAGINATED_BUNDLE_SIZE = 20;
 
@@ -39,6 +40,17 @@ export class NoticeService {
     } catch (error) {
       this.logger.error('get paginated all notice error', error.stack);
     }
+  }
+
+  async getNoticesForEveryDepartments(limit: number) {
+    const notices = await this.noticeRepository
+      .createQueryBuilder('notice')
+      .groupBy('notice.id')
+      .addGroupBy('notice.department')
+      .limit(limit)
+      .orderBy('notice.createdDatetime')
+      .getMany();
+    return notices;
   }
 
   async getPaginatedNoticeByDepartmentId(
