@@ -1,10 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { createQueryBuilder, getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateNoticeInput } from './notice.input';
 import { Notice } from './notice.entity';
 import { v4 as uuid } from 'uuid';
-import { Department } from '../department/department.entity';
 
 export const NOTICE_PAGINATED_BUNDLE_SIZE = 20;
 
@@ -43,13 +42,16 @@ export class NoticeService {
   }
 
   async getNoticesForEveryDepartments(limit: number) {
-    const notices = await this.noticeRepository
-      .createQueryBuilder('notice')
-      .groupBy('notice.id')
-      .addGroupBy('notice.department')
-      .limit(limit)
-      .orderBy('notice.createdDatetime')
-      .getMany();
+    const notices = await this.noticeRepository.query(`
+    SELECT (n).*
+    FROM (
+      SELECT
+        ROW_NUMBER() OVER (PARTITION BY "department" ORDER BY "n"."createdDatetime" DESC) AS r, n
+      FROM
+        notice n
+    ) x
+    WHERE x.r <= ${limit};
+    `);
     return notices;
   }
 
