@@ -41,18 +41,22 @@ export class NoticeService {
     }
   }
 
-  async getNoticesForEveryDepartments(limit: number) {
-    const notices = await this.noticeRepository.query(`
-    SELECT (n).*
-    FROM (
-      SELECT
-        ROW_NUMBER() OVER (PARTITION BY "department" ORDER BY "n"."createdDatetime" DESC) AS r, n
-      FROM
-        notice n
-    ) x
-    WHERE x.r <= ${limit};
-    `);
-    return notices;
+  async getNoticesForEveryDepartments(limit: number): Promise<Notice[]> {
+    try {
+      const notices = await this.noticeRepository.query(`
+      SELECT (n).*
+      FROM (
+        SELECT
+          ROW_NUMBER() OVER (PARTITION BY "department" ORDER BY "n"."createdDatetime" DESC) AS r, n
+        FROM
+          notice n
+      ) x
+      WHERE x.r <= ${limit};
+      `);
+      return notices;
+    } catch (error) {
+      this.logger.error('get notices for every departments', error.stack);
+    }
   }
 
   async getPaginatedNoticeByDepartmentId(
