@@ -31,21 +31,9 @@ export class NoticeResolver {
     return await this.noticeService.getNotice(id);
   }
 
-  @Query(() => [[NoticeType]])
+  @Query(() => [NoticeType])
   async getNoticesForEveryDepartments(@Args('count') limit: number) {
-    const departments = await this.departmentService.getAllDepartment();
-    const notices: Notice[][] = [];
-    for (const { id } of departments) {
-      const [
-        notice,
-      ] = await this.noticeService.getPaginatedNoticeByDepartmentId(
-        id,
-        limit,
-        0,
-      );
-      notices.push(notice);
-    }
-    return Promise.all(notices);
+    return await this.noticeService.getNoticesForEveryDepartments(limit);
   }
 
   @Query(() => NoticeResponse)
