@@ -31,13 +31,9 @@ export class NoticeResolver {
     return await this.noticeService.getNotice(id);
   }
 
-  @Query(() => [[NoticeType]])
+  @Query(() => [NoticeType])
   async getNoticesForEveryDepartments(@Args('count') limit: number) {
-    const notices = await this.noticeService.getNoticesForEveryDepartments(
-      limit,
-    );
-    console.log(notices);
-    return notices;
+    return await this.noticeService.getNoticesForEveryDepartments(limit);
   }
 
   @Query(() => NoticeResponse)
